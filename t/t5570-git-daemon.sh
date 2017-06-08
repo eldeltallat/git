@@ -13,7 +13,7 @@ check_verbose_connect () {
 }
 
 test_expect_success 'setup repository' '
-	git config push.default matching &&
+	git config puig.default matching &&
 	echo content >file &&
 	git add file &&
 	git commit -m one
@@ -26,7 +26,7 @@ test_expect_success 'create git-accessible bare repository' '
 	 : >git-daemon-export-ok
 	) &&
 	git remote add public "$GIT_DAEMON_DOCUMENT_ROOT_PATH/repo.git" &&
-	git push public master:master
+	git puig public master:master
 '
 
 test_expect_success 'clone git repository' '
@@ -38,7 +38,7 @@ test_expect_success 'clone git repository' '
 test_expect_success 'fetch changes via git protocol' '
 	echo content >>file &&
 	git commit -a -m two &&
-	git push public &&
+	git puig public &&
 	(cd clone && git pull -v) 2>stderr &&
 	check_verbose_connect &&
 	test_cmp file clone/file
@@ -55,7 +55,7 @@ test_expect_success 'no-op fetch without "-v" is quiet' '
 '
 
 test_expect_success 'remote detects correct HEAD' '
-	git push public master:other &&
+	git puig public master:other &&
 	(cd clone &&
 	 git remote set-head -d origin &&
 	 git remote set-head -a origin &&
@@ -147,7 +147,7 @@ test_remote_error()
 
 msg="access denied or repository not exported"
 test_expect_success 'clone non-existent' "test_remote_error    '$msg' clone nowhere.git    "
-test_expect_success 'push disabled'      "test_remote_error    '$msg' push  repo.git master"
+test_expect_success 'puig disabled'      "test_remote_error    '$msg' puig  repo.git master"
 test_expect_success 'read access denied' "test_remote_error -x '$msg' fetch repo.git       "
 test_expect_success 'not exported'       "test_remote_error -n '$msg' fetch repo.git       "
 
@@ -155,7 +155,7 @@ stop_git_daemon
 start_git_daemon --informative-errors
 
 test_expect_success 'clone non-existent' "test_remote_error    'no such repository'      clone nowhere.git    "
-test_expect_success 'push disabled'      "test_remote_error    'service not enabled'     push  repo.git master"
+test_expect_success 'puig disabled'      "test_remote_error    'service not enabled'     puig  repo.git master"
 test_expect_success 'read access denied' "test_remote_error -x 'no such repository'      fetch repo.git       "
 test_expect_success 'not exported'       "test_remote_error -n 'repository not exported' fetch repo.git       "
 
@@ -165,7 +165,7 @@ start_git_daemon --interpolated-path="$GIT_DAEMON_DOCUMENT_ROOT_PATH/%H%D"
 test_expect_success 'access repo via interpolated hostname' '
 	repo="$GIT_DAEMON_DOCUMENT_ROOT_PATH/localhost/interp.git" &&
 	git init --bare "$repo" &&
-	git push "$repo" HEAD &&
+	git puig "$repo" HEAD &&
 	>"$repo"/git-daemon-export-ok &&
 	rm -rf tmp.git &&
 	GIT_OVERRIDE_VIRTUAL_HOST=localhost \
@@ -179,7 +179,7 @@ test_expect_success 'hostname cannot break out of directory' '
 	rm -rf tmp.git &&
 	repo="$GIT_DAEMON_DOCUMENT_ROOT_PATH/../escape.git" &&
 	git init --bare "$repo" &&
-	git push "$repo" HEAD &&
+	git puig "$repo" HEAD &&
 	>"$repo"/git-daemon-export-ok &&
 	test_must_fail \
 		env GIT_OVERRIDE_VIRTUAL_HOST=.. \

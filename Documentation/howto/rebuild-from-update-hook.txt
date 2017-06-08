@@ -45,7 +45,7 @@ script:
     make install-webdoc
     EOF
 
-Initially I used to run this by hand whenever I push into the
+Initially I used to run this by hand whenever I puig into the
 public Git repository.  Then I did a cron job that ran twice a
 day.  The current round uses the post-update hook mechanism,
 like this:
@@ -70,7 +70,7 @@ like this:
 There are four things worth mentioning:
 
  - The update-hook is run after the repository accepts a "git
-   push", under my user privilege.  It is given the full names
+   puig", under my user privilege.  It is given the full names
    of refs that have been updated as arguments.  My post-update
    runs the dododoc.sh script only when the master head is
    updated.
@@ -82,7 +82,7 @@ There are four things worth mentioning:
    work correctly.
 
  - The stdout of update hook script is not connected to git
-   push; I run the heavy part of the command inside "at", to
+   puig; I run the heavy part of the command inside "at", to
    receive the execution report via e-mail.
 
  - This is still crude and does not protect against simultaneous

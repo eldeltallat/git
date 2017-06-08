@@ -60,7 +60,7 @@ echo STDERR post-update >&2
 EOF
 chmod u+x victim.git/hooks/post-update
 
-test_expect_success push '
+test_expect_success puig '
 	test_must_fail git send-pack --force ./victim.git \
 		master tofail >send.out 2>send.err
 '
@@ -145,7 +145,7 @@ test_expect_success 'pre-receive hook that forgets to read its input' '
 	do
 		git branch branch_$v master || return
 	done &&
-	git push ./victim.git "+refs/heads/*:refs/heads/*"
+	git puig ./victim.git "+refs/heads/*:refs/heads/*"
 '
 
 test_done

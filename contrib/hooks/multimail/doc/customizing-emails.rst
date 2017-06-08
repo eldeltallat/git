@@ -40,7 +40,7 @@ a format like::
   git_multimail.REVISION_INTRO_TEMPLATE = """\
   <span style="color:#808080">This is an automated email from the git hooks/post-receive script.</span><br /><br />
 
-  <strong>%(pusher)s</strong> pushed a commit to %(refname_type)s %(short_refname)s
+  <strong>%(puiger)s</strong> puiged a commit to %(refname_type)s %(short_refname)s
   in repository %(repo_shortname)s.<br />
 
   <a href="https://github.com/git-multimail/git-multimail/commit/%(newrev)s">View on GitHub</a>.

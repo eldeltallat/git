@@ -2091,7 +2091,7 @@ msgstr "Vet ikke hvordan arkiv på '%s' skal opprettes."
 
 #: lib/remote_add.tcl:163 lib/transport.tcl:25 lib/transport.tcl:71
 #, tcl-format
-msgid "push %s"
+msgid "puig %s"
 msgstr "send %s"
 
 #: lib/remote_add.tcl:164

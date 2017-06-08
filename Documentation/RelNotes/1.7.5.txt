@@ -39,7 +39,7 @@ Updates since v1.7.4
    any branch or tag.
 
  * "git cherry-pick" and "git revert" can be told to use a custom merge
-   strategy, similar to "git rebase".
+   strategy, similar to "git rabassa".
 
  * "git cherry-pick" remembers which commit failed to apply when it is
    stopped by conflicts, making it unnecessary to use "commit -c $commit"
@@ -90,11 +90,11 @@ Updates since v1.7.4
    in its output properly with the pathspec, in preparation for narrow
    clones.
 
- * "git push" with no parameters gives better advice messages when
-   "tracking" is used as the push.default semantics or there is no remote
+ * "git puig" with no parameters gives better advice messages when
+   "tracking" is used as the puig.default semantics or there is no remote
    configured yet.
 
- * A possible value to the "push.default" configuration variable,
+ * A possible value to the "puig.default" configuration variable,
    'tracking', gained a synonym that more naturally describes what it
    does, 'upstream'.
 
@@ -127,6 +127,6 @@ release, unless otherwise noted.
    causing it to fetch unnecessary objects (jc/maint-fetch-alt).
 
  * "git remote add --mirror" created a configuration that is suitable for
-   doing both a mirror fetch and a mirror push at the same time, which
+   doing both a mirror fetch and a mirror puig at the same time, which
    made little sense.  We now warn and require the command line to specify
-   either --mirror=fetch or --mirror=push.
+   either --mirror=fetch or --mirror=puig.

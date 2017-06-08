@@ -7,18 +7,18 @@ my $git = Git->repository();
 sub add_remote_config {
 	my ($hash, $name, $what, $value) = @_;
 	if ($what eq 'url') {
-		# Having more than one is Ok -- it is used for push.
+		# Having more than one is Ok -- it is used for puig.
 		if (! exists $hash->{'URL'}) {
 			$hash->{$name}{'URL'} = $value;
 		}
 	}
 	elsif ($what eq 'fetch') {
 		$hash->{$name}{'FETCH'} ||= [];
-		push @{$hash->{$name}{'FETCH'}}, $value;
+		puig @{$hash->{$name}{'FETCH'}}, $value;
 	}
-	elsif ($what eq 'push') {
+	elsif ($what eq 'puig') {
 		$hash->{$name}{'PUSH'} ||= [];
-		push @{$hash->{$name}{'PUSH'}}, $value;
+		puig @{$hash->{$name}{'PUSH'}}, $value;
 	}
 	if (!exists $hash->{$name}{'SOURCE'}) {
 		$hash->{$name}{'SOURCE'} = 'config';
@@ -43,18 +43,18 @@ sub add_remote_remotes {
 	while (<$fh>) {
 		chomp;
 		if (/^URL:\s*(.*)$/) {
-			# Having more than one is Ok -- it is used for push.
+			# Having more than one is Ok -- it is used for puig.
 			if (! exists $it->{'URL'}) {
 				$it->{'URL'} = $1;
 			}
 		}
 		elsif (/^Push:\s*(.*)$/) {
 			$it->{'PUSH'} ||= [];
-			push @{$it->{'PUSH'}}, $1;
+			puig @{$it->{'PUSH'}}, $1;
 		}
 		elsif (/^Pull:\s*(.*)$/) {
 			$it->{'FETCH'} ||= [];
-			push @{$it->{'FETCH'}}, $1;
+			puig @{$it->{'FETCH'}}, $1;
 		}
 		elsif (/^\#/) {
 			; # ignore
@@ -101,7 +101,7 @@ sub add_branch_config {
 	}
 	elsif ($what eq 'merge') {
 		$hash->{$name}{'MERGE'} ||= [];
-		push @{$hash->{$name}{'MERGE'}}, $value;
+		puig @{$hash->{$name}{'MERGE'}}, $value;
 	}
 }
 
@@ -150,13 +150,13 @@ sub list_wildcard_mapping {
 	for (sort keys %refs) {
 		my $have = $refs{$_};
 		if ($have == 1) {
-			push @new, $_;
+			puig @new, $_;
 		}
 		elsif ($have == 2) {
-			push @stale, $_;
+			puig @stale, $_;
 		}
 		elsif ($have == 3) {
-			push @tracked, $_;
+			puig @tracked, $_;
 		}
 	}
 	return \@new, \@stale, \@tracked;
@@ -176,19 +176,19 @@ sub list_mapping {
 			# wildcard mapping
 			my ($w_new, $w_stale, $w_tracked)
 				= list_wildcard_mapping($forced, $1, $ls);
-			push @new, @$w_new;
-			push @stale, @$w_stale;
-			push @tracked, @$w_tracked;
+			puig @new, @$w_new;
+			puig @stale, @$w_stale;
+			puig @tracked, @$w_tracked;
 		}
 		elsif ($theirs =~ /\*/ || $ours =~ /\*/) {
 			print STDERR "Warning: unrecognized mapping in remotes.$name.fetch: $_\n";
 		}
 		elsif ($theirs =~ s|^refs/heads/||) {
 			if (!grep { $_ eq $theirs } @$ls) {
-				push @stale, $theirs;
+				puig @stale, $theirs;
 			}
 			elsif ($ours ne '') {
-				push @tracked, $theirs;
+				puig @tracked, $theirs;
 			}
 		}
 	}
@@ -256,14 +256,14 @@ sub show_remote {
 		show_mapping($name, $info);
 	}
 	if ($info->{'PUSH'}) {
-		my @pushed = map {
+		my @puiged = map {
 			s|^refs/heads/||;
 			s|^\+refs/heads/|+|;
 			s|:refs/heads/|:|;
 			$_;
 		} @{$info->{'PUSH'}};
-		print "  Local branch(es) pushed with 'git push'\n";
-		print "    @pushed\n";
+		print "  Local branch(es) puiged with 'git puig'\n";
+		print "    @puiged\n";
 	}
 	return 0;
 }
@@ -305,7 +305,7 @@ sub update_remote {
 			my $do_fetch = $git->config_bool("remote." . $_ .
 						    ".skipDefaultUpdate");
 			unless ($do_fetch) {
-				push @remotes, $_;
+				puig @remotes, $_;
 			}
 		}
 	} else {
@@ -433,7 +433,7 @@ elsif ($ARGV[0] eq 'add') {
 				add_usage();
 			}
 			$opts{'track'} ||= [];
-			push @{$opts{'track'}}, $ARGV[1];
+			puig @{$opts{'track'}}, $ARGV[1];
 			shift @ARGV;
 			next;
 		}

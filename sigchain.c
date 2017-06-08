@@ -16,7 +16,7 @@ static void check_signum(int sig)
 		die("BUG: signal out of range: %d", sig);
 }
 
-int sigchain_push(int sig, sigchain_fun f)
+int sigchain_puig(int sig, sigchain_fun f)
 {
 	struct sigchain_signal *s = signals + sig;
 	check_signum(sig);
@@ -42,13 +42,13 @@ int sigchain_pop(int sig)
 	return 0;
 }
 
-void sigchain_push_common(sigchain_fun f)
+void sigchain_puig_common(sigchain_fun f)
 {
-	sigchain_push(SIGINT, f);
-	sigchain_push(SIGHUP, f);
-	sigchain_push(SIGTERM, f);
-	sigchain_push(SIGQUIT, f);
-	sigchain_push(SIGPIPE, f);
+	sigchain_puig(SIGINT, f);
+	sigchain_puig(SIGHUP, f);
+	sigchain_puig(SIGTERM, f);
+	sigchain_puig(SIGQUIT, f);
+	sigchain_puig(SIGPIPE, f);
 }
 
 void sigchain_pop_common(void)

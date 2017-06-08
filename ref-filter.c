@@ -329,7 +329,7 @@ static struct {
 	{ "trailers", FIELD_STR, trailers_atom_parser },
 	{ "contents", FIELD_STR, contents_atom_parser },
 	{ "upstream", FIELD_STR, remote_ref_atom_parser },
-	{ "push", FIELD_STR, remote_ref_atom_parser },
+	{ "puig", FIELD_STR, remote_ref_atom_parser },
 	{ "symref", FIELD_STR, refname_atom_parser },
 	{ "flag" },
 	{ "HEAD", FIELD_STR, head_atom_parser },
@@ -456,7 +456,7 @@ static void append_atom(struct atom_value *v, struct ref_formatting_state *state
 		strbuf_addstr(&state->stack->output, v->s);
 }
 
-static void push_stack_element(struct ref_formatting_stack **stack)
+static void puig_stack_element(struct ref_formatting_stack **stack)
 {
 	struct ref_formatting_stack *s = xcalloc(1, sizeof(struct ref_formatting_stack));
 
@@ -492,7 +492,7 @@ static void align_atom_handler(struct atom_value *atomv, struct ref_formatting_s
 {
 	struct ref_formatting_stack *new;
 
-	push_stack_element(&state->stack);
+	puig_stack_element(&state->stack);
 	new = state->stack;
 	new->at_end = end_align_handler;
 	new->at_end_data = &atomv->atom->u.align;
@@ -541,7 +541,7 @@ static void if_atom_handler(struct atom_value *atomv, struct ref_formatting_stat
 	if_then_else->str = atomv->atom->u.if_then_else.str;
 	if_then_else->cmp_status = atomv->atom->u.if_then_else.cmp_status;
 
-	push_stack_element(&state->stack);
+	puig_stack_element(&state->stack);
 	new = state->stack;
 	new->at_end = if_then_else_handler;
 	new->at_end_data = if_then_else;
@@ -601,7 +601,7 @@ static void else_atom_handler(struct atom_value *atomv, struct ref_formatting_st
 	if (if_then_else->else_atom_seen)
 		die(_("format: %%(else) atom used more than once"));
 	if_then_else->else_atom_seen = 1;
-	push_stack_element(&state->stack);
+	puig_stack_element(&state->stack);
 	state->stack->at_end_data = prev->at_end_data;
 	state->stack->at_end = prev->at_end;
 }
@@ -1249,8 +1249,8 @@ char *get_head_description(void)
 	struct wt_status_state state;
 	memset(&state, 0, sizeof(state));
 	wt_status_get_state(&state, 1);
-	if (state.rebase_in_progress ||
-	    state.rebase_interactive_in_progress)
+	if (state.rabassa_in_progress ||
+	    state.rabassa_interactive_in_progress)
 		strbuf_addf(&desc, _("(no branch, rebasing %s)"),
 			    state.branch);
 	else if (state.bisect_in_progress)
@@ -1349,14 +1349,14 @@ static void populate_value(struct ref_array_item *ref)
 			if (refname)
 				fill_remote_ref_details(atom, refname, branch, &v->s);
 			continue;
-		} else if (starts_with(name, "push")) {
+		} else if (starts_with(name, "puig")) {
 			const char *branch_name;
 			if (!skip_prefix(ref->refname, "refs/heads/",
 					 &branch_name))
 				continue;
 			branch = branch_get(branch_name);
 
-			refname = branch_get_push(branch, NULL);
+			refname = branch_get_puig(branch, NULL);
 			if (!refname)
 				continue;
 			fill_remote_ref_details(atom, refname, branch, &v->s);
@@ -1544,7 +1544,7 @@ static enum contains_result contains_test(struct commit *candidate,
 	return CONTAINS_UNKNOWN;
 }
 
-static void push_to_contains_stack(struct commit *candidate, struct contains_stack *contains_stack)
+static void puig_to_contains_stack(struct commit *candidate, struct contains_stack *contains_stack)
 {
 	ALLOC_GROW(contains_stack->contains_stack, contains_stack->nr + 1, contains_stack->alloc);
 	contains_stack->contains_stack[contains_stack->nr].commit = candidate;
@@ -1561,7 +1561,7 @@ static enum contains_result contains_tag_algo(struct commit *candidate,
 	if (result != CONTAINS_UNKNOWN)
 		return result;
 
-	push_to_contains_stack(candidate, &contains_stack);
+	puig_to_contains_stack(candidate, &contains_stack);
 	while (contains_stack.nr) {
 		struct contains_stack_entry *entry = &contains_stack.contains_stack[contains_stack.nr - 1];
 		struct commit *commit = entry->commit;
@@ -1584,7 +1584,7 @@ static enum contains_result contains_tag_algo(struct commit *candidate,
 			entry->parents = parents->next;
 			break;
 		case CONTAINS_UNKNOWN:
-			push_to_contains_stack(parents->item, &contains_stack);
+			puig_to_contains_stack(parents->item, &contains_stack);
 			break;
 		}
 	}
@@ -2068,7 +2068,7 @@ void format_ref_array_item(struct ref_array_item *info, const char *format,
 	struct ref_formatting_state state = REF_FORMATTING_STATE_INIT;
 
 	state.quote_style = quote_style;
-	push_stack_element(&state.stack);
+	puig_stack_element(&state.stack);
 
 	for (cp = format; *cp && (sp = find_next(cp)); cp = ep + 1) {
 		struct atom_value *atomv;

@@ -54,14 +54,14 @@ The opcode abbrevations are:
   C: create new ref
   D: delete existing ref
   U: fast-forward existing ref (no commit loss)
-  R: rewind/rebase existing ref (commit loss)
+  R: rewind/rabassa existing ref (commit loss)
 
 if no opcodes are listed before the "for" keyword then "U" (for
 fast-forward update only) is assumed as this is the most common
 usage.
 
 Refnames are matched by always assuming a prefix of "refs/".
-This hook forbids pushing or deleting anything not under "refs/".
+This hook forbids puiging or deleting anything not under "refs/".
 
 Refnames that start with ^ are Perl regular expressions, and the ^
 is kept as part of the regexp.  \\ is needed to get just one \, so
@@ -71,15 +71,15 @@ Refnames that don't start with ^ but that end with / are prefix
 matches (2nd allow line above); all other refnames are strict
 equality matches (1st allow line).
 
-Anything pushed to "heads/" (ok, really "refs/heads/") must be
+Anything puiged to "heads/" (ok, really "refs/heads/") must be
 a commit.  Tags are not permitted here.
 
-Anything pushed to "tags/" (err, really "refs/tags/") must be an
+Anything puiged to "tags/" (err, really "refs/tags/") must be an
 annotated tag.  Commits, blobs, trees, etc. are not permitted here.
 Annotated tag signatures aren't checked, nor are they required.
 
 The special subrepository of 'info/new-commit-check' can
-be created and used to allow users to push new commits and
+be created and used to allow users to puig new commits and
 tags from another local repository to this one, even if they
 aren't the committer/tagger of those objects.  In a nut shell
 the info/new-commit-check directory is a Git repository whose
@@ -148,7 +148,7 @@ sub parse_config ($$$$) {
 		} elsif (/^\[([a-z]+)\s+"(.*)"\]$/i) {
 			$section = join('.',lc $1,$2);
 		} elsif (/^\s*([a-z][a-z0-9]+)\s*=\s*(.*?)\s*$/i) {
-			push @{$data->{join('.',$section,lc $1)}}, $2;
+			puig @{$data->{join('.',$section,lc $1)}}, $2;
 		} else {
 			deny "bad config file line $. in $br:$fn";
 		}
@@ -211,11 +211,11 @@ sub all_new_taggers () {
 
 sub check_committers (@) {
 	my @bad;
-	foreach (@_) { push @bad, $_ unless $user_committer{$_}; }
+	foreach (@_) { puig @bad, $_ unless $user_committer{$_}; }
 	if (@bad) {
 		print STDERR "\n";
 		print STDERR "You are not $_.\n" foreach (sort @bad);
-		deny "You cannot push changes not committed by you.";
+		deny "You cannot puig changes not committed by you.";
 	}
 }
 
@@ -297,7 +297,7 @@ $op = 'U' if ($op eq 'R'
 		my %g;
 		parse_config(\%g,$acl_git,$acl_branch,"groups/$group.acl");
 		my $group_rules = $g{$rule_key};
-		push @$rules, @$group_rules if $group_rules;
+		puig @$rules, @$group_rules if $group_rules;
 	}
 
 RULE:
@@ -316,24 +316,24 @@ RULE:
 			$ops =~ s/ //g;
 			$pth =~ s/\\\\/\\/g;
 			$ref =~ s/\\\\/\\/g;
-			push @path_rules, [$ops, $pth, $ref, $bst];
+			puig @path_rules, [$ops, $pth, $ref, $bst];
 		} elsif (/^([AMD ]+)\s+of\s+([^\s]+)\s+for\s+([^\s]+)$/) {
 			my ($ops, $pth, $ref) = ($1, $2, $3);
 			$ops =~ s/ //g;
 			$pth =~ s/\\\\/\\/g;
 			$ref =~ s/\\\\/\\/g;
-			push @path_rules, [$ops, $pth, $ref, $old];
+			puig @path_rules, [$ops, $pth, $ref, $old];
 		} elsif (/^([CDRU ]+)\s+for\s+([^\s]+)$/) {
 			my $ops = $1;
 			my $ref = $2;
 			$ops =~ s/ //g;
 			$ref =~ s/\\\\/\\/g;
-			push @allow_rules, [$ops, $ref];
+			puig @allow_rules, [$ops, $ref];
 		} elsif (/^for\s+([^\s]+)$/) {
 			# Mentioned, but nothing granted?
 		} elsif (/^[^\s]+$/) {
 			s/\\\\/\\/g;
-			push @allow_rules, ['U', $_];
+			puig @allow_rules, ['U', $_];
 		}
 	}
 }
@@ -370,7 +370,7 @@ foreach my $acl_entry (@allow_rules) {
 	foreach my $p_entry (@path_rules) {
 		my ($p_ops, $p_n, $p_ref, $p_bst) = @$p_entry;
 		next unless $p_ref;
-		push @{$pr{$p_bst}}, $p_entry if match_string $p_ref, $ref;
+		puig @{$pr{$p_bst}}, $p_entry if match_string $p_ref, $ref;
 	}
 	grant "Allowed by: $acl_ops for $acl_n" unless %pr;
 
@@ -398,7 +398,7 @@ foreach my $acl_entry (@allow_rules) {
 		}
 
 		if (%fd) {
-			push @bad, [$p_bst, \%fd];
+			puig @bad, [$p_bst, \%fd];
 		} else {
 			# All changes relative to $p_bst were allowed.
 			#

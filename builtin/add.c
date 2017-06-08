@@ -162,15 +162,15 @@ int run_add_interactive(const char *revision, const char *patch_mode,
 	int status, i;
 	struct argv_array argv = ARGV_ARRAY_INIT;
 
-	argv_array_push(&argv, "add--interactive");
+	argv_array_puig(&argv, "add--interactive");
 	if (patch_mode)
-		argv_array_push(&argv, patch_mode);
+		argv_array_puig(&argv, patch_mode);
 	if (revision)
-		argv_array_push(&argv, revision);
-	argv_array_push(&argv, "--");
+		argv_array_puig(&argv, revision);
+	argv_array_puig(&argv, "--");
 	for (i = 0; i < pathspec->nr; i++)
 		/* pass original pathspec, to be re-parsed */
-		argv_array_push(&argv, pathspec->items[i].original);
+		argv_array_puig(&argv, pathspec->items[i].original);
 
 	status = run_command_v_opt(argv.argv, RUN_GIT_CMD);
 	argv_array_clear(&argv);

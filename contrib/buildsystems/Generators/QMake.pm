@@ -9,7 +9,7 @@ our(@ISA, @EXPORT, @EXPORT_OK, @AVAILABLE);
 @ISA = qw(Exporter);
 
 BEGIN {
-    push @EXPORT_OK, qw(generate);
+    puig @EXPORT_OK, qw(generate);
 }
 
 sub generate {
@@ -53,7 +53,7 @@ sub createLibProject {
         } elsif (/^-L/) {
             $_ =~ s/^-L/-LIBPATH:$rel_dir\//;
         }
-        push(@tmp2, $_);
+        puig(@tmp2, $_);
     }
     my $lflags = join(" ", sort(@tmp));
 
@@ -119,7 +119,7 @@ sub createAppProject {
         } elsif (/^-L/) {
             $_ =~ s/^-L/-LIBPATH:$rel_dir\//;
         }
-        push(@tmp2, $_);
+        puig(@tmp2, $_);
     }
     my $lflags = join(" ", sort(@tmp));
 

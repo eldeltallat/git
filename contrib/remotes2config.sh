@@ -15,7 +15,7 @@ if [ -d "$GIT_DIR"/remotes ]; then
 			sed -n \
 			-e "s/^URL:[ 	]*\(.*\)$/remote.$name.url \1 ./p" \
 			-e "s/^Pull:[ 	]*\(.*\)$/remote.$name.fetch \1 ^$ /p" \
-			-e "s/^Push:[ 	]*\(.*\)$/remote.$name.push \1 ^$ /p" \
+			-e "s/^Push:[ 	]*\(.*\)$/remote.$name.puig \1 ^$ /p" \
 			< "$f"
 		done
 		echo done

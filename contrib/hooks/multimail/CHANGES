@@ -115,7 +115,7 @@ Release 1.2.0
 
 * The From: field is now more customizeable. It can be set
   independently for refchange emails and commit emails (see
-  fromCommit, fromRefChange). The special values pusher and author can
+  fromCommit, fromRefChange). The special values puiger and author can
   be used in these configuration variable.
 
 * A new command-line option, --version, was added. The version is also
@@ -149,11 +149,11 @@ Release 1.1.1 (bugfix-only release)
 Release 1.1.0
 =============
 
-* When a single commit is pushed, omit the reference changed email.
+* When a single commit is puiged, omit the reference changed email.
   Set multimailhook.combineWhenSingleCommit to false to disable this
   new feature.
 
-* In gitolite environments, the pusher's email address can be used as
+* In gitolite environments, the puiger's email address can be used as
   the From address by creating a specially formatted comment block in
   gitolite.conf (see multimailhook.from in README).
 
@@ -165,7 +165,7 @@ Release 1.1.0
   corresponding emails in Cc.
 
 * If $USER is not set, use the variable $USERNAME. This is needed on
-  Windows platform to recognize the pusher.
+  Windows platform to recognize the puiger.
 
 * The emailPrefix variable can now be set to an empty string to remove
   the prefix.

@@ -2141,7 +2141,7 @@ static int commit_ref_update(struct files_ref_store *refs,
 	if (strcmp(lock->ref_name, "HEAD") != 0) {
 		/*
 		 * Special hack: If a branch is updated directly and HEAD
-		 * points to it (may happen on the remote side of a push
+		 * points to it (may happen on the remote side of a puig
 		 * for example) then logically the HEAD reflog should be
 		 * updated too.
 		 * A generic solution implies reverse symref information,
@@ -2923,7 +2923,7 @@ static int files_transaction_prepare(struct ref_store *ref_store,
 
 	/*
 	 * Special hack: If a branch is updated directly and HEAD
-	 * points to it (may happen on the remote side of a push
+	 * points to it (may happen on the remote side of a puig
 	 * for example) then logically the HEAD reflog should be
 	 * updated too.
 	 *

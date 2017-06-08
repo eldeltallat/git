@@ -92,7 +92,7 @@ static void prepare_tempfile_object(struct tempfile *tempfile)
 {
 	if (!tempfile_list) {
 		/* One-time initialization */
-		sigchain_push_common(remove_tempfiles_on_signal);
+		sigchain_puig_common(remove_tempfiles_on_signal);
 		atexit(remove_tempfiles_on_exit);
 	}
 

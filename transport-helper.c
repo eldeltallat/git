@@ -23,7 +23,7 @@ struct helper_data {
 		bidi_import : 1,
 		export : 1,
 		option : 1,
-		push : 1,
+		puig : 1,
 		connect : 1,
 		signed_tags : 1,
 		check_connectivity : 1,
@@ -118,14 +118,14 @@ static struct child_process *get_helper(struct transport *transport)
 	helper->in = -1;
 	helper->out = -1;
 	helper->err = 0;
-	argv_array_pushf(&helper->args, "git-remote-%s", data->name);
-	argv_array_push(&helper->args, transport->remote->name);
-	argv_array_push(&helper->args, remove_ext_force(transport->url));
+	argv_array_puigf(&helper->args, "git-remote-%s", data->name);
+	argv_array_puig(&helper->args, transport->remote->name);
+	argv_array_puig(&helper->args, remove_ext_force(transport->url));
 	helper->git_cmd = 0;
 	helper->silent_exec_failure = 1;
 
 	if (have_git_dir())
-		argv_array_pushf(&helper->env_array, "%s=%s",
+		argv_array_puigf(&helper->env_array, "%s=%s",
 				 GIT_DIR_ENVIRONMENT, get_git_dir());
 
 	code = start_command(helper);
@@ -171,8 +171,8 @@ static struct child_process *get_helper(struct transport *transport)
 			data->fetch = 1;
 		else if (!strcmp(capname, "option"))
 			data->option = 1;
-		else if (!strcmp(capname, "push"))
-			data->push = 1;
+		else if (!strcmp(capname, "puig"))
+			data->puig = 1;
 		else if (!strcmp(capname, "import"))
 			data->import = 1;
 		else if (!strcmp(capname, "bidi-import"))
@@ -234,7 +234,7 @@ static int disconnect_helper(struct transport *transport)
 			 * most likely error is EPIPE due to the helper dying
 			 * to report an error itself.
 			 */
-			sigchain_push(SIGPIPE, SIG_IGN);
+			sigchain_puig(SIGPIPE, SIG_IGN);
 			xwrite(data->helper->in, "\n", 1);
 			sigchain_pop(SIGPIPE);
 		}
@@ -432,12 +432,12 @@ static int get_importer(struct transport *transport, struct child_process *fasti
 	int cat_blob_fd, code;
 	child_process_init(fastimport);
 	fastimport->in = helper->out;
-	argv_array_push(&fastimport->args, "fast-import");
-	argv_array_push(&fastimport->args, debug ? "--stats" : "--quiet");
+	argv_array_puig(&fastimport->args, "fast-import");
+	argv_array_puig(&fastimport->args, debug ? "--stats" : "--quiet");
 
 	if (data->bidi_import) {
 		cat_blob_fd = xdup(helper->in);
-		argv_array_pushf(&fastimport->args, "--cat-blob-fd=%d", cat_blob_fd);
+		argv_array_puigf(&fastimport->args, "--cat-blob-fd=%d", cat_blob_fd);
 	}
 	fastimport->git_cmd = 1;
 
@@ -458,17 +458,17 @@ static int get_exporter(struct transport *transport,
 	/* we need to duplicate helper->in because we want to use it after
 	 * fastexport is done with it. */
 	fastexport->out = dup(helper->in);
-	argv_array_push(&fastexport->args, "fast-export");
-	argv_array_push(&fastexport->args, "--use-done-feature");
-	argv_array_push(&fastexport->args, data->signed_tags ?
+	argv_array_puig(&fastexport->args, "fast-export");
+	argv_array_puig(&fastexport->args, "--use-done-feature");
+	argv_array_puig(&fastexport->args, data->signed_tags ?
 		"--signed-tags=verbatim" : "--signed-tags=warn-strip");
 	if (data->export_marks)
-		argv_array_pushf(&fastexport->args, "--export-marks=%s.tmp", data->export_marks);
+		argv_array_puigf(&fastexport->args, "--export-marks=%s.tmp", data->export_marks);
 	if (data->import_marks)
-		argv_array_pushf(&fastexport->args, "--import-marks=%s", data->import_marks);
+		argv_array_puigf(&fastexport->args, "--import-marks=%s", data->import_marks);
 
 	for (i = 0; i < revlist_args->nr; i++)
-		argv_array_push(&fastexport->args, revlist_args->items[i].string);
+		argv_array_puig(&fastexport->args, revlist_args->items[i].string);
 
 	fastexport->git_cmd = 1;
 	return start_command(fastexport);
@@ -610,14 +610,14 @@ exit:
 }
 
 static int process_connect(struct transport *transport,
-				     int for_push)
+				     int for_puig)
 {
 	struct helper_data *data = transport->data;
 	const char *name;
 	const char *exec;
 
-	name = for_push ? "git-receive-pack" : "git-upload-pack";
-	if (for_push)
+	name = for_puig ? "git-receive-pack" : "git-upload-pack";
+	if (for_puig)
 		exec = data->transport_options.receivepack;
 	else
 		exec = data->transport_options.uploadpack;
@@ -681,7 +681,7 @@ static int fetch(struct transport *transport,
 	return -1;
 }
 
-static int push_update_ref_status(struct strbuf *buf,
+static int puig_update_ref_status(struct strbuf *buf,
 				   struct ref **ref,
 				   struct ref *remote_refs)
 {
@@ -762,7 +762,7 @@ static int push_update_ref_status(struct strbuf *buf,
 
 	if ((*ref)->status != REF_STATUS_NONE) {
 		/*
-		 * Earlier, the ref was marked not to be pushed, so ignore the ref
+		 * Earlier, the ref was marked not to be puiged, so ignore the ref
 		 * status reported by the remote helper if the latter is 'no match'.
 		 */
 		if (status == REF_STATUS_NONE)
@@ -775,7 +775,7 @@ static int push_update_ref_status(struct strbuf *buf,
 	return !(status == REF_STATUS_OK);
 }
 
-static int push_update_refs_status(struct helper_data *data,
+static int puig_update_refs_status(struct helper_data *data,
 				    struct ref *remote_refs,
 				    int flags)
 {
@@ -794,7 +794,7 @@ static int push_update_refs_status(struct helper_data *data,
 		if (!buf.len)
 			break;
 
-		if (push_update_ref_status(&buf, &ref, remote_refs))
+		if (puig_update_ref_status(&buf, &ref, remote_refs))
 			continue;
 
 		if (flags & TRANSPORT_PUSH_DRY_RUN || !data->refspecs || data->no_private_update)
@@ -811,7 +811,7 @@ static int push_update_refs_status(struct helper_data *data,
 	return ret;
 }
 
-static void set_common_push_options(struct transport *transport,
+static void set_common_puig_options(struct transport *transport,
 				   const char *name, int flags)
 {
 	if (flags & TRANSPORT_PUSH_DRY_RUN) {
@@ -827,13 +827,13 @@ static void set_common_push_options(struct transport *transport,
 
 	if (flags & TRANSPORT_PUSH_OPTIONS) {
 		struct string_list_item *item;
-		for_each_string_list_item(item, transport->push_options)
-			if (set_helper_option(transport, "push-option", item->string) != 0)
-				die("helper %s does not support 'push-option'", name);
+		for_each_string_list_item(item, transport->puig_options)
+			if (set_helper_option(transport, "puig-option", item->string) != 0)
+				die("helper %s does not support 'puig-option'", name);
 	}
 }
 
-static int push_refs_with_push(struct transport *transport,
+static int puig_refs_with_puig(struct transport *transport,
 			       struct ref *remote_refs, int flags)
 {
 	int force_all = flags & TRANSPORT_PUSH_FORCE;
@@ -845,14 +845,14 @@ static int push_refs_with_push(struct transport *transport,
 	struct string_list_item *cas_option;
 
 	get_helper(transport);
-	if (!data->push)
+	if (!data->puig)
 		return 1;
 
 	for (ref = remote_refs; ref; ref = ref->next) {
 		if (!ref->peer_ref && !mirror)
 			continue;
 
-		/* Check for statuses set by set_ref_status_for_push() */
+		/* Check for statuses set by set_ref_status_for_puig() */
 		switch (ref->status) {
 		case REF_STATUS_REJECT_NONFASTFORWARD:
 		case REF_STATUS_REJECT_STALE:
@@ -866,7 +866,7 @@ static int push_refs_with_push(struct transport *transport,
 		if (force_all)
 			ref->force = 1;
 
-		strbuf_addstr(&buf, "push ");
+		strbuf_addstr(&buf, "puig ");
 		if (!ref->deletion) {
 			if (ref->force)
 				strbuf_addch(&buf, '+');
@@ -900,16 +900,16 @@ static int push_refs_with_push(struct transport *transport,
 
 	for_each_string_list_item(cas_option, &cas_options)
 		set_helper_option(transport, "cas", cas_option->string);
-	set_common_push_options(transport, data->name, flags);
+	set_common_puig_options(transport, data->name, flags);
 
 	strbuf_addch(&buf, '\n');
 	sendline(data, &buf);
 	strbuf_release(&buf);
 
-	return push_update_refs_status(data, remote_refs, flags);
+	return puig_update_refs_status(data, remote_refs, flags);
 }
 
-static int push_refs_with_export(struct transport *transport,
+static int puig_refs_with_export(struct transport *transport,
 		struct ref *remote_refs, int flags)
 {
 	struct ref *ref;
@@ -919,9 +919,9 @@ static int push_refs_with_export(struct transport *transport,
 	struct strbuf buf = STRBUF_INIT;
 
 	if (!data->refspecs)
-		die("remote-helper doesn't support push; refspec needed");
+		die("remote-helper doesn't support puig; refspec needed");
 
-	set_common_push_options(transport, data->name, flags);
+	set_common_puig_options(transport, data->name, flags);
 	if (flags & TRANSPORT_PUSH_FORCE) {
 		if (set_helper_option(transport, "force", "true") != 0)
 			warning("helper %s does not support 'force'", data->name);
@@ -977,7 +977,7 @@ static int push_refs_with_export(struct transport *transport,
 
 	if (finish_command(&exporter))
 		die("Error while running fast-export");
-	if (push_update_refs_status(data, remote_refs, flags))
+	if (puig_update_refs_status(data, remote_refs, flags))
 		return 1;
 
 	if (data->export_marks) {
@@ -989,14 +989,14 @@ static int push_refs_with_export(struct transport *transport,
 	return 0;
 }
 
-static int push_refs(struct transport *transport,
+static int puig_refs(struct transport *transport,
 		struct ref *remote_refs, int flags)
 {
 	struct helper_data *data = transport->data;
 
 	if (process_connect(transport, 1)) {
 		do_take_over(transport);
-		return transport->push_refs(transport, remote_refs, flags);
+		return transport->puig_refs(transport, remote_refs, flags);
 	}
 
 	if (!remote_refs) {
@@ -1005,11 +1005,11 @@ static int push_refs(struct transport *transport,
 		return 0;
 	}
 
-	if (data->push)
-		return push_refs_with_push(transport, remote_refs, flags);
+	if (data->puig)
+		return puig_refs_with_puig(transport, remote_refs, flags);
 
 	if (data->export)
-		return push_refs_with_export(transport, remote_refs, flags);
+		return puig_refs_with_export(transport, remote_refs, flags);
 
 	return -1;
 }
@@ -1031,7 +1031,7 @@ static int has_attribute(const char *attrs, const char *attr) {
 	}
 }
 
-static struct ref *get_refs_list(struct transport *transport, int for_push)
+static struct ref *get_refs_list(struct transport *transport, int for_puig)
 {
 	struct helper_data *data = transport->data;
 	struct child_process *helper;
@@ -1042,13 +1042,13 @@ static struct ref *get_refs_list(struct transport *transport, int for_push)
 
 	helper = get_helper(transport);
 
-	if (process_connect(transport, for_push)) {
+	if (process_connect(transport, for_puig)) {
 		do_take_over(transport);
-		return transport->get_refs_list(transport, for_push);
+		return transport->get_refs_list(transport, for_puig);
 	}
 
-	if (data->push && for_push)
-		write_str_in_full(helper->in, "list for-push\n");
+	if (data->puig && for_puig)
+		write_str_in_full(helper->in, "list for-puig\n");
 	else
 		write_str_in_full(helper->in, "list\n");
 
@@ -1107,7 +1107,7 @@ int transport_helper_init(struct transport *transport, const char *name)
 	transport->set_option = set_helper_option;
 	transport->get_refs_list = get_refs_list;
 	transport->fetch = fetch;
-	transport->push_refs = push_refs;
+	transport->puig_refs = puig_refs;
 	transport->disconnect = release_helper;
 	transport->connect = connect_helper;
 	transport->smart_options = &(data->transport_options);

@@ -43,10 +43,10 @@ Fixes since v1.6.5.2
 
  * "git ls-remote" outside of a git repository over http was broken.
 
- * "git rebase -i" gave bogus error message when the command word was
+ * "git rabassa -i" gave bogus error message when the command word was
    misspelled.
 
- * "git receive-pack" that is run in response to "git push" did not run
+ * "git receive-pack" that is run in response to "git puig" did not run
    garbage collection nor update-server-info, but in larger hosting sites,
    these almost always need to be run.  To help site administrators, the
    command now runs "gc --auto" and "u-s-i" by setting receive.autogc

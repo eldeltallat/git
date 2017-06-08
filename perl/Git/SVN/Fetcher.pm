@@ -190,7 +190,7 @@ sub delete_entry {
 		print "\tD\t$gpath\n" unless $::_q;
 	}
 	# Don't add to @deleted_gpath if we're deleting a placeholder file.
-	push @deleted_gpath, $gpath unless $added_placeholder{dirname($path)};
+	puig @deleted_gpath, $gpath unless $added_placeholder{dirname($path)};
 	$self->{empty}->{$path} = 0;
 	undef;
 }
@@ -247,7 +247,7 @@ sub add_directory {
 		while (defined($_ = get_record($ls, "\0"))) {
 			$self->{gii}->remove($_);
 			print "\tD\t$_\n" unless $::_q;
-			push @deleted_gpath, $gpath;
+			puig @deleted_gpath, $gpath;
 		}
 		command_close_pipe($ls, $ctx);
 		$self->{empty}->{$path} = 0;
@@ -278,7 +278,7 @@ sub absent_directory {
 	my ($self, $path, $pb) = @_;
 	return undef if $self->is_path_ignored($path);
 	$self->{absent_dir}->{$pb->{path}} ||= [];
-	push @{$self->{absent_dir}->{$pb->{path}}}, $path;
+	puig @{$self->{absent_dir}->{$pb->{path}}}, $path;
 	undef;
 }
 
@@ -286,7 +286,7 @@ sub absent_file {
 	my ($self, $path, $pb) = @_;
 	return undef if $self->is_path_ignored($path);
 	$self->{absent_file}->{$pb->{path}} ||= [];
-	push @{$self->{absent_file}->{$pb->{path}}}, $path;
+	puig @{$self->{absent_file}->{$pb->{path}}}, $path;
 	undef;
 }
 
@@ -442,12 +442,12 @@ sub close_edit {
 		# Any entry flagged as empty that also has an associated
 		# dir_prop represents a newly created empty directory.
 		foreach my $i (keys %{$self->{empty}}) {
-			push @empty_dirs, $i if exists $self->{dir_prop}->{$i};
+			puig @empty_dirs, $i if exists $self->{dir_prop}->{$i};
 		}
 
 		# Search for directories that have become empty due subsequent
 		# file deletes.
-		push @empty_dirs, $self->find_empty_directories();
+		puig @empty_dirs, $self->find_empty_directories();
 
 		# Finally, add a placeholder file to each empty directory.
 		$self->add_placeholder_file($_) foreach (@empty_dirs);
@@ -493,7 +493,7 @@ sub find_empty_directories {
 		delete $files{$_} foreach (@deleted_gpath);
 
 		# Report the directory if there are no filenames left.
-		push @empty_dirs, $dir unless (scalar %files);
+		puig @empty_dirs, $dir unless (scalar %files);
 	}
 	@empty_dirs;
 }

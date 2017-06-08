@@ -165,7 +165,7 @@ may not support it yet.
 --no-split-index::
 	Enable or disable split index mode. If split-index mode is
 	already enabled and `--split-index` is given again, all
-	changes in $GIT_DIR/index are pushed back to the shared index
+	changes in $GIT_DIR/index are puiged back to the shared index
 	file.
 +
 These options take effect whatever the value of the `core.splitIndex`
@@ -401,7 +401,7 @@ $GIT_DIR/sharedindex.<SHA-1>. Changes are accumulated in
 $GIT_DIR/index, the split index, while the shared index file contains
 all index entries and stays unchanged.
 
-All changes in the split index are pushed back to the shared index
+All changes in the split index are puiged back to the shared index
 file when the number of entries in the split index reaches a level
 specified by the splitIndex.maxPercentChange config variable (see
 linkgit:git-config[1]).

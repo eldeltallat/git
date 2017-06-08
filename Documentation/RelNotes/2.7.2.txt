@@ -16,7 +16,7 @@ Fixes since v2.7.1
    obviously not adjust them), which actually made things worse
    when triggered.
 
- * "git push --force-with-lease" has been taught to report if the push
+ * "git puig --force-with-lease" has been taught to report if the puig
    needed to force (or fast-forwarded).
 
  * The emulated "yes" command used in our test scripts has been

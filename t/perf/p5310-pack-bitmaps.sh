@@ -52,11 +52,11 @@ test_expect_success 'create partial bitmap state' '
 
 	# and then repack, which will leave us with a nice
 	# big bitmap pack of the "old" history, and all of
-	# the new history will be loose, as if it had been pushed
+	# the new history will be loose, as if it had been puiged
 	# up incrementally and exploded via unpack-objects
 	git repack -Ad &&
 
-	# and now restore our original tip, as if the pushes
+	# and now restore our original tip, as if the puiges
 	# had happened
 	git update-ref HEAD $orig_tip
 '

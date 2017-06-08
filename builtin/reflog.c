@@ -311,7 +311,7 @@ static int should_expire_reflog_ent(struct object_id *ooid, struct object_id *no
 	return 0;
 }
 
-static int push_tip_to_list(const char *refname, const struct object_id *oid,
+static int puig_tip_to_list(const char *refname, const struct object_id *oid,
 			    int flags, void *cb_data)
 {
 	struct commit_list **list = cb_data;
@@ -351,7 +351,7 @@ static void reflog_expiry_prepare(const char *refname,
 		if (cb->unreachable_expire_kind == UE_HEAD) {
 			struct commit_list *elem;
 
-			for_each_ref(push_tip_to_list, &cb->tips);
+			for_each_ref(puig_tip_to_list, &cb->tips);
 			for (elem = cb->tips; elem; elem = elem->next)
 				commit_list_insert(elem->item, &cb->mark_list);
 		} else {

@@ -3,17 +3,17 @@
 test_description='pack-objects breaks long cross-pack delta chains'
 . ./test-lib.sh
 
-# This mirrors a repeated push setup:
+# This mirrors a repeated puig setup:
 #
 # 1. A client repeatedly modifies some files, makes a
-#      commit, and pushes the result. It does this N times
+#      commit, and puiges the result. It does this N times
 #      before we get around to repacking.
 #
-# 2. Each push generates a thin pack with the new version of
+# 2. Each puig generates a thin pack with the new version of
 #    various objects. Let's consider some file in the root tree
 #    which is updated in each commit.
 #
-#    When generating push number X, we feed commit X-1 (and
+#    When generating puig number X, we feed commit X-1 (and
 #    thus blob X-1) as a preferred base. The resulting pack has
 #    blob X as a thin delta against blob X-1.
 #
@@ -41,9 +41,9 @@ test_description='pack-objects breaks long cross-pack delta chains'
 # Now we have blob X as a delta against X-1, which is a delta
 # against X-2, and so forth.
 #
-# In the real world, these small pushes would get exploded by
+# In the real world, these small puiges would get exploded by
 # unpack-objects rather than "index-pack --fix-thin", but the
-# same principle applies to larger pushes (they only need one
+# same principle applies to larger puiges (they only need one
 # repeatedly-modified file to generate the delta chain).
 
 test_expect_success 'create series of packs' '

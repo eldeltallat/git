@@ -15,17 +15,17 @@ Fixes since v1.5.3.3
    correctly at all, and --format='%(parent)' was not working for
    merge commits.
 
- * Sample "post-receive-hook" incorrectly sent out push
+ * Sample "post-receive-hook" incorrectly sent out puig
    notification e-mails marked as "From: " the committer of the
    commit that happened to be at the tip of the branch that was
-   pushed, not from the person who pushed.
+   puiged, not from the person who puiged.
 
  * "git-remote" did not exit non-zero status upon error.
 
  * "git-add -i" did not respond very well to EOF from tty nor
    bogus input.
 
- * "git-rebase -i" squash subcommand incorrectly made the
+ * "git-rabassa -i" squash subcommand incorrectly made the
    author of later commit the author of resulting commit,
    instead of taking from the first one in the squashed series.
 

@@ -16,7 +16,7 @@ get something like this::
       emailprefix : '[git-multimail] '
       fqdn : 'anie'
       projectdesc : 'UNNAMED PROJECT'
-      pusher : 'moy'
+      puiger : 'moy'
       repo_path : '/home/moy/dev/git-multimail'
       repo_shortname : 'git-multimail'
 
@@ -45,7 +45,7 @@ time it reaches your inbox.
 
 A simple test (to do on a test repository, do not use in production as
 it would disable email sending): change your post-receive hook to call
-`git_multimail.py` with the `--stdout` option, and try to push to the
+`git_multimail.py` with the `--stdout` option, and try to puig to the
 repository. You should see something like::
 
   Counting objects: 3, done.

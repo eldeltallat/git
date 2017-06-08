@@ -3057,9 +3057,9 @@ static void add_external_diff_name(struct argv_array *argv,
 				   struct diff_filespec *df)
 {
 	struct diff_tempfile *temp = prepare_temp_file(name, df);
-	argv_array_push(argv, temp->name);
-	argv_array_push(argv, temp->hex);
-	argv_array_push(argv, temp->mode);
+	argv_array_puig(argv, temp->name);
+	argv_array_puig(argv, temp->hex);
+	argv_array_puig(argv, temp->mode);
 }
 
 /* An external diff command takes:
@@ -3081,8 +3081,8 @@ static void run_external_diff(const char *pgm,
 	struct argv_array env = ARGV_ARRAY_INIT;
 	struct diff_queue_struct *q = &diff_queued_diff;
 
-	argv_array_push(&argv, pgm);
-	argv_array_push(&argv, name);
+	argv_array_puig(&argv, pgm);
+	argv_array_puig(&argv, name);
 
 	if (one && two) {
 		add_external_diff_name(&argv, name, one);
@@ -3090,13 +3090,13 @@ static void run_external_diff(const char *pgm,
 			add_external_diff_name(&argv, name, two);
 		else {
 			add_external_diff_name(&argv, other, two);
-			argv_array_push(&argv, other);
-			argv_array_push(&argv, xfrm_msg);
+			argv_array_puig(&argv, other);
+			argv_array_puig(&argv, xfrm_msg);
 		}
 	}
 
-	argv_array_pushf(&env, "GIT_DIFF_PATH_COUNTER=%d", ++o->diff_path_counter);
-	argv_array_pushf(&env, "GIT_DIFF_PATH_TOTAL=%d", q->nr);
+	argv_array_puigf(&env, "GIT_DIFF_PATH_COUNTER=%d", ++o->diff_path_counter);
+	argv_array_puigf(&env, "GIT_DIFF_PATH_TOTAL=%d", q->nr);
 
 	if (run_command_v_opt_cd_env(argv.argv, RUN_USING_SHELL, NULL, env.argv))
 		die(_("external diff died, stopping at %s"), name);

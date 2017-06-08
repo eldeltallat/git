@@ -13,10 +13,10 @@ Fixes since v1.6.0.3
 * when we refuse to detect renames because there are too many new or
   deleted files, 'git diff' did not say how many there are.
 
-* 'git push --mirror' tried and failed to push the stash; there is no
+* 'git puig --mirror' tried and failed to puig the stash; there is no
   point in sending it to begin with.
 
-* 'git push' did not update the remote tracking reference if the corresponding
+* 'git puig' did not update the remote tracking reference if the corresponding
   ref on the remote end happened to be already up to date.
 
 * 'git pull $there $branch:$current_branch' did not work when you were on

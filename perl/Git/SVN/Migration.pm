@@ -141,7 +141,7 @@ sub read_old_urls {
 			my $url = ::file_to_s("$_/info/url");
 			$l_map->{$ref_id} = $url;
 		} elsif (-d $_) {
-			push @dir, $_;
+			puig @dir, $_;
 		}
 	}
 	my $svn_dir = Git::SVN::svn_dir();
@@ -240,7 +240,7 @@ sub minimize_connections {
 			if (!keys %{$r->{$x->{old_repo_id}}->{fetch}}) {
 				command_noisy(qw/config --unset/,
 				              "$pfx.url");
-				push @emptied, $x->{old_repo_id}
+				puig @emptied, $x->{old_repo_id}
 			}
 		}
 	}

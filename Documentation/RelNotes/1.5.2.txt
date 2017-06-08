@@ -99,7 +99,7 @@ Updates since v1.5.1
     the root commit).  We used to refuse to operate without a
     good and a bad commit.
 
-  - "git push", when pushing into more than one repository, does
+  - "git puig", when puiging into more than one repository, does
     not stop at the first error.
 
   - "git archive" does not insist you to give --format parameter

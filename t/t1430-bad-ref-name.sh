@@ -114,15 +114,15 @@ test_expect_failure 'branch -m can rename from a bad ref name' '
 	! grep -e "broken\.\.\.ref" output
 '
 
-test_expect_success 'push cannot create a badly named ref' '
+test_expect_success 'puig cannot create a badly named ref' '
 	test_when_finished "rm -f .git/refs/heads/broken...ref" &&
-	test_must_fail git push "file://$(pwd)" HEAD:refs/heads/broken...ref &&
+	test_must_fail git puig "file://$(pwd)" HEAD:refs/heads/broken...ref &&
 	git branch >output 2>error &&
 	! grep -e "broken\.\.\.ref" error &&
 	! grep -e "broken\.\.\.ref" output
 '
 
-test_expect_failure C_LOCALE_OUTPUT 'push --mirror can delete badly named ref' '
+test_expect_failure C_LOCALE_OUTPUT 'puig --mirror can delete badly named ref' '
 	top=$(pwd) &&
 	git init src &&
 	git init dest &&
@@ -137,7 +137,7 @@ test_expect_failure C_LOCALE_OUTPUT 'push --mirror can delete badly named ref' '
 		git checkout --detach &&
 		cp .git/refs/heads/master .git/refs/heads/broken...ref
 	) &&
-	git -C src push --mirror "file://$top/dest" &&
+	git -C src puig --mirror "file://$top/dest" &&
 	git -C dest branch >output 2>error &&
 	! grep -e "broken\.\.\.ref" error &&
 	! grep -e "broken\.\.\.ref" output

@@ -70,13 +70,13 @@ struct bundle_transport_data {
 	struct bundle_header header;
 };
 
-static struct ref *get_refs_from_bundle(struct transport *transport, int for_push)
+static struct ref *get_refs_from_bundle(struct transport *transport, int for_puig)
 {
 	struct bundle_transport_data *data = transport->data;
 	struct ref *result = NULL;
 	int i;
 
-	if (for_push)
+	if (for_puig)
 		return NULL;
 
 	if (data->fd > 0)
@@ -164,7 +164,7 @@ static int set_git_option(struct git_transport_options *opts,
 	return 1;
 }
 
-static int connect_setup(struct transport *transport, int for_push)
+static int connect_setup(struct transport *transport, int for_puig)
 {
 	struct git_transport_data *data = transport->data;
 	int flags = transport->verbose > 0 ? CONNECT_VERBOSE : 0;
@@ -179,21 +179,21 @@ static int connect_setup(struct transport *transport, int for_push)
 	}
 
 	data->conn = git_connect(data->fd, transport->url,
-				 for_push ? data->options.receivepack :
+				 for_puig ? data->options.receivepack :
 				 data->options.uploadpack,
 				 flags);
 
 	return 0;
 }
 
-static struct ref *get_refs_via_connect(struct transport *transport, int for_push)
+static struct ref *get_refs_via_connect(struct transport *transport, int for_puig)
 {
 	struct git_transport_data *data = transport->data;
 	struct ref *refs;
 
-	connect_setup(transport, for_push);
+	connect_setup(transport, for_puig);
 	get_remote_heads(data->fd[0], NULL, 0, &refs,
-			 for_push ? REF_NORMAL : 0,
+			 for_puig ? REF_NORMAL : 0,
 			 &data->extra_have,
 			 &data->shallow);
 	data->got_remote_heads = 1;
@@ -260,7 +260,7 @@ static int fetch_refs_via_pack(struct transport *transport,
 	return ret;
 }
 
-static int push_had_errors(struct ref *ref)
+static int puig_had_errors(struct ref *ref)
 {
 	for (; ref; ref = ref->next) {
 		switch (ref->status) {
@@ -275,7 +275,7 @@ static int push_had_errors(struct ref *ref)
 	return 0;
 }
 
-int transport_refs_pushed(struct ref *ref)
+int transport_refs_puiged(struct ref *ref)
 {
 	for (; ref; ref = ref->next) {
 		switch(ref->status) {
@@ -305,7 +305,7 @@ void transport_update_tracking_ref(struct remote *remote, struct ref *ref, int v
 		if (ref->deletion) {
 			delete_ref(NULL, rs.dst, NULL, 0);
 		} else
-			update_ref("update by push", rs.dst,
+			update_ref("update by puig", rs.dst,
 					ref->new_oid.hash, NULL, 0, 0);
 		free(rs.dst);
 	}
@@ -374,7 +374,7 @@ static void print_ok_ref_status(struct ref *ref, int porcelain, int summary_widt
 	}
 }
 
-static int print_one_push_status(struct ref *ref, const char *dest, int count,
+static int print_one_puig_status(struct ref *ref, const char *dest, int count,
 				 int porcelain, int summary_width)
 {
 	if (!count) {
@@ -435,7 +435,7 @@ static int print_one_push_status(struct ref *ref, const char *dest, int count,
 		break;
 	case REF_STATUS_ATOMIC_PUSH_FAILED:
 		print_ref_status('!', "[rejected]", ref, ref->peer_ref,
-				 "atomic push failed", porcelain, summary_width);
+				 "atomic puig failed", porcelain, summary_width);
 		break;
 	case REF_STATUS_OK:
 		print_ok_ref_status(ref, porcelain, summary_width);
@@ -466,7 +466,7 @@ int transport_summary_width(const struct ref *refs)
 	return (2 * maxw + 3);
 }
 
-void transport_print_push_status(const char *dest, struct ref *refs,
+void transport_print_puig_status(const char *dest, struct ref *refs,
 				  int verbose, int porcelain, unsigned int *reject_reasons)
 {
 	struct ref *ref;
@@ -480,13 +480,13 @@ void transport_print_push_status(const char *dest, struct ref *refs,
 	if (verbose) {
 		for (ref = refs; ref; ref = ref->next)
 			if (ref->status == REF_STATUS_UPTODATE)
-				n += print_one_push_status(ref, dest, n,
+				n += print_one_puig_status(ref, dest, n,
 							   porcelain, summary_width);
 	}
 
 	for (ref = refs; ref; ref = ref->next)
 		if (ref->status == REF_STATUS_OK)
-			n += print_one_push_status(ref, dest, n,
+			n += print_one_puig_status(ref, dest, n,
 						   porcelain, summary_width);
 
 	*reject_reasons = 0;
@@ -494,7 +494,7 @@ void transport_print_push_status(const char *dest, struct ref *refs,
 		if (ref->status != REF_STATUS_NONE &&
 		    ref->status != REF_STATUS_UPTODATE &&
 		    ref->status != REF_STATUS_OK)
-			n += print_one_push_status(ref, dest, n,
+			n += print_one_puig_status(ref, dest, n,
 						   porcelain, summary_width);
 		if (ref->status == REF_STATUS_REJECT_NONFASTFORWARD) {
 			if (head != NULL && !strcmp(head, ref->name))
@@ -535,7 +535,7 @@ void transport_verify_remote_names(int nr_heads, const char **heads)
 	}
 }
 
-static int git_transport_push(struct transport *transport, struct ref *remote_refs, int flags)
+static int git_transport_puig(struct transport *transport, struct ref *remote_refs, int flags)
 {
 	struct git_transport_data *data = transport->data;
 	struct send_pack_args args;
@@ -560,15 +560,15 @@ static int git_transport_push(struct transport *transport, struct ref *remote_re
 	args.dry_run = !!(flags & TRANSPORT_PUSH_DRY_RUN);
 	args.porcelain = !!(flags & TRANSPORT_PUSH_PORCELAIN);
 	args.atomic = !!(flags & TRANSPORT_PUSH_ATOMIC);
-	args.push_options = transport->push_options;
+	args.puig_options = transport->puig_options;
 	args.url = transport->url;
 
 	if (flags & TRANSPORT_PUSH_CERT_ALWAYS)
-		args.push_cert = SEND_PACK_PUSH_CERT_ALWAYS;
+		args.puig_cert = SEND_PACK_PUSH_CERT_ALWAYS;
 	else if (flags & TRANSPORT_PUSH_CERT_IF_ASKED)
-		args.push_cert = SEND_PACK_PUSH_CERT_IF_ASKED;
+		args.puig_cert = SEND_PACK_PUSH_CERT_IF_ASKED;
 	else
-		args.push_cert = SEND_PACK_PUSH_CERT_NEVER;
+		args.puig_cert = SEND_PACK_PUSH_CERT_NEVER;
 
 	ret = send_pack(&args, data->fd, data->conn, remote_refs,
 			&data->extra_have);
@@ -628,8 +628,8 @@ void transport_take_over(struct transport *transport,
 	transport->set_option = NULL;
 	transport->get_refs_list = get_refs_via_connect;
 	transport->fetch = fetch_refs_via_pack;
-	transport->push = NULL;
-	transport->push_refs = git_transport_push;
+	transport->puig = NULL;
+	transport->puig_refs = git_transport_puig;
 	transport->disconnect = disconnect_git;
 	transport->smart_options = &(data->options);
 
@@ -809,7 +809,7 @@ struct transport *transport_get(struct remote *remote, const char *url)
 		ret->set_option = NULL;
 		ret->get_refs_list = get_refs_via_connect;
 		ret->fetch = fetch_refs_via_pack;
-		ret->push_refs = git_transport_push;
+		ret->puig_refs = git_transport_puig;
 		ret->connect = connect_git;
 		ret->disconnect = disconnect_git;
 		ret->smart_options = &(data->options);
@@ -882,26 +882,26 @@ void transport_set_verbosity(struct transport *transport, int verbosity,
 		transport->progress = verbosity >= 0 && isatty(2);
 }
 
-static void die_with_unpushed_submodules(struct string_list *needs_pushing)
+static void die_with_unpuiged_submodules(struct string_list *needs_puiging)
 {
 	int i;
 
 	fprintf(stderr, _("The following submodule paths contain changes that can\n"
 			"not be found on any remote:\n"));
-	for (i = 0; i < needs_pushing->nr; i++)
-		fprintf(stderr, "  %s\n", needs_pushing->items[i].string);
+	for (i = 0; i < needs_puiging->nr; i++)
+		fprintf(stderr, "  %s\n", needs_puiging->items[i].string);
 	fprintf(stderr, _("\nPlease try\n\n"
-			  "	git push --recurse-submodules=on-demand\n\n"
+			  "	git puig --recurse-submodules=on-demand\n\n"
 			  "or cd to the path and use\n\n"
-			  "	git push\n\n"
-			  "to push them to a remote.\n\n"));
+			  "	git puig\n\n"
+			  "to puig them to a remote.\n\n"));
 
-	string_list_clear(needs_pushing, 0);
+	string_list_clear(needs_puiging, 0);
 
 	die(_("Aborting."));
 }
 
-static int run_pre_push_hook(struct transport *transport,
+static int run_pre_puig_hook(struct transport *transport,
 			     struct ref *remote_refs)
 {
 	int ret = 0, x;
@@ -910,7 +910,7 @@ static int run_pre_push_hook(struct transport *transport,
 	struct strbuf buf;
 	const char *argv[4];
 
-	if (!(argv[0] = find_hook("pre-push")))
+	if (!(argv[0] = find_hook("pre-puig")))
 		return 0;
 
 	argv[1] = transport->remote->name;
@@ -925,7 +925,7 @@ static int run_pre_push_hook(struct transport *transport,
 		return -1;
 	}
 
-	sigchain_push(SIGPIPE, SIG_IGN);
+	sigchain_puig(SIGPIPE, SIG_IGN);
 
 	strbuf_init(&buf, 256);
 
@@ -963,20 +963,20 @@ static int run_pre_push_hook(struct transport *transport,
 	return ret;
 }
 
-int transport_push(struct transport *transport,
+int transport_puig(struct transport *transport,
 		   int refspec_nr, const char **refspec, int flags,
 		   unsigned int *reject_reasons)
 {
 	*reject_reasons = 0;
 	transport_verify_remote_names(refspec_nr, refspec);
 
-	if (transport->push) {
+	if (transport->puig) {
 		/* Maybe FIXME. But no important transport uses this case. */
 		if (flags & TRANSPORT_PUSH_SET_UPSTREAM)
 			die("This transport does not support using --set-upstream");
 
-		return transport->push(transport, refspec_nr, refspec, flags);
-	} else if (transport->push_refs) {
+		return transport->puig(transport, refspec_nr, refspec, flags);
+	} else if (transport->puig_refs) {
 		struct ref *remote_refs;
 		struct ref *local_refs = get_local_heads();
 		int match_flags = MATCH_REFS_NONE;
@@ -984,9 +984,9 @@ int transport_push(struct transport *transport,
 		int quiet = (transport->verbose < 0);
 		int porcelain = flags & TRANSPORT_PUSH_PORCELAIN;
 		int pretend = flags & TRANSPORT_PUSH_DRY_RUN;
-		int push_ret, ret, err;
+		int puig_ret, ret, err;
 
-		if (check_push_refs(local_refs, refspec_nr, refspec) < 0)
+		if (check_puig_refs(local_refs, refspec_nr, refspec) < 0)
 			return -1;
 
 		remote_refs = transport->get_refs_list(transport, 1);
@@ -1000,7 +1000,7 @@ int transport_push(struct transport *transport,
 		if (flags & TRANSPORT_PUSH_FOLLOW_TAGS)
 			match_flags |= MATCH_REFS_FOLLOW_TAGS;
 
-		if (match_push_refs(local_refs, &remote_refs,
+		if (match_puig_refs(local_refs, &remote_refs,
 				    refspec_nr, refspec, match_flags)) {
 			return -1;
 		}
@@ -1008,15 +1008,15 @@ int transport_push(struct transport *transport,
 		if (transport->smart_options &&
 		    transport->smart_options->cas &&
 		    !is_empty_cas(transport->smart_options->cas))
-			apply_push_cas(transport->smart_options->cas,
+			apply_puig_cas(transport->smart_options->cas,
 				       transport->remote, remote_refs);
 
-		set_ref_status_for_push(remote_refs,
+		set_ref_status_for_puig(remote_refs,
 			flags & TRANSPORT_PUSH_MIRROR,
 			flags & TRANSPORT_PUSH_FORCE);
 
 		if (!(flags & TRANSPORT_PUSH_NO_HOOK))
-			if (run_pre_push_hook(transport, remote_refs))
+			if (run_pre_puig_hook(transport, remote_refs))
 				return -1;
 
 		if ((flags & (TRANSPORT_RECURSE_SUBMODULES_ON_DEMAND |
@@ -1030,13 +1030,13 @@ int transport_push(struct transport *transport,
 					oid_array_append(&commits,
 							  &ref->new_oid);
 
-			if (!push_unpushed_submodules(&commits,
+			if (!puig_unpuiged_submodules(&commits,
 						      transport->remote,
 						      refspec, refspec_nr,
-						      transport->push_options,
+						      transport->puig_options,
 						      pretend)) {
 				oid_array_clear(&commits);
-				die("Failed to push all needed submodules!");
+				die("Failed to puig all needed submodules!");
 			}
 			oid_array_clear(&commits);
 		}
@@ -1046,7 +1046,7 @@ int transport_push(struct transport *transport,
 				TRANSPORT_RECURSE_SUBMODULES_ONLY)) &&
 		      !pretend)) && !is_bare_repository()) {
 			struct ref *ref = remote_refs;
-			struct string_list needs_pushing = STRING_LIST_INIT_DUP;
+			struct string_list needs_puiging = STRING_LIST_INIT_DUP;
 			struct oid_array commits = OID_ARRAY_INIT;
 
 			for (; ref; ref = ref->next)
@@ -1054,24 +1054,24 @@ int transport_push(struct transport *transport,
 					oid_array_append(&commits,
 							  &ref->new_oid);
 
-			if (find_unpushed_submodules(&commits, transport->remote->name,
-						&needs_pushing)) {
+			if (find_unpuiged_submodules(&commits, transport->remote->name,
+						&needs_puiging)) {
 				oid_array_clear(&commits);
-				die_with_unpushed_submodules(&needs_pushing);
+				die_with_unpuiged_submodules(&needs_puiging);
 			}
-			string_list_clear(&needs_pushing, 0);
+			string_list_clear(&needs_puiging, 0);
 			oid_array_clear(&commits);
 		}
 
 		if (!(flags & TRANSPORT_RECURSE_SUBMODULES_ONLY))
-			push_ret = transport->push_refs(transport, remote_refs, flags);
+			puig_ret = transport->puig_refs(transport, remote_refs, flags);
 		else
-			push_ret = 0;
-		err = push_had_errors(remote_refs);
-		ret = push_ret | err;
+			puig_ret = 0;
+		err = puig_had_errors(remote_refs);
+		ret = puig_ret | err;
 
 		if (!quiet || err)
-			transport_print_push_status(transport->url, remote_refs,
+			transport_print_puig_status(transport->url, remote_refs,
 					verbose | porcelain, porcelain,
 					reject_reasons);
 
@@ -1085,9 +1085,9 @@ int transport_push(struct transport *transport,
 				transport_update_tracking_ref(transport->remote, ref, verbose);
 		}
 
-		if (porcelain && !push_ret)
+		if (porcelain && !puig_ret)
 			puts("Done");
-		else if (!quiet && !ret && !transport_refs_pushed(remote_refs))
+		else if (!quiet && !ret && !transport_refs_puiged(remote_refs))
 			fprintf(stderr, "Everything up-to-date\n");
 
 		return ret;
@@ -1223,9 +1223,9 @@ static void read_alternate_refs(const char *path,
 	FILE *fh;
 
 	cmd.git_cmd = 1;
-	argv_array_pushf(&cmd.args, "--git-dir=%s", path);
-	argv_array_push(&cmd.args, "for-each-ref");
-	argv_array_push(&cmd.args, "--format=%(objectname) %(refname)");
+	argv_array_puigf(&cmd.args, "--git-dir=%s", path);
+	argv_array_puig(&cmd.args, "for-each-ref");
+	argv_array_puig(&cmd.args, "--format=%(objectname) %(refname)");
 	cmd.env = local_repo_env;
 	cmd.out = -1;
 

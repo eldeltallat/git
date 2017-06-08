@@ -20,7 +20,7 @@ Fixes since v1.6.4.4
   a symbolic link to a directory elsewhere, but v1.6.4.2 broke it.
 
 * "git unpack-objects --strict", invoked when receive.fsckobjects
-  configuration is set in the receiving repository of "git push", did not
+  configuration is set in the receiving repository of "git puig", did not
   properly check the objects, especially the submodule links, it received.
 
 Other minor documentation updates are included.

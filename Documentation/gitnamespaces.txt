@@ -17,7 +17,7 @@ DESCRIPTION
 
 Git supports dividing the refs of a single repository into multiple
 namespaces, each of which has its own branches, tags, and HEAD.  Git can
-expose each namespace as an independent repository to pull from and push
+expose each namespace as an independent repository to pull from and puig
 to, while sharing the object store, and exposing all the refs to
 operations such as linkgit:git-gc[1].
 

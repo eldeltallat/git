@@ -167,7 +167,7 @@ an ideal situation, given that most conversion tools are throw-away
 
 Parallel Operation
 ------------------
-Like 'git push' or 'git fetch', imports handled by fast-import are safe to
+Like 'git puig' or 'git fetch', imports handled by fast-import are safe to
 run alongside parallel `git repack -a -d` or `git gc` invocations,
 or any other Git operation (including 'git prune', as loose objects
 are never used by fast-import).

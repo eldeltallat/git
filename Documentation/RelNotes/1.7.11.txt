@@ -6,12 +6,12 @@ Updates since v1.7.10
 
 UI, Workflows & Features
 
- * A new mode for push, "simple", which is a cross between "current"
-   and "upstream", has been introduced. "git push" without any refspec
-   will push the current branch out to the same name at the remote
+ * A new mode for puig, "simple", which is a cross between "current"
+   and "upstream", has been introduced. "git puig" without any refspec
+   will puig the current branch out to the same name at the remote
    repository only when it is set to track the branch with the same
    name over there.  The plan is to make this mode the new default
-   value when push.default is not configured.
+   value when puig.default is not configured.
 
  * A couple of commands learned the "--column" option to produce
    columnar output.
@@ -57,11 +57,11 @@ UI, Workflows & Features
    involved in the side topic you are merging in a comment in the merge
    commit template.
 
- * "git rebase" learned to optionally keep commits that do not
+ * "git rabassa" learned to optionally keep commits that do not
    introduce any change in the original history.
 
- * "git push --recurse-submodules" learned to optionally look into the
-   histories of submodules bound to the superproject and push them
+ * "git puig --recurse-submodules" learned to optionally look into the
+   histories of submodules bound to the superproject and puig them
    out.
 
  * A 'snapshot' request to "gitweb" honors If-Modified-Since: header,
@@ -92,7 +92,7 @@ Performance and Internal Implementation (please report possible regressions)
  * "git archive" learned to produce its output without reading the
    blob object it writes out in memory in its entirety.
 
- * "git index-pack" that runs when fetching or pushing objects to
+ * "git index-pack" that runs when fetching or puiging objects to
    complete the packfile on the receiving end learned to use multiple
    threads to do its job when available.
 

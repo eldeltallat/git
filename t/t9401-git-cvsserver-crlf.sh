@@ -84,7 +84,7 @@ export CVSROOT CVS_SERVER
 
 rm -rf "$CVSWORK" "$SERVERDIR"
 test_expect_success 'setup' '
-    git config push.default matching &&
+    git config puig.default matching &&
     echo "Simple text file" >textfile.c &&
     echo "File with embedded NUL: Q <- there" | q_to_nul > binfile.bin &&
     mkdir subdir &&
@@ -173,7 +173,7 @@ test_expect_success 'updating' '
     echo 'hello' >> binfile.bin &&
     git add subdir/newfile.bin subdir/file.h subdir/newfile.c binfile.bin &&
     git commit -q -m "Add and change some files" &&
-    git push gitcvs.git >/dev/null &&
+    git puig gitcvs.git >/dev/null &&
     (cd cvswork &&
     GIT_CONFIG="$git_config" cvs -Q update
     ) &&
@@ -218,7 +218,7 @@ test_expect_success 'setup multi-line files' '
       echo "line 4" ) | q_to_nul > multilineTxt.c &&
     git add multilineTxt.c &&
     git commit -q -m "multiline files" &&
-    git push gitcvs.git >/dev/null
+    git puig gitcvs.git >/dev/null
 '
 
 rm -rf cvswork
@@ -340,7 +340,7 @@ test_expect_success 'update/merge full other copy (guess)' '
     mv ml.temp multilineTxt.c &&
     git add multilineTxt.c &&
     git commit -q -m "modify multiline file" >> "${WORKDIR}/marked.log" &&
-    git push gitcvs.git >/dev/null &&
+    git puig gitcvs.git >/dev/null &&
     (cd cvswork2 &&
     sed "s/1/replaced_1/" < multilineTxt.c > ml.temp &&
     mv ml.temp multilineTxt.c &&

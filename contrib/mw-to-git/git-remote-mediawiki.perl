@@ -68,7 +68,7 @@ my $import_media = run_git("config --get --bool remote.${remotename}.mediaimport
 chomp($import_media);
 $import_media = ($import_media eq 'true');
 
-# Export media files on push
+# Export media files on puig
 my $export_media = run_git("config --get --bool remote.${remotename}.mediaexport");
 chomp($export_media);
 $export_media = !($export_media eq 'false');
@@ -104,26 +104,26 @@ if (!$fetch_strategy) {
 # Remember the timestamp corresponding to a revision id.
 my %basetimestamps;
 
-# Dumb push: don't update notes and mediawiki ref to reflect the last push.
+# Dumb puig: don't update notes and mediawiki ref to reflect the last puig.
 #
 # Configurable with mediawiki.dumbPush, or per-remote with
 # remote.<remotename>.dumbPush.
 #
-# This means the user will have to re-import the just-pushed
+# This means the user will have to re-import the just-puiged
 # revisions. On the other hand, this means that the Git revisions
 # corresponding to MediaWiki revisions are all imported from the wiki,
 # regardless of whether they were initially created in Git or from the
 # web interface, hence all users will get the same history (i.e. if
-# the push from Git to MediaWiki loses some information, everybody
+# the puig from Git to MediaWiki loses some information, everybody
 # will get the history with information lost). If the import is
 # deterministic, this means everybody gets the same sha1 for each
 # MediaWiki revision.
-my $dumb_push = run_git("config --get --bool remote.${remotename}.dumbPush");
-if (!$dumb_push) {
-	$dumb_push = run_git('config --get --bool mediawiki.dumbPush');
+my $dumb_puig = run_git("config --get --bool remote.${remotename}.dumbPush");
+if (!$dumb_puig) {
+	$dumb_puig = run_git('config --get --bool mediawiki.dumbPush');
 }
-chomp($dumb_push);
-$dumb_push = ($dumb_push eq 'true');
+chomp($dumb_puig);
+$dumb_puig = ($dumb_puig eq 'true');
 
 my $wiki_name = $url;
 $wiki_name =~ s{[^/]*://}{};
@@ -154,7 +154,7 @@ sub exit_error_usage {
             "module directly.\n" .
 	    "This module can be used the following way:\n" .
 	    "\tgit clone mediawiki://<address of a mediawiki>\n" .
-	    "Then, use git commit, push and pull as with every normal git repository.\n";
+	    "Then, use git commit, puig and pull as with every normal git repository.\n";
 }
 
 sub parse_command {
@@ -182,8 +182,8 @@ sub parse_command {
 		die("Too many arguments for option\n")
 		    if (defined($cmd[3]));
 		mw_option($cmd[1],$cmd[2]);
-	} elsif ($cmd[0] eq 'push') {
-		mw_push($cmd[1]);
+	} elsif ($cmd[0] eq 'puig') {
+		mw_puig($cmd[1]);
 	} else {
 		print {*STDERR} "Unknown command. Aborting...\n";
 		return 0;
@@ -404,12 +404,12 @@ sub get_linked_mediafiles {
 			if (defined($page->{links})) {
 				my @link_titles
 				    = map { $_->{title} } @{$page->{links}};
-				push(@media_titles, @link_titles);
+				puig(@media_titles, @link_titles);
 			}
 			if (defined($page->{images})) {
 				my @image_titles
 				    = map { $_->{title} } @{$page->{images}};
-				push(@media_titles, @image_titles);
+				puig(@media_titles, @image_titles);
 			}
 			if (@media_titles) {
 				get_mw_page_list(\@media_titles, $pages);
@@ -594,8 +594,8 @@ sub mw_capabilities {
 	print {*STDOUT} "refspec refs/heads/*:refs/mediawiki/${remotename}/*\n";
 	print {*STDOUT} "import\n";
 	print {*STDOUT} "list\n";
-	print {*STDOUT} "push\n";
-	if ($dumb_push) {
+	print {*STDOUT} "puig\n";
+	if ($dumb_puig) {
 		print {*STDOUT} "no-private-update\n";
 	}
 	print {*STDOUT} "\n";
@@ -645,7 +645,7 @@ sub fetch_mw_revisions_for_page {
 			my $page_rev_ids;
 			$page_rev_ids->{pageid} = $page->{pageid};
 			$page_rev_ids->{revid} = $revision->{revid};
-			push(@page_revs, $page_rev_ids);
+			puig(@page_revs, $page_rev_ids);
 			$revnum++;
 		}
 
@@ -752,14 +752,14 @@ sub import_file_revision {
 # <cmd> <arg1>
 # <cmd> <arg2>
 # \n
-# (like batch sequence of import and sequence of push statements)
+# (like batch sequence of import and sequence of puig statements)
 sub get_more_refs {
 	my $cmd = shift;
 	my @refs;
 	while (1) {
 		my $line = <STDIN>;
 		if ($line =~ /^$cmd (.*)$/) {
-			push(@refs, $1);
+			puig(@refs, $1);
 		} elsif ($line eq "\n") {
 			return @refs;
 		} else {
@@ -935,15 +935,15 @@ sub mw_import_revids {
 }
 
 sub error_non_fast_forward {
-	my $advice = run_git('config --bool advice.pushNonFastForward');
+	my $advice = run_git('config --bool advice.puigNonFastForward');
 	chomp($advice);
 	if ($advice ne 'false') {
-		# Native git-push would show this after the summary.
+		# Native git-puig would show this after the summary.
 		# We can't ask it to display it cleanly, so print it
 		# ourselves before.
 		print {*STDERR} "To prevent you from losing history, non-fast-forward updates were rejected\n";
-		print {*STDERR} "Merge the remote changes (e.g. 'git pull') before pushing again. See the\n";
-		print {*STDERR} "'Note about fast-forwards' section of 'git push --help' for details.\n";
+		print {*STDERR} "Merge the remote changes (e.g. 'git pull') before puiging again. See the\n";
+		print {*STDERR} "'Note about fast-forwards' section of 'git puig --help' for details.\n";
 	}
 	print {*STDOUT} qq(error $_[0] "non-fast-forward"\n);
 	return 0;
@@ -1000,13 +1000,13 @@ sub mw_upload_file {
 			$newrevid = $last_file_page->{revid};
 			print {*STDERR} "Pushed file: ${new_sha1} - ${complete_file_name}.\n";
 		} else {
-			print {*STDERR} "Empty file ${complete_file_name} not pushed.\n";
+			print {*STDERR} "Empty file ${complete_file_name} not puiged.\n";
 		}
 	}
 	return $newrevid;
 }
 
-sub mw_push_file {
+sub mw_puig_file {
 	my $diff_info = shift;
 	# $diff_info contains a string in this format:
 	# 100644 100644 <sha1_of_blob_before_commit> <sha1_of_blob_now> <status>
@@ -1091,15 +1091,15 @@ sub mw_push_file {
 	return ($newrevid, 'ok');
 }
 
-sub mw_push {
-	# multiple push statements can follow each other
-	my @refsspecs = (shift, get_more_refs('push'));
-	my $pushed;
+sub mw_puig {
+	# multiple puig statements can follow each other
+	my @refsspecs = (shift, get_more_refs('puig'));
+	my $puiged;
 	for my $refspec (@refsspecs) {
 		my ($force, $local, $remote) = $refspec =~ /^(\+)?([^:]*):([^:]*)$/
-		    or die("Invalid refspec for push. Expected <src>:<dst> or +<src>:<dst>\n");
+		    or die("Invalid refspec for puig. Expected <src>:<dst> or +<src>:<dst>\n");
 		if ($force) {
-			print {*STDERR} "Warning: forced push not allowed on a MediaWiki.\n";
+			print {*STDERR} "Warning: forced puig not allowed on a MediaWiki.\n";
 		}
 		if ($local eq EMPTY) {
 			print {*STDERR} "Cannot delete remote branch on a MediaWiki\n";
@@ -1107,30 +1107,30 @@ sub mw_push {
 			next;
 		}
 		if ($remote ne 'refs/heads/master') {
-			print {*STDERR} "Only push to the branch 'master' is supported on a MediaWiki\n";
+			print {*STDERR} "Only puig to the branch 'master' is supported on a MediaWiki\n";
 			print {*STDOUT} "error ${remote} only master allowed\n";
 			next;
 		}
-		if (mw_push_revision($local, $remote)) {
-			$pushed = 1;
+		if (mw_puig_revision($local, $remote)) {
+			$puiged = 1;
 		}
 	}
 
-	# Notify Git that the push is done
+	# Notify Git that the puig is done
 	print {*STDOUT} "\n";
 
-	if ($pushed && $dumb_push) {
-		print {*STDERR} "Just pushed some revisions to MediaWiki.\n";
-		print {*STDERR} "The pushed revisions now have to be re-imported, and your current branch\n";
+	if ($puiged && $dumb_puig) {
+		print {*STDERR} "Just puiged some revisions to MediaWiki.\n";
+		print {*STDERR} "The puiged revisions now have to be re-imported, and your current branch\n";
 		print {*STDERR} "needs to be updated with these re-imported commits. You can do this with\n";
 		print {*STDERR} "\n";
-		print {*STDERR} "  git pull --rebase\n";
+		print {*STDERR} "  git pull --rabassa\n";
 		print {*STDERR} "\n";
 	}
 	return;
 }
 
-sub mw_push_revision {
+sub mw_puig_revision {
 	my $local = shift;
 	my $remote = shift; # actually, this has to be "refs/heads/master" at this point.
 	my $last_local_revid = get_last_local_revision();
@@ -1151,7 +1151,7 @@ sub mw_push_revision {
 	}
 
 	if ($HEAD_sha1 eq $remoteorigin_sha1) {
-		# nothing to push
+		# nothing to puig
 		return 0;
 	}
 
@@ -1160,7 +1160,7 @@ sub mw_push_revision {
 	my @commit_pairs = ();
 	if ($last_local_revid > 0) {
 		my $parsed_sha1 = $remoteorigin_sha1;
-		# Find a path from last MediaWiki commit to pushed commit
+		# Find a path from last MediaWiki commit to puiged commit
 		print {*STDERR} "Computing path from local to remote ...\n";
 		my @local_ancestry = split(/\n/, run_git("rev-list --boundary --parents ${local} ^${parsed_sha1}"));
 		my %local_ancestry;
@@ -1179,19 +1179,19 @@ sub mw_push_revision {
 				print {*STDERR} "Cannot find a path in history from remote commit to last commit\n";
 				return error_non_fast_forward($remote);
 			}
-			push(@commit_pairs, [$parsed_sha1, $child]);
+			puig(@commit_pairs, [$parsed_sha1, $child]);
 			$parsed_sha1 = $child;
 		}
 	} else {
 		# No remote mediawiki revision. Export the whole
 		# history (linearized with --first-parent)
-		print {*STDERR} "Warning: no common ancestor, pushing complete history\n";
+		print {*STDERR} "Warning: no common ancestor, puiging complete history\n";
 		my $history = run_git("rev-list --first-parent --children ${local}");
 		my @history = split(/\n/, $history);
 		@history = @history[1..$#history];
 		foreach my $line (reverse @history) {
 			my @commit_info_split = split(/[ \n]/, $line);
-			push(@commit_pairs, \@commit_info_split);
+			puig(@commit_pairs, \@commit_info_split);
 		}
 	}
 
@@ -1214,20 +1214,20 @@ sub mw_push_revision {
 			# and we've split on \0.
 			my $info = shift(@diff_info_list);
 			my $file = shift(@diff_info_list);
-			($mw_revision, $status) = mw_push_file($info, $file, $commit_msg, $mw_revision);
+			($mw_revision, $status) = mw_puig_file($info, $file, $commit_msg, $mw_revision);
 			if ($status eq 'non-fast-forward') {
 				# we may already have sent part of the
 				# commit to MediaWiki, but it's too
-				# late to cancel it. Stop the push in
+				# late to cancel it. Stop the puig in
 				# the middle, but still give an
 				# accurate error message.
 				return error_non_fast_forward($remote);
 			}
 			if ($status ne 'ok') {
-				die("Unknown error from mw_push_file()\n");
+				die("Unknown error from mw_puig_file()\n");
 			}
 		}
-		if (!$dumb_push) {
+		if (!$dumb_puig) {
 			run_git(qq(notes --ref=${remotename}/mediawiki add -f -m "mediawiki_revision: ${mw_revision}" ${sha1_commit}));
 		}
 	}

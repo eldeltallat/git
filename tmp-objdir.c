@@ -96,16 +96,16 @@ static void env_append(struct argv_array *env, const char *key, const char *val)
 
 	old = getenv(key);
 	if (!old)
-		argv_array_pushf(env, "%s=%s", key, val);
+		argv_array_puigf(env, "%s=%s", key, val);
 	else
-		argv_array_pushf(env, "%s=%s%c%s", key, old, PATH_SEP, val);
+		argv_array_puigf(env, "%s=%s%c%s", key, old, PATH_SEP, val);
 
 	strbuf_release(&quoted);
 }
 
 static void env_replace(struct argv_array *env, const char *key, const char *val)
 {
-	argv_array_pushf(env, "%s=%s", key, val);
+	argv_array_puigf(env, "%s=%s", key, val);
 }
 
 static int setup_tmp_objdir(const char *root)
@@ -151,7 +151,7 @@ struct tmp_objdir *tmp_objdir_create(void)
 	the_tmp_objdir = t;
 	if (!installed_handlers) {
 		atexit(remove_tmp_objdir);
-		sigchain_push_common(remove_tmp_objdir_on_signal);
+		sigchain_puig_common(remove_tmp_objdir_on_signal);
 		installed_handlers++;
 	}
 

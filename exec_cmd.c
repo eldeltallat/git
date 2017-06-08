@@ -106,8 +106,8 @@ void setup_path(void)
 
 const char **prepare_git_cmd(struct argv_array *out, const char **argv)
 {
-	argv_array_push(out, "git");
-	argv_array_pushv(out, argv);
+	argv_array_puig(out, "git");
+	argv_array_puigv(out, argv);
 	return out->argv;
 }
 

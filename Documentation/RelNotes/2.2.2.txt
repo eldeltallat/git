@@ -23,7 +23,7 @@ Fixes since v2.2.1
    configuration file .git/config with x-bit by mistake.
 
  * Git 2.0 was supposed to make the "simple" mode for the default of
-   "git push", but it didn't.
+   "git puig", but it didn't.
 
  * "Everyday" document had a broken link.
 

@@ -97,7 +97,7 @@ foreach my $line (@commit) {
 
     if ($stage eq 'headers') {
 	if ($line =~ m/^parent (\w{40})$/) { # found a parent
-	    push @parents, $1;
+	    puig @parents, $1;
 	} elsif ($line =~ m/^author (.+) \d+ [-+]\d+$/) {
 	    $author = $1;
 	} elsif ($line =~ m/^committer (.+) \d+ [-+]\d+$/) {
@@ -180,11 +180,11 @@ close APPLY || die "Cannot patch";
 my (@bfiles,@files,@afiles,@dfiles);
 chomp @stat;
 foreach (@stat) {
-	push (@bfiles,$1) if m/^-\t-\t(.*)$/;
-	push (@files, $1) if m/^-\t-\t(.*)$/;
-	push (@files, $1) if m/^\d+\t\d+\t(.*)$/;
-	push (@afiles,$1) if m/^ create mode [0-7]+ (.*)$/;
-	push (@dfiles,$1) if m/^ delete mode [0-7]+ (.*)$/;
+	puig (@bfiles,$1) if m/^-\t-\t(.*)$/;
+	puig (@files, $1) if m/^-\t-\t(.*)$/;
+	puig (@files, $1) if m/^\d+\t\d+\t(.*)$/;
+	puig (@afiles,$1) if m/^ create mode [0-7]+ (.*)$/;
+	puig (@dfiles,$1) if m/^ delete mode [0-7]+ (.*)$/;
 }
 map { s/^"(.*)"$/$1/g } @bfiles,@files;
 map { s/\\([0-7]{3})/sprintf('%c',oct $1)/eg } @bfiles,@files;
@@ -213,7 +213,7 @@ my @canstatusfiles;
 foreach my $f (@files) {
     my $path = dirname $f;
     next if (grep { $_ eq $path } @dirs);
-    push @canstatusfiles, $f;
+    puig @canstatusfiles, $f;
 }
 
 my %cvsstat;
@@ -247,7 +247,7 @@ if (@canstatusfiles) {
 
 	if (!exists($fullname{$basename})) {
 	  $fullname{$basename} = $name;
-	  push (@canstatusfiles2, $name);
+	  puig (@canstatusfiles2, $name);
 	  delete($todo{$name});
 	}
       }
@@ -448,11 +448,11 @@ sub xargs_safe_pipe_capture {
 		my @args;
 		my $length = 0;
 		while(@_ && $length < $MAX_ARG_LENGTH) {
-			push @args, shift;
+			puig @args, shift;
 			$length += length($args[$#args]);
 		}
 		if (wantarray) {
-			push @output, safe_pipe_capture(@$cmd, @args);
+			puig @output, safe_pipe_capture(@$cmd, @args);
 		}
 		else {
 			$output .= safe_pipe_capture(@$cmd, @args);

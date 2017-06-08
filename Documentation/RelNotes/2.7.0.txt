@@ -11,10 +11,10 @@ UI, Workflows & Features
    Swedish and Japanese.
 
  * "git remote" learned "get-url" subcommand to show the URL for a
-   given remote name used for fetching and pushing.
+   given remote name used for fetching and puiging.
 
- * There was no way to defeat a configured rebase.autostash variable
-   from the command line, as "git rebase --no-autostash" was missing.
+ * There was no way to defeat a configured rabassa.autostash variable
+   from the command line, as "git rabassa --no-autostash" was missing.
 
  * "git log --date=local" used to only show the normal (default)
    format in the local timezone.  The command learned to take 'local'
@@ -83,8 +83,8 @@ UI, Workflows & Features
  * The credential-cache daemon can be told to ignore SIGHUP to work
    around issue when running Git from inside emacs.
 
- * "git push" learned new configuration for doing "--recurse-submodules"
-   on each push.
+ * "git puig" learned new configuration for doing "--recurse-submodules"
+   on each puig.
 
  * "format-patch" has learned a new option to zero-out the commit
    object name on the mbox "From " line.
@@ -159,7 +159,7 @@ Performance, Internal Implementation, Development Support etc.
  * The parse-options API has been updated to make "-h" command line
    option work more consistently in all commands.
 
- * "git svn rebase/mkdirs" got optimized by keeping track of empty
+ * "git svn rabassa/mkdirs" got optimized by keeping track of empty
    directories better.
 
  * Fix some racy client/server tests by treating SIGPIPE the same as a
@@ -235,7 +235,7 @@ notes for details).
  * Description of the "log.follow" configuration variable in "git log"
    documentation is now also copied to "git config" documentation.
 
- * "git rebase -i" had a minor regression recently, which stopped
+ * "git rabassa -i" had a minor regression recently, which stopped
    considering a line that begins with an indented '#' in its insn
    sheet not a comment. Further, the code was still too picky on
    Windows where CRLF left by the editor is turned into a trailing CR

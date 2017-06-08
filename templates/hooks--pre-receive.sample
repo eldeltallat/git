@@ -1,8 +1,8 @@
 #!/bin/sh
 #
-# An example hook script to make use of push options.
-# The example simply echoes all push options that start with 'echoback='
-# and rejects all pushes when the "reject" push option is used.
+# An example hook script to make use of puig options.
+# The example simply echoes all puig options that start with 'echoback='
+# and rejects all puiges when the "reject" puig option is used.
 #
 # To enable this hook, rename this file to "pre-receive".
 

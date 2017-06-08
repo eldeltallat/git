@@ -82,10 +82,10 @@ Fixes since v2.8.2
  * "git mv old new" did not adjust the path for a submodule that lives
    as a subdirectory inside old/ directory correctly.
 
- * "git push" from a corrupt repository that attempts to push a large
+ * "git puig" from a corrupt repository that attempts to puig a large
    number of refs deadlocked; the thread to relay rejection notices
    for these ref updates blocked on writing them to the main thread,
-   after the main thread at the receiving end notices that the push
+   after the main thread at the receiving end notices that the puig
    failed and decides not to read these notices and return a failure.
 
  * A question by "git send-email" to ask the identity of the sender

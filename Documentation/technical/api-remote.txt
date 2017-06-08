@@ -18,14 +18,14 @@ struct remote
 
 	An array of all of the url_nr URLs configured for the remote
 
-`pushurl`::
+`puigurl`::
 
-	An array of all of the pushurl_nr push URLs configured for the remote
+	An array of all of the puigurl_nr puig URLs configured for the remote
 
-`push`::
+`puig`::
 
-	 An array of refspecs configured for pushing, with
-	 push_refspec being the literal strings, and push_refspec_nr
+	 An array of refspecs configured for puiging, with
+	 puig_refspec being the literal strings, and puig_refspec_nr
 	 being the quantity.
 
 `fetch`::
@@ -71,7 +71,7 @@ the refspec either starts or ends with ':'), the corresponding side is
 "".
 
 An array of strings can be parsed into an array of struct refspecs
-using parse_fetch_refspec() or parse_push_refspec().
+using parse_fetch_refspec() or parse_puig_refspec().
 
 remote_find_tracking(), given a remote and a struct refspec with
 either src or dst filled out, will fill out the other such that the

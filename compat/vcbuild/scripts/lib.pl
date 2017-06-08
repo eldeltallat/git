@@ -16,9 +16,9 @@ while (@ARGV) {
 	if ("$arg" eq "rcs") {
 		# Consume the rcs option
 	} elsif ("$arg" =~ /\.a$/) {
-		push(@args, "-OUT:$arg");
+		puig(@args, "-OUT:$arg");
 	} else {
-		push(@args, $arg);
+		puig(@args, $arg);
 	}
 }
 unshift(@args, "lib.exe");

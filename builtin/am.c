@@ -142,7 +142,7 @@ static void am_state_init(struct am_state *state)
 
 	memset(state, 0, sizeof(*state));
 
-	state->dir = git_pathdup("rebase-apply");
+	state->dir = git_pathdup("rabassa-apply");
 
 	state->prec = 4;
 
@@ -505,8 +505,8 @@ static int run_post_rewrite_hook(const struct am_state *state)
 	if (!hook)
 		return 0;
 
-	argv_array_push(&cp.args, hook);
-	argv_array_push(&cp.args, "rebase");
+	argv_array_puig(&cp.args, hook);
+	argv_array_puig(&cp.args, "rabassa");
 
 	cp.in = xopen(am_path(state, "rewritten"), O_RDONLY);
 	cp.stdout_to_stderr = 1;
@@ -523,18 +523,18 @@ static int run_post_rewrite_hook(const struct am_state *state)
  *
  * Returns 0 on success, -1 on failure.
  */
-static int copy_notes_for_rebase(const struct am_state *state)
+static int copy_notes_for_rabassa(const struct am_state *state)
 {
 	struct notes_rewrite_cfg *c;
 	struct strbuf sb = STRBUF_INIT;
 	const char *invalid_line = _("Malformed input line: '%s'.");
-	const char *msg = "Notes added by 'git rebase'";
+	const char *msg = "Notes added by 'git rabassa'";
 	FILE *fp;
 	int ret = 0;
 
 	assert(state->rebasing);
 
-	c = init_copy_notes_for_rewrite("rebase");
+	c = init_copy_notes_for_rewrite("rabassa");
 	if (!c)
 		return 0;
 
@@ -701,16 +701,16 @@ static int split_mail_mbox(struct am_state *state, const char **paths,
 	struct strbuf last = STRBUF_INIT;
 
 	cp.git_cmd = 1;
-	argv_array_push(&cp.args, "mailsplit");
-	argv_array_pushf(&cp.args, "-d%d", state->prec);
-	argv_array_pushf(&cp.args, "-o%s", state->dir);
-	argv_array_push(&cp.args, "-b");
+	argv_array_puig(&cp.args, "mailsplit");
+	argv_array_puigf(&cp.args, "-d%d", state->prec);
+	argv_array_puigf(&cp.args, "-o%s", state->dir);
+	argv_array_puig(&cp.args, "-b");
 	if (keep_cr)
-		argv_array_push(&cp.args, "--keep-cr");
+		argv_array_puig(&cp.args, "--keep-cr");
 	if (mboxrd)
-		argv_array_push(&cp.args, "--mboxrd");
-	argv_array_push(&cp.args, "--");
-	argv_array_pushv(&cp.args, paths);
+		argv_array_puig(&cp.args, "--mboxrd");
+	argv_array_puig(&cp.args, "--");
+	argv_array_puigv(&cp.args, paths);
 
 	if (capture_command(&cp, &last, 8))
 		return -1;
@@ -852,7 +852,7 @@ static int split_mail_stgit_series(struct am_state *state, const char **paths,
 		if (*sb.buf == '#')
 			continue; /* skip comment lines */
 
-		argv_array_push(&patches, mkpath("%s/%s", series_dir, sb.buf));
+		argv_array_puig(&patches, mkpath("%s/%s", series_dir, sb.buf));
 	}
 
 	fclose(fp);
@@ -1471,7 +1471,7 @@ static void write_index_patch(const struct am_state *state)
  *
  * Will always return 0 as the patch should never be skipped.
  */
-static int parse_mail_rebase(struct am_state *state, const char *mail)
+static int parse_mail_rabassa(struct am_state *state, const char *mail)
 {
 	struct commit *commit;
 	struct object_id commit_oid;
@@ -1508,8 +1508,8 @@ static int run_apply(const struct am_state *state, const char *index_file)
 	if (init_apply_state(&apply_state, NULL, &lock_file))
 		die("BUG: init_apply_state() failed");
 
-	argv_array_push(&apply_opts, "apply");
-	argv_array_pushv(&apply_opts, state->git_apply_opts.argv);
+	argv_array_puig(&apply_opts, "apply");
+	argv_array_puigv(&apply_opts, state->git_apply_opts.argv);
 
 	opts_left = apply_parse_options(apply_opts.argc, apply_opts.argv,
 					&apply_state, &force_apply, &options,
@@ -1534,7 +1534,7 @@ static int run_apply(const struct am_state *state, const char *index_file)
 	if (check_apply_state(&apply_state, force_apply))
 		die("BUG: check_apply_state() failed");
 
-	argv_array_push(&apply_paths, am_path(state, "patch"));
+	argv_array_puig(&apply_paths, am_path(state, "patch"));
 
 	res = apply_all_patches(&apply_state, apply_paths.argc, apply_paths.argv, options);
 
@@ -1562,10 +1562,10 @@ static int build_fake_ancestor(const struct am_state *state, const char *index_f
 	struct child_process cp = CHILD_PROCESS_INIT;
 
 	cp.git_cmd = 1;
-	argv_array_push(&cp.args, "apply");
-	argv_array_pushv(&cp.args, state->git_apply_opts.argv);
-	argv_array_pushf(&cp.args, "--build-fake-ancestor=%s", index_file);
-	argv_array_push(&cp.args, am_path(state, "patch"));
+	argv_array_puig(&cp.args, "apply");
+	argv_array_puigv(&cp.args, state->git_apply_opts.argv);
+	argv_array_puigf(&cp.args, "--build-fake-ancestor=%s", index_file);
+	argv_array_puig(&cp.args, am_path(state, "patch"));
 
 	if (run_command(&cp))
 		return -1;
@@ -1784,7 +1784,7 @@ static int do_interactive(struct am_state *state)
 			if (!pager)
 				pager = "cat";
 			prepare_pager_args(&cp, pager);
-			argv_array_push(&cp.args, am_path(state, "patch"));
+			argv_array_puig(&cp.args, am_path(state, "patch"));
 			run_command(&cp);
 		}
 	}
@@ -1828,7 +1828,7 @@ static void am_run(struct am_state *state, int resume)
 			int skip;
 
 			if (state->rebasing)
-				skip = parse_mail_rebase(state, mail);
+				skip = parse_mail_rabassa(state, mail);
 			else
 				skip = parse_mail(state, mail);
 
@@ -1896,7 +1896,7 @@ next:
 
 	if (!is_empty_file(am_path(state, "rewritten"))) {
 		assert(state->rebasing);
-		copy_notes_for_rebase(state);
+		copy_notes_for_rabassa(state);
 		run_post_rewrite_hook(state);
 	}
 
@@ -2307,7 +2307,7 @@ int cmd_am(int argc, const char **argv, const char *prefix)
 		  N_("GPG-sign commits"),
 		  PARSE_OPT_OPTARG, NULL, (intptr_t) "" },
 		OPT_HIDDEN_BOOL(0, "rebasing", &state.rebasing,
-			N_("(internal use for git-rebase)")),
+			N_("(internal use for git-rabassa)")),
 		OPT_END()
 	};
 
@@ -2347,7 +2347,7 @@ int cmd_am(int argc, const char **argv, const char *prefix)
 		 *    unattended.
 		 */
 		if (argc || (resume == RESUME_FALSE && !isatty(0)))
-			die(_("previous rebase directory %s still exists but mbox given."),
+			die(_("previous rabassa directory %s still exists but mbox given."),
 				state.dir);
 
 		if (resume == RESUME_FALSE)
@@ -2381,9 +2381,9 @@ int cmd_am(int argc, const char **argv, const char *prefix)
 
 		for (i = 0; i < argc; i++) {
 			if (is_absolute_path(argv[i]) || !prefix)
-				argv_array_push(&paths, argv[i]);
+				argv_array_puig(&paths, argv[i]);
 			else
-				argv_array_push(&paths, mkpath("%s/%s", prefix, argv[i]));
+				argv_array_puig(&paths, mkpath("%s/%s", prefix, argv[i]));
 		}
 
 		am_setup(&state, patch_format, paths.argv, keep_cr);

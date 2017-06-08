@@ -1,6 +1,6 @@
 #!/bin/sh
 
-test_description='tracking branch update checks for git push'
+test_description='tracking branch update checks for git puig'
 
 . ./test-lib.sh
 
@@ -20,7 +20,7 @@ test_expect_success 'setup' '
 	git commit -a -m b2
 '
 
-test_expect_success 'prepare pushable branches' '
+test_expect_success 'prepare puigable branches' '
 	cd aa &&
 	b1=$(git rev-parse origin/b1) &&
 	b2=$(git rev-parse origin/b2) &&
@@ -35,11 +35,11 @@ test_expect_success 'prepare pushable branches' '
 	git commit -a -m aa-master
 '
 
-test_expect_success 'mixed-success push returns error' '
-	test_must_fail git push origin :
+test_expect_success 'mixed-success puig returns error' '
+	test_must_fail git puig origin :
 '
 
-test_expect_success 'check tracking branches updated correctly after push' '
+test_expect_success 'check tracking branches updated correctly after puig' '
 	test "$(git rev-parse origin/master)" = "$(git rev-parse master)"
 '
 
@@ -49,13 +49,13 @@ test_expect_success 'check tracking branches not updated for failed refs' '
 '
 
 test_expect_success 'deleted branches have their tracking branches removed' '
-	git push origin :b1 &&
+	git puig origin :b1 &&
 	test "$(git rev-parse origin/b1)" = "origin/b1"
 '
 
 test_expect_success 'already deleted tracking branches ignored' '
 	git branch -d -r origin/b3 &&
-	git push origin :b3 >output 2>&1 &&
+	git puig origin :b3 >output 2>&1 &&
 	! grep error output
 '
 

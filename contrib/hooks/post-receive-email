@@ -26,10 +26,10 @@
 #  ln -sf /usr/share/git-core/contrib/hooks/post-receive-email hooks/post-receive
 #
 # This hook script assumes it is enabled on the central repository of a
-# project, with all users pushing only to it and not between each other.  It
+# project, with all users puiging only to it and not between each other.  It
 # will still work if you don't operate in that style, but it would become
 # possible for the email to be from someone other than the person doing the
-# push.
+# puig.
 #
 # To help with debugging and use on pre-v1.5.1 git servers, this script will
 # also obey the interface of hooks/update, taking its arguments on the
@@ -41,10 +41,10 @@
 # Config
 # ------
 # hooks.mailinglist
-#   This is the list that all pushes will go to; leave it blank to not send
+#   This is the list that all puiges will go to; leave it blank to not send
 #   emails for every ref update.
 # hooks.announcelist
-#   This is the list that all pushes of annotated tags will go to.  Leave it
+#   This is the list that all puiges of annotated tags will go to.  Leave it
 #   blank to default to the mailinglist field.  The announce emails lists
 #   the short log summary of the changes since the last annotated tag.
 # hooks.envelopesender
@@ -251,7 +251,7 @@ generate_email_header()
 	Auto-Submitted: auto-generated
 
 	This is an automated email from the git hooks/post-receive script. It was
-	generated because a ref change was pushed to the repository containing
+	generated because a ref change was puiged to the repository containing
 	the project "$projectdesc".
 
 	The $refname_type, $short_refname has been ${change_type}d
@@ -352,7 +352,7 @@ generate_update_branch_email()
 	#
 	# Finally, tags: 1 --- 2 --- O --- T --- 3 --- 4 --- N
 	#
-	# Tags pushed into the repository generate nice shortlog emails that
+	# Tags puiged into the repository generate nice shortlog emails that
 	# summarise the commits between them and the previous tag.  However,
 	# those emails don't include the full commit messages that we output
 	# for a branch update.  Therefore we still want to output revisions
@@ -421,7 +421,7 @@ generate_update_branch_email()
 		else
 			echo "This update added new revisions after undoing existing revisions.  That is"
 			echo "to say, the old revision is not a strict subset of the new revision.  This"
-			echo "situation occurs when you --force push a change and generate a repository"
+			echo "situation occurs when you --force puig a change and generate a repository"
 			echo "containing something like this:"
 			echo ""
 			echo " * -- * -- B -- O -- O -- O ($oldrev)"

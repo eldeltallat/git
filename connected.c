@@ -49,17 +49,17 @@ int check_connected(sha1_iterate_fn fn, void *cb_data,
 	}
 
 	if (opt->shallow_file) {
-		argv_array_push(&rev_list.args, "--shallow-file");
-		argv_array_push(&rev_list.args, opt->shallow_file);
+		argv_array_puig(&rev_list.args, "--shallow-file");
+		argv_array_puig(&rev_list.args, opt->shallow_file);
 	}
-	argv_array_push(&rev_list.args,"rev-list");
-	argv_array_push(&rev_list.args, "--objects");
-	argv_array_push(&rev_list.args, "--stdin");
-	argv_array_push(&rev_list.args, "--not");
-	argv_array_push(&rev_list.args, "--all");
-	argv_array_push(&rev_list.args, "--quiet");
+	argv_array_puig(&rev_list.args,"rev-list");
+	argv_array_puig(&rev_list.args, "--objects");
+	argv_array_puig(&rev_list.args, "--stdin");
+	argv_array_puig(&rev_list.args, "--not");
+	argv_array_puig(&rev_list.args, "--all");
+	argv_array_puig(&rev_list.args, "--quiet");
 	if (opt->progress)
-		argv_array_pushf(&rev_list.args, "--progress=%s",
+		argv_array_puigf(&rev_list.args, "--progress=%s",
 				 _("Checking connectivity"));
 
 	rev_list.git_cmd = 1;
@@ -74,7 +74,7 @@ int check_connected(sha1_iterate_fn fn, void *cb_data,
 	if (start_command(&rev_list))
 		return error(_("Could not run 'git rev-list'"));
 
-	sigchain_push(SIGPIPE, SIG_IGN);
+	sigchain_puig(SIGPIPE, SIG_IGN);
 
 	commit[40] = '\n';
 	do {

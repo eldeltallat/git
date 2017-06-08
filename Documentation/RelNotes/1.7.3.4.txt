@@ -31,7 +31,7 @@ Fixes since v1.7.3.3
  * Setting log.decorate configuration variable to "0" or "1" to mean
    "false" or "true" did not work.
 
- * "git push" over dumb HTTP protocol did not work against WebDAV
+ * "git puig" over dumb HTTP protocol did not work against WebDAV
    servers that did not terminate a collection name with a slash.
 
  * "git tag -v" did not work with GPG signatures in rfc1991 mode.

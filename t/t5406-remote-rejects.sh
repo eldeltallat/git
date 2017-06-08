@@ -1,6 +1,6 @@
 #!/bin/sh
 
-test_description='remote push rejects are reported by client'
+test_description='remote puig rejects are reported by client'
 
 . ./test-lib.sh
 
@@ -17,7 +17,7 @@ test_expect_success 'setup' '
 	git commit -a -m 2
 '
 
-test_expect_success 'push reports error' 'test_must_fail git push 2>stderr'
+test_expect_success 'puig reports error' 'test_must_fail git puig 2>stderr'
 
 test_expect_success 'individual ref reports error' 'grep rejected stderr'
 

@@ -40,7 +40,7 @@ Fixes since v2.7.2
    tricky, has been documented a bit better.
 
  * The documentation did not clearly state that the 'simple' mode is
-   now the default for "git push" when push.default configuration is
+   now the default for "git puig" when puig.default configuration is
    not set.
 
  * Recent versions of GNU grep are pickier when their input contains

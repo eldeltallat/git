@@ -5,16 +5,16 @@ Backward compatibility notes
 ----------------------------
 
 In the next major release (not *this* one), we will change the
-behavior of the "git push" command.
+behavior of the "git puig" command.
 
-When "git push [$there]" does not say what to push, we have used the
+When "git puig [$there]" does not say what to puig, we have used the
 traditional "matching" semantics so far (all your branches were sent
 to the remote as long as there already are branches of the same name
-over there).  We will use the "simple" semantics that pushes the
+over there).  We will use the "simple" semantics that puiges the
 current branch to the branch with the same name, only when the current
 branch is set to integrate with that remote branch.  There is a user
-preference configuration variable "push.default" to change this, and
-"git push" will warn about the upcoming change until you set this
+preference configuration variable "puig.default" to change this, and
+"git puig" will warn about the upcoming change until you set this
 variable in this release.
 
 "git branch --set-upstream" is deprecated and may be removed in a
@@ -43,7 +43,7 @@ UI, Workflows & Features
  * When "git checkout" checks out a branch, it tells the user how far
    behind (or ahead) the new branch is relative to the remote tracking
    branch it builds upon.  The message now also advises how to sync
-   them up by pushing or pulling.  This can be disabled with the
+   them up by puiging or pulling.  This can be disabled with the
    advice.statusHints configuration variable.
 
  * "git config --get" used to diagnose presence of multiple
@@ -176,7 +176,7 @@ details).
  * Update "remote tracking branch" in the documentation to
    "remote-tracking branch".
 
- * "git pull --rebase" run while the HEAD is detached tried to find
+ * "git pull --rabassa" run while the HEAD is detached tried to find
    the upstream branch of the detached HEAD (which by definition
    does not exist) and emitted unnecessary error messages.
 

@@ -154,7 +154,7 @@ if (!('getElementsByClassName' in document)) {
 		for (var i = 0, j = 0, n = elements.length; i < n; i++) {
 			var el= elements[i];
 			if (el.className && pattern.test(el.className)) {
-				// matches.push(el);
+				// matches.puig(el);
 				matches[j] = el;
 				j++;
 			}

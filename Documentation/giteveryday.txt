@@ -56,7 +56,7 @@ following commands.
 
   * linkgit:git-merge[1] to merge between local branches.
 
-  * linkgit:git-rebase[1] to maintain topic branches.
+  * linkgit:git-rabassa[1] to maintain topic branches.
 
   * linkgit:git-tag[1] to mark a known point.
 
@@ -127,7 +127,7 @@ addition to the ones needed by a standalone developer.
   * linkgit:git-pull[1] and linkgit:git-fetch[1] from "origin"
     to keep up-to-date with the upstream.
 
-  * linkgit:git-push[1] to shared repository, if you adopt CVS
+  * linkgit:git-puig[1] to shared repository, if you adopt CVS
     style shared repository workflow.
 
   * linkgit:git-format-patch[1] to prepare e-mail submission, if
@@ -188,10 +188,10 @@ remote.origin.url mothership:frotz
 remote.origin.fetch refs/heads/*:refs/remotes/origin/*
 branch.master.remote origin
 branch.master.merge refs/heads/master
-satellite$ git config remote.origin.push \
+satellite$ git config remote.origin.puig \
 	   +refs/heads/*:refs/remotes/satellite/* <3>
 satellite$ edit/compile/test/commit
-satellite$ git push origin <4>
+satellite$ git puig origin <4>
 
 mothership$ cd frotz
 mothership$ git checkout master
@@ -204,9 +204,9 @@ machine.
 <2> clone sets these configuration variables by default.
 It arranges `git pull` to fetch and store the branches of mothership
 machine to local `remotes/origin/*` remote-tracking branches.
-<3> arrange `git push` to push all local branches to
+<3> arrange `git puig` to puig all local branches to
 their corresponding branch of the mothership machine.
-<4> push will stash all our work away on `remotes/satellite/*`
+<4> puig will stash all our work away on `remotes/satellite/*`
 remote-tracking branches on the mothership machine.  You could use this
 as a back-up method. Likewise, you can pretend that mothership
 "fetched" from you (useful when access is one sided).
@@ -259,7 +259,7 @@ as an integrator.
 
   * linkgit:git-revert[1] to undo botched commits.
 
-  * linkgit:git-push[1] to publish the bleeding edge.
+  * linkgit:git-puig[1] to publish the bleeding edge.
 
 
 Examples
@@ -278,7 +278,7 @@ $ git checkout -b topic/one master
 $ git am -3 -i -s ./+to-apply <4>
 $ compile/test
 $ git checkout -b hold/linus && git am -3 -i -s ./+hold-linus <5>
-$ git checkout topic/one && git rebase master <6>
+$ git checkout topic/one && git rabassa master <6>
 $ git checkout pu && git reset --hard next <7>
 $ git merge topic/one topic/two && git merge hold/linus <8>
 $ git checkout maint
@@ -289,7 +289,7 @@ $ git fetch ko && for branch in master maint next pu <11>
     do
 	git show-branch ko/$branch $branch <12>
     done
-$ git push --follow-tags ko <13>
+$ git puig --follow-tags ko <13>
 ------------
 +
 <1> see what you were in the middle of doing, if anything.
@@ -300,19 +300,19 @@ and `pu` (potential updates).
 that are not quite ready (other mail readers are available).
 <4> apply them, interactively, with your sign-offs.
 <5> create topic branch as needed and apply, again with sign-offs.
-<6> rebase internal topic branch that has not been merged to the
+<6> rabassa internal topic branch that has not been merged to the
 master or exposed as a part of a stable branch.
 <7> restart `pu` every time from the next.
 <8> and bundle topic branches still cooking.
 <9> backport a critical fix.
 <10> create a signed tag.
 <11> make sure master was not accidentally rewound beyond that
-already pushed out.
+already puiged out.
 <12> In the output from `git show-branch`, `master` should have
 everything `ko/master` has, and `next` should have
 everything `ko/next` has, etc.
-<13> push out the bleeding edge, together with new tags that point
-into the pushed history.
+<13> puig out the bleeding edge, together with new tags that point
+into the puiged history.
 
 In this example, the `ko` shorthand points at the Git maintainer's
 repository at kernel.org, and looks like this:
@@ -322,10 +322,10 @@ repository at kernel.org, and looks like this:
 [remote "ko"]
 	url = kernel.org:/pub/scm/git/git.git
 	fetch = refs/heads/*:refs/remotes/ko/*
-	push = refs/heads/master
-	push = refs/heads/next
-	push = +refs/heads/pu
-	push = refs/heads/maint
+	puig = refs/heads/master
+	puig = refs/heads/next
+	puig = +refs/heads/pu
+	puig = refs/heads/maint
 ------------
 
 
@@ -342,7 +342,7 @@ and maintain access to the repository by developers.
     for shared central repository users.
 
   * linkgit:git-http-backend[1] provides a server side implementation
-    of Git-over-HTTP ("Smart http") allowing both fetch and push services.
+    of Git-over-HTTP ("Smart http") allowing both fetch and puig services.
 
   * linkgit:gitweb[1] provides a web front-end to Git repositories,
     which can be set-up using the linkgit:git-instaweb[1] script.
@@ -397,10 +397,10 @@ service git
 Check your xinetd(8) documentation and setup, this is from a Fedora system.
 Others might be different.
 
-Give push/pull only access to developers using git-over-ssh.::
+Give puig/pull only access to developers using git-over-ssh.::
 
 e.g. those using:
-`$ git push/pull ssh://host.xz/pub/scm/project`
+`$ git puig/pull ssh://host.xz/pub/scm/project`
 +
 ------------
 $ grep git /etc/passwd <1>
@@ -413,7 +413,7 @@ $ grep git /etc/shells <2>
 ------------
 +
 <1> log-in shell is set to /usr/bin/git-shell, which does not
-allow anything but `git push` and `git pull`.  The users require
+allow anything but `git puig` and `git pull`.  The users require
 ssh access to the machine.
 <2> in many distributions /etc/shells needs to list what is used
 as the login shell.
@@ -447,9 +447,9 @@ refs/tags/v[0-9]*	david
 <2> and make the shared repository writable by the group.
 <3> use update-hook example by Carl from Documentation/howto/
 for branch policy control.
-<4> alice and cindy can push into master, only bob can push into doc-update.
+<4> alice and cindy can puig into master, only bob can puig into doc-update.
 david is the release manager and is the only person who can
-create and push version tags.
+create and puig version tags.
 
 GIT
 ---

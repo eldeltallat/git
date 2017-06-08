@@ -1,8 +1,8 @@
 Git v2.1.2 Release Notes
 ========================
 
- * "git push" over HTTP transport had an artificial limit on number of
-   refs that can be pushed imposed by the command line length.
+ * "git puig" over HTTP transport had an artificial limit on number of
+   refs that can be puiged imposed by the command line length.
 
  * When receiving an invalid pack stream that records the same object
    twice, multiple threads got confused due to a race.

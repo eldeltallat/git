@@ -25,7 +25,7 @@ test_expect_success 'setup' '
 		test_tick &&
 		git commit -m "\"Thirty days\", a reminder of month lengths" &&
 		git tag -m "version 1" -a initial &&
-		git push --tags origin master
+		git puig --tags origin master
 	) &&
 	(
 		cd local &&
@@ -116,7 +116,7 @@ test_expect_success 'setup: two scripts for reading pull requests' '
 
 '
 
-test_expect_success 'pull request when forgot to push' '
+test_expect_success 'pull request when forgot to puig' '
 
 	rm -fr downstream.git &&
 	git init --bare downstream.git &&
@@ -128,11 +128,11 @@ test_expect_success 'pull request when forgot to push' '
 			2>../err
 	) &&
 	grep "No match for commit .*" err &&
-	grep "Are you sure you pushed" err
+	grep "Are you sure you puiged" err
 
 '
 
-test_expect_success 'pull request after push' '
+test_expect_success 'pull request after puig' '
 
 	rm -fr downstream.git &&
 	git init --bare downstream.git &&
@@ -140,7 +140,7 @@ test_expect_success 'pull request after push' '
 		cd local &&
 		git checkout initial &&
 		git merge --ff-only master &&
-		git push origin master:for-upstream &&
+		git puig origin master:for-upstream &&
 		git request-pull initial origin master:for-upstream >../request
 	) &&
 	sed -nf read-request.sed <request >digest &&
@@ -168,8 +168,8 @@ test_expect_success 'request asks HEAD to be pulled' '
 		cd local &&
 		git checkout initial &&
 		git merge --ff-only master &&
-		git push --tags origin master simplify &&
-		git push origin master:for-upstream &&
+		git puig --tags origin master simplify &&
+		git puig origin master:for-upstream &&
 		git request-pull initial "$downstream_url" >../request
 	) &&
 	sed -nf read-request.sed <request >digest &&
@@ -212,7 +212,7 @@ test_expect_success 'pull request format' '
 		cd local &&
 		git checkout initial &&
 		git merge --ff-only master &&
-		git push origin tags/full &&
+		git puig origin tags/full &&
 		git request-pull initial "$downstream_url" tags/full >../request
 	) &&
 	<request sed -nf fuzz.sed >request.fuzzy &&
@@ -240,7 +240,7 @@ test_expect_success 'request-pull ignores OPTIONS_KEEPDASHDASH poison' '
 		export OPTIONS_KEEPDASHDASH &&
 		git checkout initial &&
 		git merge --ff-only master &&
-		git push origin master:for-upstream &&
+		git puig origin master:for-upstream &&
 		git request-pull -- initial "$downstream_url" master:for-upstream >../request
 	)
 

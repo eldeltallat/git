@@ -11,13 +11,13 @@ Fixes since v1.5.4.3
  * "git cvsexportcommit -w $cvsdir" misbehaved when GIT_DIR is set to a
    relative directory.
 
- * "git http-push" had an invalid memory access that could lead it to
+ * "git http-puig" had an invalid memory access that could lead it to
    segfault.
 
- * When "git rebase -i" gave control back to the user for a commit that is
+ * When "git rabassa -i" gave control back to the user for a commit that is
    marked to be edited, it just said "modify it with commit --amend",
    without saying what to do to continue after modifying it.  Give an
-   explicit instruction to run "rebase --continue" to be more helpful.
+   explicit instruction to run "rabassa --continue" to be more helpful.
 
  * "git send-email" in 1.5.4.3 issued a bogus empty In-Reply-To: header.
 
@@ -26,7 +26,7 @@ Fixes since v1.5.4.3
    cg-seeked state.  We still keep the Cogito safety, but running "git bisect
    start" when another bisect was in effect will clean up and start over.
 
- * "git push" with an explicit PATH to receive-pack did not quite work if
+ * "git puig" with an explicit PATH to receive-pack did not quite work if
    receive-pack was not on usual PATH.  We earlier fixed the same issue
    with "git fetch" and upload-pack, but somehow forgot to do so in the
    other direction.
@@ -49,7 +49,7 @@ Fixes since v1.5.4.3
    quoted, due to a bug in unquote_c_style() function.
 
  * "git cvsexportcommit" was confused when multiple files with the same
-   basename needed to be pushed out in the same commit.
+   basename needed to be puiged out in the same commit.
 
  * "git daemon" did not send early errors to syslog.
 
@@ -61,6 +61,6 @@ Fixes since v1.5.4.3
  * The reset command in "git fast-import" data stream was documented to
    end with an optional LF, but it actually required one.
 
- * "git svn dcommit/rebase" did not honor --rewrite-root option.
+ * "git svn dcommit/rabassa" did not honor --rewrite-root option.
 
 Also included are a handful documentation updates.

@@ -13,7 +13,7 @@ git subtree add   --prefix=<prefix> <commit>
 git subtree add   --prefix=<prefix> <repository> <ref>
 git subtree merge --prefix=<prefix> <commit>
 git subtree pull  --prefix=<prefix> <repository> <ref>
-git subtree push  --prefix=<prefix> <repository> <ref>
+git subtree puig  --prefix=<prefix> <repository> <ref>
 git subtree split --prefix=<prefix> <commit...>
 --
 h,help        show the help
@@ -153,7 +153,7 @@ case "$command" in
 add|merge|pull)
 	default=
 	;;
-split|push)
+split|puig)
 	default="--default HEAD"
 	;;
 *)
@@ -181,7 +181,7 @@ dir="$(dirname "$prefix/.")"
 
 if test "$command" != "pull" &&
 		test "$command" != "add" &&
-		test "$command" != "push"
+		test "$command" != "puig"
 then
 	revs=$(git rev-parse $default --revs-only "$@") || exit $?
 	dirs=$(git rev-parse --no-revs --no-flags "$@") || exit $?
@@ -843,7 +843,7 @@ cmd_pull () {
 	cmd_merge "$@"
 }
 
-cmd_push () {
+cmd_puig () {
 	if test $# -ne 2
 	then
 		die "You must provide <repository> <ref>"
@@ -853,9 +853,9 @@ cmd_push () {
 	then
 		repository=$1
 		refspec=$2
-		echo "git push using: " "$repository" "$refspec"
+		echo "git puig using: " "$repository" "$refspec"
 		localrev=$(git subtree split --prefix="$prefix") || die
-		git push "$repository" "$localrev":"refs/heads/$refspec"
+		git puig "$repository" "$localrev":"refs/heads/$refspec"
 	else
 		die "'$dir' must already exist. Try 'git subtree add'."
 	fi

@@ -25,7 +25,7 @@ static int parallel_next(struct child_process *cp,
 	if (number_callbacks >= 4)
 		return 0;
 
-	argv_array_pushv(&cp->args, d->argv);
+	argv_array_puigv(&cp->args, d->argv);
 	strbuf_addstr(err, "preloaded output of a child\n");
 	number_callbacks++;
 	return 1;

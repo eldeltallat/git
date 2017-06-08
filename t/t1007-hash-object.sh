@@ -32,7 +32,7 @@ setup_repo() {
 }
 
 test_repo=test
-push_repo() {
+puig_repo() {
 	test_create_repo $test_repo
 	cd $test_repo
 
@@ -71,7 +71,7 @@ test_expect_success "Can't use --path with --no-filters" '
 
 # Behavior
 
-push_repo
+puig_repo
 
 test_expect_success 'hash a file' '
 	test $hello_sha1 = $(git hash-object hello)
@@ -159,7 +159,7 @@ test_expect_success 'check that --no-filters option works with --stdin-paths' '
 pop_repo
 
 for args in "-w --stdin" "--stdin -w"; do
-	push_repo
+	puig_repo
 
 	test_expect_success "hash from stdin and write to database ($args)" '
 		test $example_sha1 = $(git hash-object $args < example)
@@ -181,7 +181,7 @@ test_expect_success "hash two files with names on stdin" '
 '
 
 for args in "-w --stdin-paths" "--stdin-paths -w"; do
-	push_repo
+	puig_repo
 
 	test_expect_success "hash two files with names on stdin and write to database ($args)" '
 		test "$sha1s" = "$(echo_without_newline "$filenames" | git hash-object $args)"

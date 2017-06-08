@@ -1,6 +1,6 @@
 #!/bin/sh
 
-test_description='fetching and pushing project with subproject'
+test_description='fetching and puiging project with subproject'
 
 . ./test-lib.sh
 

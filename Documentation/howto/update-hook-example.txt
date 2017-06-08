@@ -3,14 +3,14 @@ Subject: control access to branches.
 Date: Thu, 17 Nov 2005 23:55:32 -0800
 Message-ID: <7vfypumlu3.fsf@assigned-by-dhcp.cox.net>
 Abstract: An example hooks/update script is presented to
- implement repository maintenance policies, such as who can push
+ implement repository maintenance policies, such as who can puig
  into which branch and who can make a tag.
 Content-type: text/asciidoc
 
 How to use the update hook
 ==========================
 
-When your developer runs git-push into the repository,
+When your developer runs git-puig into the repository,
 git-receive-pack is run (either locally or over ssh) as that
 developer, so is hooks/update script.  Quoting from the relevant
 section of the documentation:
@@ -27,8 +27,8 @@ section of the documentation:
     sha1-old is 0{40} (meaning there is no such ref yet), or it
     should match what is recorded in refname.
 
-So if your policy is (1) always require fast-forward push
-(i.e. never allow "git-push repo +branch:branch"), (2) you
+So if your policy is (1) always require fast-forward puig
+(i.e. never allow "git-puig repo +branch:branch"), (2) you
 have a list of users allowed to update each branch, and (3) you
 do not let tags to be overwritten, then you can use something
 like this as your hooks/update script.
@@ -175,7 +175,7 @@ deny >/dev/null "There are no more rules to check.  Denying access"
 ----------------------------------------------------
 
 This uses two files, $GIT_DIR/info/allowed-users and
-allowed-groups, to describe which heads can be pushed into by
+allowed-groups, to describe which heads can be puiged into by
 whom.  The format of each file would look like this:
 
     refs/heads/master   junio
@@ -185,8 +185,8 @@ whom.  The format of each file would look like this:
     refs/heads/tmp/.*   .*
     refs/tags/v[0-9].*  junio
 
-With this, Linus can push or create "bw/penguin" or "bw/zebra"
+With this, Linus can puig or create "bw/penguin" or "bw/zebra"
 or "bw/panda" branches, Pasky can do only "cogito", and JC can
 do master and pu branches and make versioned tags.  And anybody
 can do tmp/blah branches. The '+' sign at the pu record means
-that JC can make non-fast-forward pushes on it.
+that JC can make non-fast-forward puiges on it.

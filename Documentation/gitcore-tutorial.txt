@@ -1270,7 +1270,7 @@ things are usually done. A recommended way is to have a public
 repository, make it reachable by other people, and when the
 changes you made in your primary working tree are in good shape,
 update the public repository from it. This is often called
-'pushing'.
+'puiging'.
 
 [NOTE]
 This public repository could further be mirrored, and that is
@@ -1283,12 +1283,12 @@ run a single command, 'git-receive-pack'.
 
 First, you need to create an empty repository on the remote
 machine that will house your public repository. This empty
-repository will be populated and be kept up-to-date by pushing
+repository will be populated and be kept up-to-date by puiging
 into it later. Obviously, this repository creation needs to be
 done only once.
 
 [NOTE]
-'git push' uses a pair of commands,
+'git puig' uses a pair of commands,
 'git send-pack' on your local machine, and 'git-receive-pack'
 on the remote machine. The communication between the two over
 the network internally uses an SSH connection.
@@ -1327,7 +1327,7 @@ your login shell is 'bash', only `.bashrc` is read and not
 If you plan to publish this repository to be accessed over http,
 you should do `mv my-git.git/hooks/post-update.sample
 my-git.git/hooks/post-update` at this point.
-This makes sure that every time you push into this
+This makes sure that every time you puig into this
 repository, `git update-server-info` is run.
 
 Your "public repository" is now ready to accept your changes.
@@ -1335,7 +1335,7 @@ Come back to the machine you have your private repository. From
 there, run this command:
 
 ------------
-$ git push <public-host>:/path/to/my-git.git master
+$ git puig <public-host>:/path/to/my-git.git master
 ------------
 
 This synchronizes your public repository to match the named
@@ -1347,7 +1347,7 @@ repository. Kernel.org mirror network takes care of the
 propagation to other publicly visible machines:
 
 ------------
-$ git push master.kernel.org:/pub/scm/git/git.git/
+$ git puig master.kernel.org:/pub/scm/git/git.git/
 ------------
 
 
@@ -1414,7 +1414,7 @@ soon after the initial import (unless you are starting your
 project from scratch), and then run `git repack` every once in a
 while, depending on how active your project is.
 
-When a repository is synchronized via `git push` and `git pull`
+When a repository is synchronized via `git puig` and `git pull`
 objects packed in the source repository are usually stored
 unpacked in the destination.
 While this allows you to use different packing strategies on
@@ -1532,7 +1532,7 @@ like this:
    public repository is stored in `.git/refs/remotes/origin/master`.
 
 4. Use `git cherry origin` to see which ones of your patches
-   were accepted, and/or use `git rebase origin` to port your
+   were accepted, and/or use `git rabassa origin` to port your
    unmerged changes forward to the updated upstream.
 
 5. Use `git format-patch origin` to prepare patches for e-mail

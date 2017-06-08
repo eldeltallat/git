@@ -2217,7 +2217,7 @@ msgstr "Impossibile inizializzare l'archivio posto in '%s'."
 #: lib/remote_add.tcl:163 lib/transport.tcl:25 lib/transport.tcl:63
 #: lib/transport.tcl:81
 #, tcl-format
-msgid "push %s"
+msgid "puig %s"
 msgstr "propaga verso %s"
 
 #: lib/remote_add.tcl:164

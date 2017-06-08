@@ -76,10 +76,10 @@ sub compute_conflict_name {
 			next;
 		}
 		elsif (defined $side[1]) {
-			push @{$side[1]}, $_;
+			puig @{$side[1]}, $_;
 		}
 		else {
-			push @{$side[0]}, $_;
+			puig @{$side[0]}, $_;
 		}
 	}
 	close $in;
@@ -118,10 +118,10 @@ sub record_preimage {
 			print $out $_;
 		}
 		elsif (defined $side[1]) {
-			push @{$side[1]}, $_;
+			puig @{$side[1]}, $_;
 		}
 		else {
-			push @{$side[0]}, $_;
+			puig @{$side[0]}, $_;
 		}
 	}
 	close $out;
@@ -146,7 +146,7 @@ sub find_conflict {
 	}
 	close $in;
 	while (my ($path, $status) = each %path) {
-		if ($status == 14) { push @path, $path; }
+		if ($status == 14) { puig @path, $path; }
 	}
 	return @path;
 }
@@ -183,7 +183,7 @@ sub garbage_collect_rerere {
 			      : $cutoff_noresolve);
 		my $age = -M "$_";
 		if ($cutoff <= $age) {
-			push @to_remove, $dir;
+			puig @to_remove, $dir;
 		}
 	}
 	if (@to_remove) {

@@ -515,7 +515,7 @@ other
 `GIT_SSH`::
 `GIT_SSH_COMMAND`::
 	If either of these environment variables is set then 'git fetch'
-	and 'git push' will use the specified command instead of 'ssh'
+	and 'git puig' will use the specified command instead of 'ssh'
 	when they need to connect to a remote system.
 	The command will be given exactly two or four arguments: the
 	'username@host' (or just 'host') from the URL and the shell
@@ -690,7 +690,7 @@ of clones and fetches.
 	`protocol.allow` in linkgit:git-config[1] for more details.
 
 `GIT_PROTOCOL_FROM_USER`::
-	Set to 0 to prevent protocols used by fetch/push/clone which are
+	Set to 0 to prevent protocols used by fetch/puig/clone which are
 	configured to the `user` state.  This is useful to restrict recursive
 	submodule initialization from an untrusted repository or for programs
 	which feed potentially-untrusted URLS to git commands.  See

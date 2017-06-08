@@ -4,7 +4,7 @@ git-multimail version 1.4.0
 .. image:: https://travis-ci.org/git-multimail/git-multimail.svg?branch=master
     :target: https://travis-ci.org/git-multimail/git-multimail
 
-git-multimail is a tool for sending notification emails on pushes to a
+git-multimail is a tool for sending notification emails on puiges to a
 Git repository.  It includes a Python module called ``git_multimail.py``,
 which can either be used as a hook script directly or can be imported
 as a Python module into another script.
@@ -24,7 +24,7 @@ git-multimail takes place in its own, separate project.  See section
 "Getting involved" below for more information.
 
 
-By default, for each push received by the repository, git-multimail:
+By default, for each puig received by the repository, git-multimail:
 
 1. Outputs one email summarizing each reference that was changed.
    These "reference change" (called "refchange" below) emails describe
@@ -54,7 +54,7 @@ By default, for each push received by the repository, git-multimail:
      + [git] 08/08: Git 1.7.11-rc2
 
    By default, each commit appears in exactly one commit email, the
-   first time that it is pushed to the repository.  If a commit is later
+   first time that it is puiged to the repository.  If a commit is later
    merged into another branch, then a one-line summary of the commit
    is included in the reference change email (as usual), but no
    additional commit email is generated. See
@@ -62,7 +62,7 @@ By default, for each push received by the repository, git-multimail:
    below to configure which branches and tags are watched by the hook.
 
    By default, reference change emails have their "Reply-To" field set
-   to the person who pushed the change, and commit emails have their
+   to the person who puiged the change, and commit emails have their
    "Reply-To" field set to the author of the commit.
 
 3. Output one "announce" mail for each new annotated tag, including
@@ -98,7 +98,7 @@ Git repository (see githooks(5)).  Link or copy it to
 $GIT_DIR/hooks/post-receive within the repository for which email
 notifications are desired.  Usually it should be installed on the
 central repository for a project, to which all commits are eventually
-pushed.
+puiged.
 
 For use on pre-v1.5.1 Git servers, ``git_multimail.py`` can also work as
 an ``update`` hook, taking its arguments on the command line.  To use
@@ -112,7 +112,7 @@ work, but allows the behavior of the hook to be customized using
 arbitrary Python code.  For example, you can use a custom environment
 (perhaps inheriting from GenericEnvironment or GitoliteEnvironment) to
 
-* change how the user who did the push is determined
+* change how the user who did the puig is determined
 
 * read users' email addresses from an LDAP server or from a database
 
@@ -147,14 +147,14 @@ multimailhook.environment
     Currently supported values:
 
     generic
-      the username of the pusher is read from $USER or $USERNAME and
+      the username of the puiger is read from $USER or $USERNAME and
       the repository name is derived from the repository's path.
 
     gitolite
       Environment to use when ``git-multimail`` is ran as a gitolite_
       hook.
 
-      The username of the pusher is read from $GL_USER, the repository
+      The username of the puiger is read from $GL_USER, the repository
       name is read from $GL_REPO, and the From: header value is
       optionally read from gitolite.conf (see multimailhook.from).
 
@@ -182,7 +182,7 @@ multimailhook.environment
       This value is used when the gerrit-specific command line flags
       (``--oldrev``, ``--newrev``, ``--refname``, ``--project``) for
       gerrit's ref-updated hook are present. When this environment is
-      active, the username of the pusher is taken from the
+      active, the username of the puiger is taken from the
       ``--submitter`` argument if that command line option is passed,
       otherwise 'Gerrit' is used. The repository name is taken from
       the ``--project`` option on the command line, which must be passed.
@@ -410,7 +410,7 @@ multimailhook.from, multimailhook.fromCommit, multimailhook.fromRefchange
 
     - An email address, which will be used directly.
 
-    - The value ``pusher``, in which case the pusher's address (if
+    - The value ``puiger``, in which case the puiger's address (if
       available) will be used.
 
     - The value ``author`` (meaningful only for ``fromCommit``), in which
@@ -481,7 +481,7 @@ multimailhook.maxCommitEmails
     The maximum number of commit emails to send for a given change.
     When the number of patches is larger that this value, only the
     summary refchange email is sent.  This can avoid accidental
-    mailbombing, for example on an initial push.  To disable commit
+    mailbombing, for example on an initial puig.  To disable commit
     emails limit, set this option to 0.  The default is 500.
 
 multimailhook.emailStrictUTF8
@@ -542,22 +542,22 @@ multimailhook.dateSubstitute
     the behavior.
 
 multimailhook.emailDomain
-    Domain name appended to the username of the person doing the push
+    Domain name appended to the username of the person doing the puig
     to convert it into an email address
     (via ``"%s@%s" % (username, emaildomain)``). More complicated
     schemes can be implemented by overriding Environment and
-    overriding its get_pusher_email() method.
+    overriding its get_puiger_email() method.
 
 multimailhook.replyTo, multimailhook.replyToCommit, multimailhook.replyToRefchange
     Addresses to use in the Reply-To: field for commit emails
     (replyToCommit) and refchange emails (replyToRefchange).
     multimailhook.replyTo is used as default when replyToCommit or
-    replyToRefchange is not set. The shortcuts ``pusher`` and
+    replyToRefchange is not set. The shortcuts ``puiger`` and
     ``author`` are allowed with the same semantics as for
     ``multimailhook.from``. In addition, the value ``none`` can be
     used to omit the ``Reply-To:`` field.
 
-    The default is ``pusher`` for refchange emails, and ``author`` for
+    The default is ``puiger`` for refchange emails, and ``author`` for
     commit emails.
 
 multimailhook.quiet
@@ -573,7 +573,7 @@ multimailhook.scanCommitForCc
     Default: false
 
 multimailhook.combineWhenSingleCommit
-    If this option is set to true and a single new commit is pushed to
+    If this option is set to true and a single new commit is puiged to
     a branch, combine the summary and commit email messages into a
     single email.
     Default: true
@@ -610,7 +610,7 @@ multimailhook.refFilterInclusionRegex, multimailhook.refFilterExclusionRegex, mu
     ``refFilterDoSendRegex`` and ``refFilterDontSendRegex``, commits
     introduced by one excluded ref will not be considered as new when
     they reach an included ref. Typically, if you add a branch ``foo``
-    to  ``refFilterDontSendRegex``, push commits to this branch, and
+    to  ``refFilterDontSendRegex``, puig commits to this branch, and
     later merge branch ``foo`` into ``master``, then the notification
     email for ``master`` will contain a commit email only for the
     merge commit. If you include ``foo`` in
@@ -651,7 +651,7 @@ multimailhook.logFile, multimailhook.errorLogFile, multimailhook.debugLogFile
     (part of the information is then duplicated in several log files,
     for example errors are duplicated to all log files).
 
-    Relative path are relative to the Git repository where the push is
+    Relative path are relative to the Git repository where the puig is
     done.
 
 multimailhook.verbose
@@ -693,7 +693,7 @@ GenericEnvironment
 
 GitoliteEnvironment
     a Git repository that is managed by gitolite_.  For such
-    repositories, the identity of the pusher is read from
+    repositories, the identity of the puiger is read from
     environment variable $GL_USER, the name of the repository is read
     from $GL_REPO (if it is not overridden by multimailhook.reponame),
     and the From: header value is optionally read from gitolite.conf
@@ -742,7 +742,7 @@ Footnotes
        been seen does not work when it is used as an ``update`` script.
        In particular, no notification email will be generated for a
        new commit that is added to multiple references in the same
-       push. A workaround is to use --force-send to force sending the
+       puig. A workaround is to use --force-send to force sending the
        emails.
 
 .. _gitolite: https://github.com/sitaramc/gitolite

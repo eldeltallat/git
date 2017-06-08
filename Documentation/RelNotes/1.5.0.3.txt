@@ -11,7 +11,7 @@ Fixes since v1.5.0.2
   - 'blameview' in contrib/ correctly digs deeper when a line is
     clicked.
 
-  - 'http-push' correctly makes sure the remote side has leading
+  - 'http-puig' correctly makes sure the remote side has leading
     path.  Earlier it started in the middle of the path, and
     incorrectly.
 
@@ -42,7 +42,7 @@ Fixes since v1.5.0.2
   - 'git index-pack' did not protect itself from getting a short
     read out of pread(2).
 
-  - 'git http-push' had a few buffer overruns.
+  - 'git http-puig' had a few buffer overruns.
 
   - Build dependency fixes to rebuild fetch.o when other headers
     change.

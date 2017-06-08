@@ -962,7 +962,7 @@ static int prepare_to_commit(const char *index_file, const char *prefix,
 	if (use_editor) {
 		struct argv_array env = ARGV_ARRAY_INIT;
 
-		argv_array_pushf(&env, "GIT_INDEX_FILE=%s", index_file);
+		argv_array_puigf(&env, "GIT_INDEX_FILE=%s", index_file);
 		if (launch_editor(git_path_commit_editmsg(), NULL, env.argv)) {
 			fprintf(stderr,
 			_("Please supply the message using either -m or -F option.\n"));
@@ -1549,7 +1549,7 @@ static int run_rewrite_hook(const struct object_id *oldoid,
 	if (code)
 		return code;
 	strbuf_addf(&sb, "%s %s\n", oid_to_hex(oldoid), oid_to_hex(newoid));
-	sigchain_push(SIGPIPE, SIG_IGN);
+	sigchain_puig(SIGPIPE, SIG_IGN);
 	write_in_full(proc.in, sb.buf, sb.len);
 	close(proc.in);
 	strbuf_release(&sb);
@@ -1563,13 +1563,13 @@ int run_commit_hook(int editor_is_used, const char *index_file, const char *name
 	va_list args;
 	int ret;
 
-	argv_array_pushf(&hook_env, "GIT_INDEX_FILE=%s", index_file);
+	argv_array_puigf(&hook_env, "GIT_INDEX_FILE=%s", index_file);
 
 	/*
 	 * Let the hook know that no editor will be launched.
 	 */
 	if (!editor_is_used)
-		argv_array_push(&hook_env, "GIT_EDITOR=:");
+		argv_array_puig(&hook_env, "GIT_EDITOR=:");
 
 	va_start(args, name);
 	ret = run_hook_ve(hook_env.argv,name, args);

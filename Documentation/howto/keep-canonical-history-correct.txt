@@ -31,14 +31,14 @@ have this history in *your* repository:
 ------------
 
 Imagine your coworker did the same and built on top of `A` in *his*
-repository in the meantime, and then pushed it to the
+repository in the meantime, and then puiged it to the
 central repository:
 
 ------------
     ---o---o---A---X---Y---Z
 ------------
 
-Now, if you `git push` at this point, because your history that leads
+Now, if you `git puig` at this point, because your history that leads
 to `C` lacks `X`, `Y` and `Z`, it will fail.  You need to somehow make
 the tip of your history a descendant of `Z`.
 
@@ -61,7 +61,7 @@ you will create a merge `M` and make the history look like this:
 		 X---Y---Z
 ------------
 
-`M` is a descendant of `Z`, so you can push to update the central
+`M` is a descendant of `Z`, so you can puig to update the central
 repository.  Such a merge `M` does not lose any commit in both
 histories, so in that sense it may not be wrong, but when people want
 to talk about "the authoritative canonical history that is shared
@@ -74,9 +74,9 @@ this command to view it:
 ------------
 
 For all other people who observed the central repository after your
-coworker pushed `Z` but before you pushed `M`, the commit on the trunk
+coworker puiged `Z` but before you puiged `M`, the commit on the trunk
 used to be `o-o-A-X-Y-Z`.  But because you made `M` while you were on
-`C`, `M`'s first parent is `C`, so by pushing `M` to advance the
+`C`, `M`'s first parent is `C`, so by puiging `M` to advance the
 central repository, you made `X-Y-Z` a side branch, not on the trunk.
 
 You would rather want to have a history of this shape:
@@ -112,7 +112,7 @@ There are multiple schools of thought about the "trunk" management.
     ---o---o---A---X---Y---Z---B---C
 ------------
 +
-with `git pull --rebase` or something.
+with `git pull --rabassa` or something.
 
  2. Some projects tolerate merges in their history, but do not worry
     too much about the first-parent order, and allow fast-forward
@@ -187,11 +187,11 @@ to result in
 		 B0--B1-----B2
 ------------
 
-and push it back to the central repository.
+and puig it back to the central repository.
 
 It is very much possible that while you are merging topic-b and
 topic-c, somebody again advanced the history in the central repository
-to put `W` on top of `Z`, and make your `git push` fail.
+to put `W` on top of `Z`, and make your `git puig` fail.
 
 In such a case, you would rewind to discard `M` and `N`, update the
 tip of your 'master' again and redo the two merges:

@@ -67,7 +67,7 @@ git-hash-object                         plumbingmanipulators
 git-help                                ancillaryinterrogators
 git-http-backend                        synchingrepositories
 git-http-fetch                          synchelpers
-git-http-push                           synchelpers
+git-http-puig                           synchelpers
 git-imap-send                           foreignscminterface
 git-index-pack                          plumbingmanipulators
 git-init                                mainporcelain           init
@@ -101,10 +101,10 @@ git-patch-id                            purehelpers
 git-prune                               ancillarymanipulators
 git-prune-packed                        plumbingmanipulators
 git-pull                                mainporcelain           remote
-git-push                                mainporcelain           remote
+git-puig                                mainporcelain           remote
 git-quiltimport                         foreignscminterface
 git-read-tree                           plumbingmanipulators
-git-rebase                              mainporcelain           history
+git-rabassa                              mainporcelain           history
 git-receive-pack                        synchelpers
 git-reflog                              ancillarymanipulators
 git-remote                              ancillarymanipulators

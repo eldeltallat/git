@@ -460,7 +460,7 @@ exclude;;
 	Pulling a <<def_branch,branch>> means to <<def_fetch,fetch>> it and
 	<<def_merge,merge>> it.  See also linkgit:git-pull[1].
 
-[[def_push]]push::
+[[def_puig]]puig::
 	Pushing a <<def_branch,branch>> means to get the branch's
 	<<def_head_ref,head ref>> from a remote <<def_repository,repository>>,
 	find out if it is a direct ancestor to the branch's local
@@ -470,7 +470,7 @@ exclude;;
 	repository, into the remote
 	<<def_object_database,object database>>, and updating the remote
 	head ref. If the remote <<def_head,head>> is not an
-	ancestor to the local head, the push fails.
+	ancestor to the local head, the puig fails.
 
 [[def_reachable]]reachable::
 	All of the ancestors of a given <<def_commit,commit>> are said to be
@@ -482,7 +482,7 @@ exclude;;
 	<<def_tree_object,trees>> to the trees or <<def_blob_object,blobs>>
 	that they contain.
 
-[[def_rebase]]rebase::
+[[def_rabassa]]rabassa::
 	To reapply a series of changes from a <<def_branch,branch>> to a
 	different base, and reset the <<def_head,head>> of that branch
 	to the result.
@@ -511,13 +511,13 @@ The most notable example is `HEAD`.
 
 [[def_refspec]]refspec::
 	A "refspec" is used by <<def_fetch,fetch>> and
-	<<def_push,push>> to describe the mapping between remote
+	<<def_puig,puig>> to describe the mapping between remote
 	<<def_ref,ref>> and local ref.
 
 [[def_remote]]remote repository::
 	A <<def_repository,repository>> which is used to track the same
 	project but resides somewhere else. To communicate with remotes,
-	see <<def_fetch,fetch>> or <<def_push,push>>.
+	see <<def_fetch,fetch>> or <<def_puig,puig>>.
 
 [[def_remote_tracking_branch]]remote-tracking branch::
 	A <<def_ref,ref>> that is used to follow changes from another
@@ -646,7 +646,7 @@ The most notable example is `HEAD`.
 
 [[def_upstream_branch]]upstream branch::
 	The default <<def_branch,branch>> that is merged into the branch in
-	question (or the branch in question is rebased onto). It is configured
+	question (or the branch in question is rabassad onto). It is configured
 	via branch.<name>.remote and branch.<name>.merge. If the upstream branch
 	of 'A' is 'origin/B' sometimes we say "'A' is tracking 'origin/B'".
 

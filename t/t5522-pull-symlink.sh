@@ -71,14 +71,14 @@ test_expect_success SYMLINKS 'pulling from symlinked subdir' '
 # Prove that the remote end really is a repo, and other commands
 # work fine in this context.  It's just that "git pull" breaks.
 #
-test_expect_success SYMLINKS 'pushing from symlinked subdir' '
+test_expect_success SYMLINKS 'puiging from symlinked subdir' '
 	(
 		cd subdir-link/ &&
-		echo push >file &&
-		git commit -m push ./file &&
-		git push
+		echo puig >file &&
+		git commit -m puig ./file &&
+		git puig
 	) &&
-	test push = $(git show HEAD:subdir/file)
+	test puig = $(git show HEAD:subdir/file)
 '
 
 test_done

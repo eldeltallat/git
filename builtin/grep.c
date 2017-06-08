@@ -406,7 +406,7 @@ static void run_pager(struct grep_opt *opt, const char *prefix)
 	int i, status;
 
 	for (i = 0; i < path_list->nr; i++)
-		argv_array_push(&child.args, path_list->items[i].string);
+		argv_array_puig(&child.args, path_list->items[i].string);
 	child.dir = prefix;
 	child.use_shell = 1;
 
@@ -424,85 +424,85 @@ static void compile_submodule_options(const struct grep_opt *opt,
 	struct grep_pat *pattern;
 
 	if (recurse_submodules)
-		argv_array_push(&submodule_options, "--recurse-submodules");
+		argv_array_puig(&submodule_options, "--recurse-submodules");
 
 	if (cached)
-		argv_array_push(&submodule_options, "--cached");
+		argv_array_puig(&submodule_options, "--cached");
 	if (!use_index)
-		argv_array_push(&submodule_options, "--no-index");
+		argv_array_puig(&submodule_options, "--no-index");
 	if (untracked)
-		argv_array_push(&submodule_options, "--untracked");
+		argv_array_puig(&submodule_options, "--untracked");
 	if (opt_exclude > 0)
-		argv_array_push(&submodule_options, "--exclude-standard");
+		argv_array_puig(&submodule_options, "--exclude-standard");
 
 	if (opt->invert)
-		argv_array_push(&submodule_options, "-v");
+		argv_array_puig(&submodule_options, "-v");
 	if (opt->ignore_case)
-		argv_array_push(&submodule_options, "-i");
+		argv_array_puig(&submodule_options, "-i");
 	if (opt->word_regexp)
-		argv_array_push(&submodule_options, "-w");
+		argv_array_puig(&submodule_options, "-w");
 	switch (opt->binary) {
 	case GREP_BINARY_NOMATCH:
-		argv_array_push(&submodule_options, "-I");
+		argv_array_puig(&submodule_options, "-I");
 		break;
 	case GREP_BINARY_TEXT:
-		argv_array_push(&submodule_options, "-a");
+		argv_array_puig(&submodule_options, "-a");
 		break;
 	default:
 		break;
 	}
 	if (opt->allow_textconv)
-		argv_array_push(&submodule_options, "--textconv");
+		argv_array_puig(&submodule_options, "--textconv");
 	if (opt->max_depth != -1)
-		argv_array_pushf(&submodule_options, "--max-depth=%d",
+		argv_array_puigf(&submodule_options, "--max-depth=%d",
 				 opt->max_depth);
 	if (opt->linenum)
-		argv_array_push(&submodule_options, "-n");
+		argv_array_puig(&submodule_options, "-n");
 	if (!opt->pathname)
-		argv_array_push(&submodule_options, "-h");
+		argv_array_puig(&submodule_options, "-h");
 	if (!opt->relative)
-		argv_array_push(&submodule_options, "--full-name");
+		argv_array_puig(&submodule_options, "--full-name");
 	if (opt->name_only)
-		argv_array_push(&submodule_options, "-l");
+		argv_array_puig(&submodule_options, "-l");
 	if (opt->unmatch_name_only)
-		argv_array_push(&submodule_options, "-L");
+		argv_array_puig(&submodule_options, "-L");
 	if (opt->null_following_name)
-		argv_array_push(&submodule_options, "-z");
+		argv_array_puig(&submodule_options, "-z");
 	if (opt->count)
-		argv_array_push(&submodule_options, "-c");
+		argv_array_puig(&submodule_options, "-c");
 	if (opt->file_break)
-		argv_array_push(&submodule_options, "--break");
+		argv_array_puig(&submodule_options, "--break");
 	if (opt->heading)
-		argv_array_push(&submodule_options, "--heading");
+		argv_array_puig(&submodule_options, "--heading");
 	if (opt->pre_context)
-		argv_array_pushf(&submodule_options, "--before-context=%d",
+		argv_array_puigf(&submodule_options, "--before-context=%d",
 				 opt->pre_context);
 	if (opt->post_context)
-		argv_array_pushf(&submodule_options, "--after-context=%d",
+		argv_array_puigf(&submodule_options, "--after-context=%d",
 				 opt->post_context);
 	if (opt->funcname)
-		argv_array_push(&submodule_options, "-p");
+		argv_array_puig(&submodule_options, "-p");
 	if (opt->funcbody)
-		argv_array_push(&submodule_options, "-W");
+		argv_array_puig(&submodule_options, "-W");
 	if (opt->all_match)
-		argv_array_push(&submodule_options, "--all-match");
+		argv_array_puig(&submodule_options, "--all-match");
 	if (opt->debug)
-		argv_array_push(&submodule_options, "--debug");
+		argv_array_puig(&submodule_options, "--debug");
 	if (opt->status_only)
-		argv_array_push(&submodule_options, "-q");
+		argv_array_puig(&submodule_options, "-q");
 
 	switch (pattern_type_arg) {
 	case GREP_PATTERN_TYPE_BRE:
-		argv_array_push(&submodule_options, "-G");
+		argv_array_puig(&submodule_options, "-G");
 		break;
 	case GREP_PATTERN_TYPE_ERE:
-		argv_array_push(&submodule_options, "-E");
+		argv_array_puig(&submodule_options, "-E");
 		break;
 	case GREP_PATTERN_TYPE_FIXED:
-		argv_array_push(&submodule_options, "-F");
+		argv_array_puig(&submodule_options, "-F");
 		break;
 	case GREP_PATTERN_TYPE_PCRE:
-		argv_array_push(&submodule_options, "-P");
+		argv_array_puig(&submodule_options, "-P");
 		break;
 	case GREP_PATTERN_TYPE_UNSPECIFIED:
 		break;
@@ -514,7 +514,7 @@ static void compile_submodule_options(const struct grep_opt *opt,
 	     pattern = pattern->next) {
 		switch (pattern->token) {
 		case GREP_PATTERN:
-			argv_array_pushf(&submodule_options, "-e%s",
+			argv_array_puigf(&submodule_options, "-e%s",
 					 pattern->pattern);
 			break;
 		case GREP_AND:
@@ -522,7 +522,7 @@ static void compile_submodule_options(const struct grep_opt *opt,
 		case GREP_CLOSE_PAREN:
 		case GREP_NOT:
 		case GREP_OR:
-			argv_array_push(&submodule_options, pattern->pattern);
+			argv_array_puig(&submodule_options, pattern->pattern);
 			break;
 		/* BODY and HEAD are not used by git-grep */
 		case GREP_PATTERN_BODY:
@@ -536,13 +536,13 @@ static void compile_submodule_options(const struct grep_opt *opt,
 	 * This is to prevent potential fork-bomb behavior of git-grep as each
 	 * submodule process has its own thread pool.
 	 */
-	argv_array_pushf(&submodule_options, "--threads=%d",
+	argv_array_puigf(&submodule_options, "--threads=%d",
 			 (num_threads + 1) / 2);
 
 	/* Add Pathspecs */
-	argv_array_push(&submodule_options, "--");
+	argv_array_puig(&submodule_options, "--");
 	for (; *argv; argv++)
-		argv_array_push(&submodule_options, *argv);
+		argv_array_puig(&submodule_options, *argv);
 }
 
 /*
@@ -564,18 +564,18 @@ static int grep_submodule_launch(struct grep_opt *opt,
 		name = gs->name;
 
 	prepare_submodule_repo_env(&cp.env_array);
-	argv_array_push(&cp.env_array, GIT_DIR_ENVIRONMENT);
+	argv_array_puig(&cp.env_array, GIT_DIR_ENVIRONMENT);
 
 	if (opt->relative && opt->prefix_length)
-		argv_array_pushf(&cp.env_array, "%s=%s",
+		argv_array_puigf(&cp.env_array, "%s=%s",
 				 GIT_TOPLEVEL_PREFIX_ENVIRONMENT,
 				 opt->prefix);
 
 	/* Add super prefix */
-	argv_array_pushf(&cp.args, "--super-prefix=%s%s/",
+	argv_array_puigf(&cp.args, "--super-prefix=%s%s/",
 			 super_prefix ? super_prefix : "",
 			 name);
-	argv_array_push(&cp.args, "grep");
+	argv_array_puig(&cp.args, "grep");
 
 	/*
 	 * Add basename of parent project
@@ -586,7 +586,7 @@ static int grep_submodule_launch(struct grep_opt *opt,
 	 * prefix its output with the parent's name and not its own SHA1.
 	 */
 	if (gs->identifier && end_of_base)
-		argv_array_pushf(&cp.args, "--parent-basename=%.*s",
+		argv_array_puigf(&cp.args, "--parent-basename=%.*s",
 				 (int) (end_of_base - gs->name),
 				 gs->name);
 
@@ -596,15 +596,15 @@ static int grep_submodule_launch(struct grep_opt *opt,
 		 * If there is a tree identifier for the submodule, add the
 		 * rev after adding the submodule options but before the
 		 * pathspecs.  To do this we listen for the '--' and insert the
-		 * sha1 before pushing the '--' onto the child process argv
+		 * sha1 before puiging the '--' onto the child process argv
 		 * array.
 		 */
 		if (gs->identifier &&
 		    !strcmp("--", submodule_options.argv[i])) {
-			argv_array_push(&cp.args, sha1_to_hex(gs->identifier));
+			argv_array_puig(&cp.args, sha1_to_hex(gs->identifier));
 		}
 
-		argv_array_push(&cp.args, submodule_options.argv[i]);
+		argv_array_puig(&cp.args, submodule_options.argv[i]);
 	}
 
 	cp.git_cmd = 1;

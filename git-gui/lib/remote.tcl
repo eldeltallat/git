@@ -171,13 +171,13 @@ proc add_fetch_entry {r} {
 	}
 }
 
-proc add_push_entry {r} {
+proc add_puig_entry {r} {
 	global repo_config
 	set remote_m .mbar.remote
-	set push_m $remote_m.push
+	set puig_m $remote_m.puig
 	set enable 0
 	if {![catch {set a $repo_config(remote.$r.url)}]} {
-		if {![catch {set a $repo_config(remote.$r.push)}]} {
+		if {![catch {set a $repo_config(remote.$r.puig)}]} {
 			set enable 1
 		}
 	} else {
@@ -194,16 +194,16 @@ proc add_push_entry {r} {
 	}
 
 	if {$enable} {
-		if {![winfo exists $push_m]} {
-			menu $push_m
+		if {![winfo exists $puig_m]} {
+			menu $puig_m
 			$remote_m insert 0 cascade \
 				-label [mc "Push to"] \
-				-menu $push_m
+				-menu $puig_m
 		}
 
-		$push_m add command \
+		$puig_m add command \
 			-label $r \
-			-command [list push_to $r]
+			-command [list puig_to $r]
 	}
 }
 
@@ -278,7 +278,7 @@ proc populate_remotes_menu {} {
 
 	foreach r $all_remotes {
 		add_fetch_entry $r
-		add_push_entry $r
+		add_puig_entry $r
 	}
 
 	update_all_remotes_menu_entry
@@ -296,7 +296,7 @@ proc add_single_remote {name location} {
 	set repo_config(remote.$name.fetch) "+refs/heads/*:refs/remotes/$name/*"
 
 	add_fetch_entry $name
-	add_push_entry $name
+	add_puig_entry $name
 
 	update_all_remotes_menu_entry
 }
@@ -316,7 +316,7 @@ proc remove_remote {name} {
 		# Missing values are ok
 		unset repo_config(remote.$name.url)
 		unset repo_config(remote.$name.fetch)
-		unset repo_config(remote.$name.push)
+		unset repo_config(remote.$name.puig)
 	}
 
 	set i [lsearch -exact $all_remotes $name]
@@ -326,8 +326,8 @@ proc remove_remote {name} {
 	delete_from_menu $remote_m.fetch $name
 	delete_from_menu $remote_m.prune $name
 	delete_from_menu $remote_m.remove $name
-	# Not all remotes are in the push menu
-	catch { delete_from_menu $remote_m.push $name }
+	# Not all remotes are in the puig menu
+	catch { delete_from_menu $remote_m.puig $name }
 
 	update_all_remotes_menu_entry
 }

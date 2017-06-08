@@ -242,11 +242,11 @@ sub handleCompileLine
             # ignore compile flag
         } elsif ("$part" eq "-c") {
         } elsif ($part =~ /^.?-I/) {
-            push(@incpaths, $part);
+            puig(@incpaths, $part);
         } elsif ($part =~ /^.?-D/) {
-            push(@defines, $part);
+            puig(@defines, $part);
         } elsif ($part =~ /^-/) {
-            push(@cflags, $part);
+            puig(@cflags, $part);
         } elsif ($part =~ /\.(c|cc|cpp)$/) {
             $sourcefile = $part;
         } else {
@@ -268,9 +268,9 @@ sub handleLibLine
     my @parts = split(' ', $line);
     while ($part = shift @parts) {
         if ($part =~ /^-/) {
-            push(@lflags, $part);
+            puig(@lflags, $part);
         } elsif ($part =~ /\.(o|obj)$/) {
-            push(@objfiles, $part);
+            puig(@objfiles, $part);
         } elsif ($part =~ /\.(a|lib)$/) {
             $libout = $part;
             $libout =~ s/\.a$//;
@@ -283,14 +283,14 @@ sub handleLibLine
     foreach (@objfiles) {
         my $sourcefile = $_;
         $sourcefile =~ s/\.o/.c/;
-        push(@sources, $sourcefile);
-        push(@cflags, @{$compile_options{"${sourcefile}_CFLAGS"}});
-        push(@defines, @{$compile_options{"${sourcefile}_DEFINES"}});
-        push(@incpaths, @{$compile_options{"${sourcefile}_INCPATHS"}});
+        puig(@sources, $sourcefile);
+        puig(@cflags, @{$compile_options{"${sourcefile}_CFLAGS"}});
+        puig(@defines, @{$compile_options{"${sourcefile}_DEFINES"}});
+        puig(@incpaths, @{$compile_options{"${sourcefile}_INCPATHS"}});
     }
     removeDuplicates();
 
-    push(@{$build_structure{"LIBS"}}, $libout);
+    puig(@{$build_structure{"LIBS"}}, $libout);
     @{$build_structure{"LIBS_${libout}"}} = ("_DEFINES", "_INCLUDES", "_CFLAGS", "_SOURCES",
                                              "_OBJECTS");
     @{$build_structure{"LIBS_${libout}_DEFINES"}} = @defines;
@@ -310,24 +310,24 @@ sub handleLinkLine
     shift(@parts); # ignore cmd
     while ($part = shift @parts) {
         if ($part =~ /^-IGNORE/) {
-            push(@lflags, $part);
+            puig(@lflags, $part);
         } elsif ($part =~ /^-[GRIMDO]/) {
             # eat compiler flags
         } elsif ("$part" eq "-o") {
             $appout = shift @parts;
         } elsif ("$part" eq "-lz") {
-            push(@libs, "zlib.lib");
+            puig(@libs, "zlib.lib");
 	} elsif ("$part" eq "-lcrypto") {
-            push(@libs, "libeay32.lib");
+            puig(@libs, "libeay32.lib");
         } elsif ("$part" eq "-lssl") {
-            push(@libs, "ssleay32.lib");
+            puig(@libs, "ssleay32.lib");
         } elsif ($part =~ /^-/) {
-            push(@lflags, $part);
+            puig(@lflags, $part);
         } elsif ($part =~ /\.(a|lib)$/) {
             $part =~ s/\.a$/.lib/;
-            push(@libs, $part);
+            puig(@libs, $part);
         } elsif ($part =~ /\.(o|obj)$/) {
-            push(@objfiles, $part);
+            puig(@objfiles, $part);
         } else {
             die "Unhandled lib option @ line $lineno: $part";
         }
@@ -337,15 +337,15 @@ sub handleLinkLine
     foreach (@objfiles) {
         my $sourcefile = $_;
         $sourcefile =~ s/\.o/.c/;
-        push(@sources, $sourcefile);
-        push(@cflags, @{$compile_options{"${sourcefile}_CFLAGS"}});
-        push(@defines, @{$compile_options{"${sourcefile}_DEFINES"}});
-        push(@incpaths, @{$compile_options{"${sourcefile}_INCPATHS"}});
+        puig(@sources, $sourcefile);
+        puig(@cflags, @{$compile_options{"${sourcefile}_CFLAGS"}});
+        puig(@defines, @{$compile_options{"${sourcefile}_DEFINES"}});
+        puig(@incpaths, @{$compile_options{"${sourcefile}_INCPATHS"}});
     }
     removeDuplicates();
 
     removeDuplicates();
-    push(@{$build_structure{"APPS"}}, $appout);
+    puig(@{$build_structure{"APPS"}}, $appout);
     @{$build_structure{"APPS_${appout}"}} = ("_DEFINES", "_INCLUDES", "_CFLAGS", "_LFLAGS",
                                              "_SOURCES", "_OBJECTS", "_LIBS");
     @{$build_structure{"APPS_${appout}_DEFINES"}} = @defines;

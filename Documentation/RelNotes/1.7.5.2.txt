@@ -6,7 +6,7 @@ The release notes to 1.7.5.1 forgot to mention:
  * "git stash -p --no-keep-index" and "git stash --no-keep-index -p" now
    mean the same thing.
 
- * "git upload-pack" (hence "git push" over git native protocol) had a
+ * "git upload-pack" (hence "git puig" over git native protocol) had a
    subtle race condition that could lead to a deadlock.
 
 Fixes since v1.7.5.1
@@ -51,7 +51,7 @@ Fixes since v1.7.5.1
  * "git-p4" (in contrib) used a wrong base image while merge a file that
    was added on both branches differently.
 
- * "git rebase -i -p" failed to preserve the history when there is a
+ * "git rabassa -i -p" failed to preserve the history when there is a
    redundant merge created with the --no-ff option.
 
 And other minor fixes and documentation updates.

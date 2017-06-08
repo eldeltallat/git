@@ -66,13 +66,13 @@ Fixes since v1.7.10
    conflicts, $GIT_DIR/NOTES_MERGE_WORKTREE is the place a user edits
    to resolve it.
 
- * The 'push to upstream' implementation was broken in some corner
-   cases. "git push $there" without refspec, when the current branch
-   is set to push to a remote different from $there, used to push to
+ * The 'puig to upstream' implementation was broken in some corner
+   cases. "git puig $there" without refspec, when the current branch
+   is set to puig to a remote different from $there, used to puig to
    $there using the upstream information to a remote unreleated to
    $there.
 
- * Giving "--continue" to a conflicted "rebase -i" session skipped a
+ * Giving "--continue" to a conflicted "rabassa -i" session skipped a
    commit that only results in changes to submodules.
 
 Also contains minor fixes and documentation updates.

@@ -306,7 +306,7 @@ int git_config_include(const char *var, const char *value, void *data)
 	return ret;
 }
 
-void git_config_push_parameter(const char *text)
+void git_config_puig_parameter(const char *text)
 {
 	struct strbuf env = STRBUF_INIT;
 	const char *old = getenv(CONFIG_DATA_ENVIRONMENT);
@@ -1274,17 +1274,17 @@ static int git_default_branch_config(const char *var, const char *value)
 		git_branch_track = git_config_bool(var, value);
 		return 0;
 	}
-	if (!strcmp(var, "branch.autosetuprebase")) {
+	if (!strcmp(var, "branch.autosetuprabassa")) {
 		if (!value)
 			return config_error_nonbool(var);
 		else if (!strcmp(value, "never"))
-			autorebase = AUTOREBASE_NEVER;
+			autorabassa = AUTOREBASE_NEVER;
 		else if (!strcmp(value, "local"))
-			autorebase = AUTOREBASE_LOCAL;
+			autorabassa = AUTOREBASE_LOCAL;
 		else if (!strcmp(value, "remote"))
-			autorebase = AUTOREBASE_REMOTE;
+			autorabassa = AUTOREBASE_REMOTE;
 		else if (!strcmp(value, "always"))
-			autorebase = AUTOREBASE_ALWAYS;
+			autorabassa = AUTOREBASE_ALWAYS;
 		else
 			return error("malformed value for %s", var);
 		return 0;
@@ -1294,23 +1294,23 @@ static int git_default_branch_config(const char *var, const char *value)
 	return 0;
 }
 
-static int git_default_push_config(const char *var, const char *value)
+static int git_default_puig_config(const char *var, const char *value)
 {
-	if (!strcmp(var, "push.default")) {
+	if (!strcmp(var, "puig.default")) {
 		if (!value)
 			return config_error_nonbool(var);
 		else if (!strcmp(value, "nothing"))
-			push_default = PUSH_DEFAULT_NOTHING;
+			puig_default = PUSH_DEFAULT_NOTHING;
 		else if (!strcmp(value, "matching"))
-			push_default = PUSH_DEFAULT_MATCHING;
+			puig_default = PUSH_DEFAULT_MATCHING;
 		else if (!strcmp(value, "simple"))
-			push_default = PUSH_DEFAULT_SIMPLE;
+			puig_default = PUSH_DEFAULT_SIMPLE;
 		else if (!strcmp(value, "upstream"))
-			push_default = PUSH_DEFAULT_UPSTREAM;
+			puig_default = PUSH_DEFAULT_UPSTREAM;
 		else if (!strcmp(value, "tracking")) /* deprecated */
-			push_default = PUSH_DEFAULT_UPSTREAM;
+			puig_default = PUSH_DEFAULT_UPSTREAM;
 		else if (!strcmp(value, "current"))
-			push_default = PUSH_DEFAULT_CURRENT;
+			puig_default = PUSH_DEFAULT_CURRENT;
 		else {
 			error("malformed value for %s: %s", var, value);
 			return error("Must be one of nothing, matching, simple, "
@@ -1348,8 +1348,8 @@ int git_default_config(const char *var, const char *value, void *dummy)
 	if (starts_with(var, "branch."))
 		return git_default_branch_config(var, value);
 
-	if (starts_with(var, "push."))
-		return git_default_push_config(var, value);
+	if (starts_with(var, "puig."))
+		return git_default_puig_config(var, value);
 
 	if (starts_with(var, "mailmap."))
 		return git_default_mailmap_config(var, value);
@@ -1391,7 +1391,7 @@ static int do_config_from(struct config_source *top, config_fn_t fn, void *data)
 {
 	int ret;
 
-	/* push config-file parsing state stack */
+	/* puig config-file parsing state stack */
 	top->prev = cf;
 	top->linenr = 1;
 	top->eof = 0;

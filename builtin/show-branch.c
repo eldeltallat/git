@@ -550,8 +550,8 @@ static int git_show_branch_config(const char *var, const char *value, void *cb)
 		 * mimic the real argv a bit better.
 		 */
 		if (!default_args.argc)
-			argv_array_push(&default_args, "show-branch");
-		argv_array_push(&default_args, value);
+			argv_array_puig(&default_args, "show-branch");
+		argv_array_puig(&default_args, value);
 		return 0;
 	}
 

@@ -2381,7 +2381,7 @@ msgstr "Хранилището с местоположение „%s“ не м�
 #: lib/remote_add.tcl:162 lib/transport.tcl:54 lib/transport.tcl:92
 #: lib/transport.tcl:110
 #, tcl-format
-msgid "push %s"
+msgid "puig %s"
 msgstr "изтласкване на „%s“"
 
 #: lib/remote_add.tcl:163

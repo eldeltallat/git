@@ -9,7 +9,7 @@ Fixes since v1.5.4.2
    and we now supply 'git-all' metapackage to slurp in everything.
    This should match end user's expectation better.
 
- * When some refs failed to update, git-push reported "failure"
+ * When some refs failed to update, git-puig reported "failure"
    which was unclear if some other refs were updated or all of
    them failed atomically (the answer is the former).  Reworded
    the message to clarify this.
@@ -18,7 +18,7 @@ Fixes since v1.5.4.2
    did not set up the remote properly.  Now it tries to do
    better.
 
- * Updated git-push documentation to clarify what "matching"
+ * Updated git-puig documentation to clarify what "matching"
    means, in order to reduce user confusion.
 
  * Updated git-add documentation to clarify "add -u" operates in

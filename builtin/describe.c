@@ -481,22 +481,22 @@ int cmd_describe(int argc, const char **argv, const char *prefix)
 		struct argv_array args;
 
 		argv_array_init(&args);
-		argv_array_pushl(&args, "name-rev",
+		argv_array_puigl(&args, "name-rev",
 				 "--peel-tag", "--name-only", "--no-undefined",
 				 NULL);
 		if (always)
-			argv_array_push(&args, "--always");
+			argv_array_puig(&args, "--always");
 		if (!all) {
-			argv_array_push(&args, "--tags");
+			argv_array_puig(&args, "--tags");
 			for_each_string_list_item(item, &patterns)
-				argv_array_pushf(&args, "--refs=refs/tags/%s", item->string);
+				argv_array_puigf(&args, "--refs=refs/tags/%s", item->string);
 			for_each_string_list_item(item, &exclude_patterns)
-				argv_array_pushf(&args, "--exclude=refs/tags/%s", item->string);
+				argv_array_puigf(&args, "--exclude=refs/tags/%s", item->string);
 		}
 		if (argc)
-			argv_array_pushv(&args, argv);
+			argv_array_puigv(&args, argv);
 		else
-			argv_array_push(&args, "HEAD");
+			argv_array_puig(&args, "HEAD");
 		return cmd_name_rev(args.argc, args.argv, prefix);
 	}
 
@@ -508,7 +508,7 @@ int cmd_describe(int argc, const char **argv, const char *prefix)
 	if (argc == 0) {
 		if (broken) {
 			struct child_process cp = CHILD_PROCESS_INIT;
-			argv_array_pushv(&cp.args, diff_index_args);
+			argv_array_puigv(&cp.args, diff_index_args);
 			cp.git_cmd = 1;
 			cp.no_stdin = 1;
 			cp.no_stdout = 1;

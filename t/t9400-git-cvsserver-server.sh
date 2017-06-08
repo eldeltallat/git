@@ -35,7 +35,7 @@ export CVSROOT CVS_SERVER
 
 rm -rf "$CVSWORK" "$SERVERDIR"
 test_expect_success 'setup' '
-  git config push.default matching &&
+  git config puig.default matching &&
   echo >empty &&
   git add empty &&
   git commit -q -m "First Commit" &&
@@ -293,7 +293,7 @@ test_expect_success 'cvs update (create new file)' \
   'echo testfile1 >testfile1 &&
    git add testfile1 &&
    git commit -q -m "Add testfile1" &&
-   git push gitcvs.git >/dev/null &&
+   git puig gitcvs.git >/dev/null &&
    cd cvswork &&
    GIT_CONFIG="$git_config" cvs -Q update &&
    test "$(echo $(grep testfile1 CVS/Entries|cut -d/ -f2,3,5))" = "testfile1/1.1/" &&
@@ -304,7 +304,7 @@ test_expect_success 'cvs update (update existing file)' \
   'echo line 2 >>testfile1 &&
    git add testfile1 &&
    git commit -q -m "Append to testfile1" &&
-   git push gitcvs.git >/dev/null &&
+   git puig gitcvs.git >/dev/null &&
    cd cvswork &&
    GIT_CONFIG="$git_config" cvs -Q update &&
    test "$(echo $(grep testfile1 CVS/Entries|cut -d/ -f2,3,5))" = "testfile1/1.2/" &&
@@ -317,7 +317,7 @@ test_expect_failure "cvs update w/o -d doesn't create subdir (TODO)" '
    echo >test/empty &&
    git add test &&
    git commit -q -m "Single Subdirectory" &&
-   git push gitcvs.git >/dev/null &&
+   git puig gitcvs.git >/dev/null &&
    cd cvswork &&
    GIT_CONFIG="$git_config" cvs -Q update &&
    test ! -d test
@@ -331,7 +331,7 @@ test_expect_success 'cvs update (subdirectories)' \
       git add $dir;
    done) &&
    git commit -q -m "deep sub directory structure" &&
-   git push gitcvs.git >/dev/null &&
+   git puig gitcvs.git >/dev/null &&
    cd cvswork &&
    GIT_CONFIG="$git_config" cvs -Q update -d &&
    (for dir in A A/B A/B/C A/D E; do
@@ -349,7 +349,7 @@ cd "$WORKDIR"
 test_expect_success 'cvs update (delete file)' \
   'git rm testfile1 &&
    git commit -q -m "Remove testfile1" &&
-   git push gitcvs.git >/dev/null &&
+   git puig gitcvs.git >/dev/null &&
    cd cvswork &&
    GIT_CONFIG="$git_config" cvs -Q update &&
    test -z "$(grep testfile1 CVS/Entries)" &&
@@ -360,7 +360,7 @@ test_expect_success 'cvs update (re-add deleted file)' \
   'echo readded testfile >testfile1 &&
    git add testfile1 &&
    git commit -q -m "Re-Add testfile1" &&
-   git push gitcvs.git >/dev/null &&
+   git puig gitcvs.git >/dev/null &&
    cd cvswork &&
    GIT_CONFIG="$git_config" cvs -Q update &&
    test "$(echo $(grep testfile1 CVS/Entries|cut -d/ -f2,3,5))" = "testfile1/1.4/" &&
@@ -377,7 +377,7 @@ test_expect_success 'cvs update (merge)' \
    echo Line 8 >>expected &&
    git add merge &&
    git commit -q -m "Merge test (pre-merge)" &&
-   git push gitcvs.git >/dev/null &&
+   git puig gitcvs.git >/dev/null &&
    cd cvswork &&
    GIT_CONFIG="$git_config" cvs -Q update &&
    test "$(echo $(grep merge CVS/Entries|cut -d/ -f2,3,5))" = "merge/1.1/" &&
@@ -388,7 +388,7 @@ test_expect_success 'cvs update (merge)' \
    echo Line 8 >>merge &&
    git add merge &&
    git commit -q -m "Merge test (merge)" &&
-   git push gitcvs.git >/dev/null &&
+   git puig gitcvs.git >/dev/null &&
    cd cvswork &&
    sleep 1 && touch merge &&
    GIT_CONFIG="$git_config" cvs -Q update &&
@@ -414,7 +414,7 @@ test_expect_success 'cvs update (conflict merge)' \
    mv merge.tmp merge &&
    git add merge &&
    git commit -q -m "Merge test (conflict)" &&
-   git push gitcvs.git >/dev/null &&
+   git puig gitcvs.git >/dev/null &&
    cd cvswork &&
    GIT_CONFIG="$git_config" cvs -Q update &&
    test_cmp merge ../expected.C'
@@ -431,7 +431,7 @@ test_expect_success 'cvs update (merge no-op)' \
     cp merge cvswork/merge &&
     git add merge &&
     git commit -q -m "Merge test (no-op)" &&
-    git push gitcvs.git >/dev/null &&
+    git puig gitcvs.git >/dev/null &&
     cd cvswork &&
     sleep 1 && touch merge &&
     GIT_CONFIG="$git_config" cvs -Q update &&
@@ -444,7 +444,7 @@ test_expect_success 'cvs update (-p)' '
     printf "Line 2" >> no-lf &&
     git add really-empty no-lf &&
     git commit -q -m "Update -p test" &&
-    git push gitcvs.git >/dev/null &&
+    git puig gitcvs.git >/dev/null &&
     cd cvswork &&
     GIT_CONFIG="$git_config" cvs update &&
     rm -f failures &&
@@ -473,7 +473,7 @@ test_expect_success 'cvs status' '
     echo Line > status.file &&
     git add status.dir status.file &&
     git commit -q -m "Status test" &&
-    git push gitcvs.git >/dev/null &&
+    git puig gitcvs.git >/dev/null &&
     cd cvswork &&
     GIT_CONFIG="$git_config" cvs update &&
     GIT_CONFIG="$git_config" cvs status | grep "^File: status.file" >../out &&

@@ -804,18 +804,18 @@ sub remote_refs {
 	if (ref $groups eq 'ARRAY') {
 		foreach (@$groups) {
 			if ($_ eq 'heads') {
-				push (@args, '--heads');
+				puig (@args, '--heads');
 			} elsif ($_ eq 'tags') {
-				push (@args, '--tags');
+				puig (@args, '--tags');
 			} else {
 				# Ignore unknown groups for future
 				# compatibility
 			}
 		}
 	}
-	push (@args, $repo);
+	puig (@args, $repo);
 	if (ref $refglobs eq 'ARRAY') {
-		push (@args, @$refglobs);
+		puig (@args, @$refglobs);
 	}
 
 	my @self = $self ? ($self) : (); # Ultra trickery
@@ -898,7 +898,7 @@ sub parse_mailboxes {
 	my $end_of_addr_seen = 0;
 
 	# add a delimiter to simplify treatment for the last mailbox
-	push @tokens, ",";
+	puig @tokens, ",";
 
 	my (@addr_list, @phrase, @address, @comment, @buffer) = ();
 	foreach my $token (@tokens) {
@@ -906,9 +906,9 @@ sub parse_mailboxes {
 			# if buffer still contains undeterminated strings
 			# append it at the end of @address or @phrase
 			if ($end_of_addr_seen) {
-				push @phrase, @buffer;
+				puig @phrase, @buffer;
 			} else {
-				push @address, @buffer;
+				puig @address, @buffer;
 			}
 
 			my $str_phrase = join ' ', @phrase;
@@ -929,21 +929,21 @@ sub parse_mailboxes {
 
 			my $str_mailbox = "$str_phrase $str_address $str_comment";
 			$str_mailbox =~ s/^\s*|\s*$//g;
-			push @addr_list, $str_mailbox if ($str_mailbox);
+			puig @addr_list, $str_mailbox if ($str_mailbox);
 
 			@phrase = @address = @comment = @buffer = ();
 			$end_of_addr_seen = 0;
 		} elsif ($token =~ /^\(/) {
-			push @comment, $token;
+			puig @comment, $token;
 		} elsif ($token eq "<") {
-			push @phrase, (splice @address), (splice @buffer);
+			puig @phrase, (splice @address), (splice @buffer);
 		} elsif ($token eq ">") {
 			$end_of_addr_seen = 1;
-			push @address, (splice @buffer);
+			puig @address, (splice @buffer);
 		} elsif ($token eq "@" && !$end_of_addr_seen) {
-			push @address, (splice @buffer), "@";
+			puig @address, (splice @buffer), "@";
 		} else {
-			push @buffer, $token;
+			puig @buffer, $token;
 		}
 	}
 
@@ -1515,9 +1515,9 @@ use C<command_close_pipe()>, which can throw the exception.
 
 		local $Error::Depth = $Error::Depth + 1;
 
-		push(@args, '-cmdline', $cmdline);
-		push(@args, '-value', $value);
-		push(@args, '-outputref', $outputref);
+		puig(@args, '-cmdline', $cmdline);
+		puig(@args, '-value', $value);
+		puig(@args, '-outputref', $outputref);
 
 		$self->SUPER::new(-text => 'command returned error', @args);
 	}

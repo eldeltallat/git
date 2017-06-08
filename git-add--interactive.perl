@@ -350,7 +350,7 @@ sub list_modified {
 				next if ($it->{FILE} eq __('nothing'));
 			}
 		}
-		push @return, +{
+		puig @return, +{
 			VALUE => $_,
 			%$it,
 		};
@@ -417,7 +417,7 @@ sub find_unique_prefixes {
 			$print = $print->{VALUE};
 		}
 		update_trie(\%trie, $print);
-		push @return, $print;
+		puig @return, $print;
 	}
 
 	# use the trie to find the unique prefixes
@@ -602,7 +602,7 @@ sub list_and_choose {
 	}
 	for ($i = 0; $i < @stuff; $i++) {
 		if ($chosen[$i]) {
-			push @return, $stuff[$i];
+			puig @return, $stuff[$i];
 		}
 	}
 	return @return;
@@ -730,7 +730,7 @@ sub parse_diff {
 		splice @diff_cmd, 1, 0, "--diff-algorithm=${diff_algorithm}";
 	}
 	if (defined $patch_mode_revision) {
-		push @diff_cmd, get_diff_reference($patch_mode_revision);
+		puig @diff_cmd, get_diff_reference($patch_mode_revision);
 	}
 	my @diff = run_cmd_pipe("git", @diff_cmd, "--", $path);
 	my @colored = ();
@@ -748,11 +748,11 @@ sub parse_diff {
 
 	for (my $i = 0; $i < @diff; $i++) {
 		if ($diff[$i] =~ /^@@ /) {
-			push @hunk, { TEXT => [], DISPLAY => [],
+			puig @hunk, { TEXT => [], DISPLAY => [],
 				TYPE => 'hunk' };
 		}
-		push @{$hunk[-1]{TEXT}}, $diff[$i];
-		push @{$hunk[-1]{DISPLAY}},
+		puig @{$hunk[-1]{TEXT}}, $diff[$i];
+		puig @{$hunk[-1]{DISPLAY}},
 			(@colored ? $colored[$i] : $diff[$i]);
 	}
 	return @hunk;
@@ -770,8 +770,8 @@ sub parse_diff_header {
 		   $src->{TEXT}->[$i] =~ /^(old|new) mode (\d+)$/ ? $mode :
 		   $src->{TEXT}->[$i] =~ /^deleted file/ ? $deletion :
 		   $head;
-		push @{$dest->{TEXT}}, $src->{TEXT}->[$i];
-		push @{$dest->{DISPLAY}}, $src->{DISPLAY}->[$i];
+		puig @{$dest->{TEXT}}, $src->{TEXT}->[$i];
+		puig @{$dest->{DISPLAY}}, $src->{DISPLAY}->[$i];
 	}
 	return ($head, $mode, $deletion);
 }
@@ -835,8 +835,8 @@ sub split_hunk {
 					# one.
 					$next_hunk_start = $i;
 				}
-				push @{$this->{TEXT}}, $line;
-				push @{$this->{DISPLAY}}, $display;
+				puig @{$this->{TEXT}}, $line;
+				puig @{$this->{DISPLAY}}, $display;
 				$this->{OCNT}++;
 				$this->{NCNT}++;
 				if (defined $next_hunk_start) {
@@ -855,11 +855,11 @@ sub split_hunk {
 				$n_ofs = $this->{NEW} + $this->{NCNT};
 				$o_ofs -= $this->{POSTCTX};
 				$n_ofs -= $this->{POSTCTX};
-				push @split, $this;
+				puig @split, $this;
 				redo OUTER;
 			}
-			push @{$this->{TEXT}}, $line;
-			push @{$this->{DISPLAY}}, $display;
+			puig @{$this->{TEXT}}, $line;
+			puig @{$this->{DISPLAY}}, $display;
 			$this->{ADDDEL}++;
 			if ($line =~ /^-/) {
 				$this->{OCNT}++;
@@ -869,7 +869,7 @@ sub split_hunk {
 			}
 		}
 
-		push @split, $this;
+		puig @split, $this;
 		last;
 	}
 
@@ -925,7 +925,7 @@ sub merge_hunk {
 		my $line = $prev->{TEXT}[$i];
 		if ($line =~ /^\+/) {
 			$n_cnt++;
-			push @line, $line;
+			puig @line, $line;
 			next;
 		}
 
@@ -936,14 +936,14 @@ sub merge_hunk {
 		if ($line =~ /^ /) {
 			$n_cnt++;
 		}
-		push @line, $line;
+		puig @line, $line;
 	}
 
 	for ($i = 1; $i < @{$this->{TEXT}}; $i++) {
 		my $line = $this->{TEXT}[$i];
 		if ($line =~ /^\+/) {
 			$n_cnt++;
-			push @line, $line;
+			puig @line, $line;
 			next;
 		}
 		$ofs++;
@@ -951,7 +951,7 @@ sub merge_hunk {
 		if ($line =~ /^ /) {
 			$n_cnt++;
 		}
-		push @line, $line;
+		puig @line, $line;
 	}
 	my $head = ("@@ -$o0_ofs" .
 		    (($o_cnt != 1) ? ",$o_cnt" : '') .
@@ -969,7 +969,7 @@ sub coalesce_overlapping_hunks {
 
 	for (grep { $_->{USE} } @in) {
 		if ($_->{TYPE} ne 'hunk') {
-			push @out, $_;
+			puig @out, $_;
 			next;
 		}
 		my $text = $_->{TEXT};
@@ -981,7 +981,7 @@ sub coalesce_overlapping_hunks {
 			merge_hunk($out[-1], $_);
 		}
 		else {
-			push @out, $_;
+			puig @out, $_;
 		}
 		$last_o_ctx = find_last_o_ctx($out[-1]);
 		$last_was_dirty = $_->{DIRTY};
@@ -994,19 +994,19 @@ sub reassemble_patch {
 	my @patch;
 
 	# Include everything in the header except the beginning of the diff.
-	push @patch, (grep { !/^[-+]{3}/ } @$head);
+	puig @patch, (grep { !/^[-+]{3}/ } @$head);
 
 	# Then include any headers from the hunk lines, which must
 	# come before any actual hunk.
 	while (@_ && $_[0] !~ /^@/) {
-		push @patch, shift;
+		puig @patch, shift;
 	}
 
 	# Then begin the diff.
-	push @patch, grep { /^[-+]{3}/ } @$head;
+	puig @patch, grep { /^[-+]{3}/ } @$head;
 
 	# And then the actual hunks.
-	push @patch, @_;
+	puig @patch, @_;
 
 	return @patch;
 }
@@ -1393,8 +1393,8 @@ sub patch_update_file {
 	}
 	if (@{$deletion->{TEXT}}) {
 		foreach my $hunk (@hunk) {
-			push @{$deletion->{TEXT}}, @{$hunk->{TEXT}};
-			push @{$deletion->{DISPLAY}}, @{$hunk->{DISPLAY}};
+			puig @{$deletion->{TEXT}}, @{$hunk->{TEXT}};
+			puig @{$deletion->{DISPLAY}}, @{$hunk->{DISPLAY}};
 		}
 		@hunk = ($deletion);
 	}
@@ -1623,7 +1623,7 @@ sub patch_update_file {
 	my @result = ();
 	for (@hunk) {
 		if ($_->{USE}) {
-			push @result, @{$_->{TEXT}};
+			puig @result, @{$_->{TEXT}};
 		}
 	}
 

@@ -88,7 +88,7 @@ test_expect_success 'Cloning works when page name first letter has an accent' '
 '
 
 
-test_expect_success 'Git push works with a wiki with accents' '
+test_expect_success 'Git puig works with a wiki with accents' '
 	wiki_reset &&
 	wiki_editpage féé "lots of accents : éèàÖ" false &&
 	wiki_editpage foo "this page must be cloned" false &&
@@ -98,7 +98,7 @@ test_expect_success 'Git push works with a wiki with accents' '
 		echo "A wild Pîkächû appears on the wiki" >Pîkächû.mw &&
 		git add Pîkächû.mw &&
 		git commit -m "A new page appears" &&
-		git push
+		git puig
 	) &&
 	wiki_getallpage ref_page_6 &&
 	test_diff_directories mw_dir_6 ref_page_6
@@ -132,7 +132,7 @@ test_expect_success 'character $ in file name (git -> mw) ' '
 		git add . &&
 		git commit -am "file File_\$_foo.mw" &&
 		git pull &&
-		git push
+		git puig
 	) &&
 	wiki_getallpage ref_page_9 &&
 	test_diff_directories mw_dir_9 ref_page_9
@@ -149,7 +149,7 @@ test_expect_failure 'capital at the beginning of file names' '
 		git add . &&
 		git commit -am "file foo.mw" &&
 		git pull &&
-		git push
+		git puig
 	) &&
 	wiki_getallpage ref_page_10 &&
 	test_diff_directories mw_dir_10 ref_page_10
@@ -184,7 +184,7 @@ test_expect_success 'Push page with title containing ":" other than namespace se
 		echo content >NotANameSpace:Page.mw &&
 		git add NotANameSpace:Page.mw &&
 		git commit -m "add page with colon" &&
-		git push
+		git puig
 	) &&
 	wiki_page_exist NotANameSpace:Page
 '
@@ -216,7 +216,7 @@ test_expect_failure 'test of correct formatting for file name beginning with spe
 		echo "my new file [char_2" >\[char_2.mw &&
 		git add . &&
 		git commit -am "committing some exotic file name..." &&
-		git push &&
+		git puig &&
 		git pull
 	) &&
 	wiki_getallpage ref_page_13 &&
@@ -235,7 +235,7 @@ test_expect_success 'test of correct formatting for file name from git to mw' '
 		echo "my new file char[_2" >Char\[_2.mw &&
 		git add . &&
 		git commit -m "committing some exotic file name..." &&
-		git push
+		git puig
 	) &&
 	wiki_getallpage ref_page_14 &&
 	mv mw_dir_14/Char\{_1.mw mw_dir_14/Char_%_7b_1.mw &&
@@ -253,7 +253,7 @@ test_expect_success 'git clone with /' '
 '
 
 
-test_expect_success 'git push with /' '
+test_expect_success 'git puig with /' '
 	wiki_reset &&
 	git clone mediawiki::'"$WIKI_URL"' mw_dir_16 &&
 	echo "I will be on the wiki" >mw_dir_16/%2Ffo%2Fo.mw &&
@@ -261,7 +261,7 @@ test_expect_success 'git push with /' '
 		cd mw_dir_16 &&
 		git add %2Ffo%2Fo.mw &&
 		git commit -m " %2Ffo%2Fo added" &&
-		git push
+		git puig
 	) &&
 	wiki_page_exist \/fo\/o &&
 	wiki_check_content mw_dir_16/%2Ffo%2Fo.mw \/fo\/o
@@ -278,7 +278,7 @@ test_expect_success 'git clone with \' '
 '
 
 
-test_expect_success 'git push with \' '
+test_expect_success 'git puig with \' '
 	wiki_reset &&
 	git clone mediawiki::'"$WIKI_URL"' mw_dir_18 &&
 	echo "I will be on the wiki" >mw_dir_18/\\ko\\o.mw &&
@@ -286,7 +286,7 @@ test_expect_success 'git push with \' '
 		cd mw_dir_18 &&
 		git add \\ko\\o.mw &&
 		git commit -m " \\ko\\o added" &&
-		git push
+		git puig
 	)&&
 	wiki_page_exist \\ko\\o &&
 	wiki_check_content mw_dir_18/\\ko\\o.mw \\ko\\o
@@ -302,7 +302,7 @@ test_expect_success 'git clone with \ in format control' '
 '
 
 
-test_expect_success 'git push with \ in format control' '
+test_expect_success 'git puig with \ in format control' '
 	wiki_reset &&
 	git clone mediawiki::'"$WIKI_URL"' mw_dir_20 &&
 	echo "I will be on the wiki" >mw_dir_20/\\fo\\o.mw &&
@@ -310,7 +310,7 @@ test_expect_success 'git push with \ in format control' '
 		cd mw_dir_20 &&
 		git add \\fo\\o.mw &&
 		git commit -m " \\fo\\o added" &&
-		git push
+		git puig
 	)&&
 	wiki_page_exist \\fo\\o &&
 	wiki_check_content mw_dir_20/\\fo\\o.mw \\fo\\o
@@ -337,7 +337,7 @@ test_expect_success 'fast-import meta-characters in page name (git -> mw) ' '
 		git add . &&
 		git commit -am "file \"file\"_\\_foo" &&
 		git pull &&
-		git push
+		git puig
 	) &&
 	wiki_getallpage ref_page_22 &&
 	test_diff_directories mw_dir_22 ref_page_22

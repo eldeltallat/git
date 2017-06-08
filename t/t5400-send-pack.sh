@@ -44,7 +44,7 @@ test_expect_success setup '
 	    git update-index --add mozart/is/pink &&
 	    tree=$(git write-tree) &&
 	    commit=$(echo "Rebase #$i" | git commit-tree $tree -p $parent) &&
-	    git update-ref refs/tags/rebase$i $commit &&
+	    git update-ref refs/tags/rabassa$i $commit &&
 	    parent=$commit || return 1
 	done &&
 	git update-ref HEAD "$commit" &&
@@ -64,8 +64,8 @@ test_expect_success 'pack the destination repository' '
     )
 '
 
-test_expect_success 'refuse pushing rewound head without --force' '
-	pushed_head=$(git rev-parse --verify master) &&
+test_expect_success 'refuse puiging rewound head without --force' '
+	puiged_head=$(git rev-parse --verify master) &&
 	victim_orig=$(cd victim && git rev-parse --verify master) &&
 	test_must_fail git send-pack ./victim master &&
 	victim_head=$(cd victim && git rev-parse --verify master) &&
@@ -73,17 +73,17 @@ test_expect_success 'refuse pushing rewound head without --force' '
 	# this should update
 	git send-pack --force ./victim master &&
 	victim_head=$(cd victim && git rev-parse --verify master) &&
-	test "$victim_head" = "$pushed_head"
+	test "$victim_head" = "$puiged_head"
 '
 
-test_expect_success 'push can be used to delete a ref' '
+test_expect_success 'puig can be used to delete a ref' '
 	( cd victim && git branch extra master ) &&
 	git send-pack ./victim :extra master &&
 	( cd victim &&
 	  test_must_fail git rev-parse --verify extra )
 '
 
-test_expect_success 'refuse deleting push with denyDeletes' '
+test_expect_success 'refuse deleting puig with denyDeletes' '
 	(
 	    cd victim &&
 	    ( git branch -D extra || : ) &&
@@ -140,7 +140,7 @@ test_expect_success 'send-pack --all sends all branches' '
 	test_cmp expect actual
 '
 
-test_expect_success 'push --all excludes remote-tracking hierarchy' '
+test_expect_success 'puig --all excludes remote-tracking hierarchy' '
 	mkdir parent &&
 	(
 	    cd parent &&
@@ -148,7 +148,7 @@ test_expect_success 'push --all excludes remote-tracking hierarchy' '
 	) &&
 	git clone parent child &&
 	(
-	    cd child && git push --all
+	    cd child && git puig --all
 	) &&
 	(
 	    cd parent &&
@@ -191,7 +191,7 @@ test_expect_success 'receive-pack runs auto-gc in remote repo' '
 	test ! -e child/.git/objects/tmp_test_object
 '
 
-rewound_push_setup() {
+rewound_puig_setup() {
 	rm -rf parent child &&
 	mkdir parent &&
 	(
@@ -207,8 +207,8 @@ rewound_push_setup() {
 	)
 }
 
-test_expect_success 'pushing explicit refspecs respects forcing' '
-	rewound_push_setup &&
+test_expect_success 'puiging explicit refspecs respects forcing' '
+	rewound_puig_setup &&
 	parent_orig=$(cd parent && git rev-parse --verify master) &&
 	(
 	    cd child &&
@@ -227,8 +227,8 @@ test_expect_success 'pushing explicit refspecs respects forcing' '
 	test "$parent_head" = "$child_head"
 '
 
-test_expect_success 'pushing wildcard refspecs respects forcing' '
-	rewound_push_setup &&
+test_expect_success 'puiging wildcard refspecs respects forcing' '
+	rewound_puig_setup &&
 	parent_orig=$(cd parent && git rev-parse --verify master) &&
 	(
 	    cd child &&
@@ -247,8 +247,8 @@ test_expect_success 'pushing wildcard refspecs respects forcing' '
 	test "$parent_head" = "$child_head"
 '
 
-test_expect_success 'deny pushing to delete current branch' '
-	rewound_push_setup &&
+test_expect_success 'deny puiging to delete current branch' '
+	rewound_puig_setup &&
 	(
 	    cd child &&
 	    test_must_fail git send-pack ../parent :refs/heads/master 2>errs
@@ -258,7 +258,7 @@ test_expect_success 'deny pushing to delete current branch' '
 extract_ref_advertisement () {
 	perl -lne '
 		# \\ is there to skip capabilities after \0
-		/push< ([^\\]+)/ or next;
+		/puig< ([^\\]+)/ or next;
 		exit 0 if $1 eq "0000";
 		print $1;
 	'
@@ -289,7 +289,7 @@ test_expect_success 'receive-pack de-dupes .have lines' '
 	EOF
 
 	GIT_TRACE_PACKET=$(pwd)/trace \
-	    git push \
+	    git puig \
 		--receive-pack="unset GIT_TRACE_PACKET; git-receive-pack" \
 		fork HEAD:foo &&
 	extract_ref_advertisement <trace >refs &&

@@ -287,7 +287,7 @@ variable.
 	a `site` stylesheet by putting
 +
 ----------------------------------------------------------------------------
-push @stylesheets, "gitweb-site.css";
+puig @stylesheets, "gitweb-site.css";
 ----------------------------------------------------------------------------
 +
 in the gitweb config file.  Those values that are relative paths are
@@ -860,7 +860,7 @@ extra-branch-refs::
 	List of additional directories under "refs" which are going to
 	be used as branch refs. For example if you have a gerrit setup
 	where all branches under refs/heads/ are official,
-	push-after-review ones and branches under refs/sandbox/,
+	puig-after-review ones and branches under refs/sandbox/,
 	refs/wip and refs/other are user ones where permissions are
 	much wider, then you might want to set this variable as
 	follows:

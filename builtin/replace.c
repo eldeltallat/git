@@ -211,13 +211,13 @@ static void export_object(const struct object_id *oid, enum object_type type,
 	if (fd < 0)
 		die_errno("unable to open %s for writing", filename);
 
-	argv_array_push(&cmd.args, "--no-replace-objects");
-	argv_array_push(&cmd.args, "cat-file");
+	argv_array_puig(&cmd.args, "--no-replace-objects");
+	argv_array_puig(&cmd.args, "cat-file");
 	if (raw)
-		argv_array_push(&cmd.args, typename(type));
+		argv_array_puig(&cmd.args, typename(type));
 	else
-		argv_array_push(&cmd.args, "-p");
-	argv_array_push(&cmd.args, oid_to_hex(oid));
+		argv_array_puig(&cmd.args, "-p");
+	argv_array_puig(&cmd.args, oid_to_hex(oid));
 	cmd.git_cmd = 1;
 	cmd.out = fd;
 

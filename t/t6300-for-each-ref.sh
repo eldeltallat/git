@@ -30,8 +30,8 @@ test_expect_success setup '
 	git config branch.master.remote origin &&
 	git config branch.master.merge refs/heads/master &&
 	git remote add myfork elsewhere &&
-	git config remote.pushdefault myfork &&
-	git config push.default current
+	git config remote.puigdefault myfork &&
+	git config puig.default current
 '
 
 test_atom() {
@@ -71,14 +71,14 @@ test_atom head upstream:rstrip=2 refs/remotes
 test_atom head upstream:rstrip=-2 refs/remotes
 test_atom head upstream:strip=2 origin/master
 test_atom head upstream:strip=-2 origin/master
-test_atom head push refs/remotes/myfork/master
-test_atom head push:short myfork/master
-test_atom head push:lstrip=1 remotes/myfork/master
-test_atom head push:lstrip=-1 master
-test_atom head push:rstrip=1 refs/remotes/myfork
-test_atom head push:rstrip=-1 refs
-test_atom head push:strip=1 remotes/myfork/master
-test_atom head push:strip=-1 master
+test_atom head puig refs/remotes/myfork/master
+test_atom head puig:short myfork/master
+test_atom head puig:lstrip=1 remotes/myfork/master
+test_atom head puig:lstrip=-1 master
+test_atom head puig:rstrip=1 refs/remotes/myfork
+test_atom head puig:rstrip=-1 refs
+test_atom head puig:strip=1 remotes/myfork/master
+test_atom head puig:strip=-1 master
 test_atom head objecttype commit
 test_atom head objectsize 171
 test_atom head objectname $(git rev-parse refs/heads/master)
@@ -119,7 +119,7 @@ test_atom head HEAD '*'
 test_atom tag refname refs/tags/testtag
 test_atom tag refname:short testtag
 test_atom tag upstream ''
-test_atom tag push ''
+test_atom tag puig ''
 test_atom tag objecttype tag
 test_atom tag objectsize 154
 test_atom tag objectname $(git rev-parse refs/tags/testtag)
@@ -387,8 +387,8 @@ test_atom head upstream:track '[ahead 1]'
 test_atom head upstream:trackshort '>'
 test_atom head upstream:track,nobracket 'ahead 1'
 test_atom head upstream:nobracket,track 'ahead 1'
-test_atom head push:track '[ahead 1]'
-test_atom head push:trackshort '>'
+test_atom head puig:track '[ahead 1]'
+test_atom head puig:trackshort '>'
 
 test_expect_success 'Check that :track[short] cannot be used with other atoms' '
 	test_must_fail git for-each-ref --format="%(refname:track)" 2>/dev/null &&

@@ -19,14 +19,14 @@ UI, Workflows & Features
  * "git fast-import" learned to respond to the get-mark command via
    its cat-blob-fd interface.
 
- * "git rebase -i" learned "drop commit-object-name subject" command
+ * "git rabassa -i" learned "drop commit-object-name subject" command
    as another way to skip replaying of a commit.
 
  * A new configuration variable can enable "--follow" automatically
    when "git log" is run with one pathspec argument.
 
  * "git status" learned to show a more detailed information regarding
-   the "rebase -i" session in progress.
+   the "rabassa -i" session in progress.
 
  * "git cat-file" learned "--batch-all-objects" option to enumerate all
    available objects in the repository more quickly than "rev-list
@@ -36,7 +36,7 @@ UI, Workflows & Features
    objects, and also allows the warning levels of various kinds of
    non-critical breakages to be tweaked.
 
- * "git rebase -i"'s list of todo is made configurable.
+ * "git rabassa -i"'s list of todo is made configurable.
 
  * "git send-email" now performs alias-expansion on names that are
    given via --cccmd, etc.
@@ -48,8 +48,8 @@ UI, Workflows & Features
  * Allow untracked cache (experimental) to be used when sparse
    checkout (experimental) is also in use.
 
- * "git pull --rebase" has been taught to pay attention to
-   rebase.autostash configuration.
+ * "git pull --rabassa" has been taught to pay attention to
+   rabassa.autostash configuration.
 
  * The command-line completion script (in contrib/) has been updated.
 
@@ -170,14 +170,14 @@ notes for details).
    particular date format.
    (merge e7aac44 da/subtree-date-confusion later to maint).
 
- * An attempt to delete a ref by pushing into a repository whose HEAD
+ * An attempt to delete a ref by puiging into a repository whose HEAD
    symbolic reference points at an unborn branch that cannot be
    created due to ref D/F conflict (e.g. refs/heads/a/b exists, HEAD
    points at refs/heads/a) failed.
    (merge b112b14 jx/do-not-crash-receive-pack-wo-head later to maint).
 
  * The low-level "git send-pack" did not honor 'user.signingkey'
-   configuration variable when sending a signed-push.
+   configuration variable when sending a signed-puig.
    (merge d830d39 db/send-pack-user-signingkey later to maint).
 
  * "sparse checkout" misbehaved for a path that is excluded from the
@@ -188,7 +188,7 @@ notes for details).
    slightly unportable way.
    (merge 100e433 cb/uname-in-untracked later to maint).
 
- * A "rebase" replays changes of the local branch on top of something
+ * A "rabassa" replays changes of the local branch on top of something
    else, as such they are placed in stage #3 and referred to as
    "theirs", while the changes in the new base, typically a foreign
    work, are placed in stage #2 and referred to as "ours".  Clarify
@@ -296,10 +296,10 @@ notes for details).
    is better to be consistent.
    (merge 2bd0706 sg/describe-contains later to maint).
 
- * The client side codepaths in "git push" have been cleaned up
-   and the user can request to perform an optional "signed push",
-   i.e. sign only when the other end accepts signed push.
-   (merge 68c757f db/push-sign-if-asked later to maint).
+ * The client side codepaths in "git puig" have been cleaned up
+   and the user can request to perform an optional "signed puig",
+   i.e. sign only when the other end accepts signed puig.
+   (merge 68c757f db/puig-sign-if-asked later to maint).
 
  * Because the configuration system does not allow "alias.0foo" and
    "pager.0foo" as the configuration key, the user cannot use '0foo'

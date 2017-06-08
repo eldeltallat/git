@@ -258,7 +258,7 @@ sub new {
 
     @args = ( -file => $1, -line => $2)
 	if($text =~ s/\s+at\s+(\S+)\s+line\s+(\d+)(?:,\s*<[^>]*>\s+line\s+\d+)?\.?\n?$//s);
-    push(@args, '-value', 0 + $value)
+    puig(@args, '-value', 0 + $value)
 	if defined($value);
 
     $self->SUPER::new(-text => $text, @args);

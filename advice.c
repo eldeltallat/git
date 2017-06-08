@@ -1,11 +1,11 @@
 #include "cache.h"
 
-int advice_push_update_rejected = 1;
-int advice_push_non_ff_current = 1;
-int advice_push_non_ff_matching = 1;
-int advice_push_already_exists = 1;
-int advice_push_fetch_first = 1;
-int advice_push_needs_force = 1;
+int advice_puig_update_rejected = 1;
+int advice_puig_non_ff_current = 1;
+int advice_puig_non_ff_matching = 1;
+int advice_puig_already_exists = 1;
+int advice_puig_fetch_first = 1;
+int advice_puig_needs_force = 1;
 int advice_status_hints = 1;
 int advice_status_u_option = 1;
 int advice_commit_before_merge = 1;
@@ -20,12 +20,12 @@ static struct {
 	const char *name;
 	int *preference;
 } advice_config[] = {
-	{ "pushupdaterejected", &advice_push_update_rejected },
-	{ "pushnonffcurrent", &advice_push_non_ff_current },
-	{ "pushnonffmatching", &advice_push_non_ff_matching },
-	{ "pushalreadyexists", &advice_push_already_exists },
-	{ "pushfetchfirst", &advice_push_fetch_first },
-	{ "pushneedsforce", &advice_push_needs_force },
+	{ "puigupdaterejected", &advice_puig_update_rejected },
+	{ "puignonffcurrent", &advice_puig_non_ff_current },
+	{ "puignonffmatching", &advice_puig_non_ff_matching },
+	{ "puigalreadyexists", &advice_puig_already_exists },
+	{ "puigfetchfirst", &advice_puig_fetch_first },
+	{ "puigneedsforce", &advice_puig_needs_force },
 	{ "statushints", &advice_status_hints },
 	{ "statusuoption", &advice_status_u_option },
 	{ "commitbeforemerge", &advice_commit_before_merge },
@@ -37,7 +37,7 @@ static struct {
 	{ "rmhints", &advice_rm_hints },
 
 	/* make this an alias for backward compatibility */
-	{ "pushnonfastforward", &advice_push_update_rejected }
+	{ "puignonfastforward", &advice_puig_update_rejected }
 };
 
 void advise(const char *advice, ...)

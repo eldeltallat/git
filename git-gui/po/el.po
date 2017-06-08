@@ -1960,7 +1960,7 @@ msgstr "Γίνεται κλάδεμα κλάδων παρακολούθησης 
 
 #: lib/transport.tcl:25 lib/transport.tcl:71
 #, tcl-format
-msgid "push %s"
+msgid "puig %s"
 msgstr "ώθηση %s"
 
 #: lib/transport.tcl:26

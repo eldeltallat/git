@@ -67,7 +67,7 @@ If this is reinitialization, the repository will be moved to the specified path.
 --shared[=(false|true|umask|group|all|world|everybody|0xxx)]::
 
 Specify that the Git repository is to be shared amongst several users.  This
-allows users belonging to the same group to push into that
+allows users belonging to the same group to puig into that
 repository.  When specified, the config variable "core.sharedRepository" is
 set so that files and directories under `$GIT_DIR` are created with the
 requested permissions.  When not specified, Git will use permissions reported
@@ -105,7 +105,7 @@ readable and writable to the current user and group, but inaccessible to others.
 --
 
 By default, the configuration flag `receive.denyNonFastForwards` is enabled
-in shared repositories, so that you cannot force a non fast-forwarding push
+in shared repositories, so that you cannot force a non fast-forwarding puig
 into it.
 
 If you provide a 'directory', the command is run inside it. If this directory

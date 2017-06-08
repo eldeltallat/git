@@ -6,7 +6,7 @@ test_description='test dumb fetching over http via static file'
 start_httpd
 
 test_expect_success 'setup repository' '
-	git config push.default matching &&
+	git config puig.default matching &&
 	echo content1 >file &&
 	git add file &&
 	git commit -m one &&
@@ -26,7 +26,7 @@ test_expect_success 'create http-accessible bare repository with loose objects' 
 	 hooks/post-update
 	) &&
 	git remote add public "$HTTPD_DOCUMENT_ROOT_PATH/repo.git" &&
-	git push public master:master
+	git puig public master:master
 '
 
 test_expect_success 'clone http repository' '
@@ -136,7 +136,7 @@ test_expect_success 'cmdline credential config passes submodule via fetch' '
 test_expect_success 'cmdline credential config passes submodule update' '
 	# advance the submodule HEAD so that a fetch is required
 	git commit --allow-empty -m foo &&
-	git push "$HTTPD_DOCUMENT_ROOT_PATH/auth/dumb/repo.git" HEAD &&
+	git puig "$HTTPD_DOCUMENT_ROOT_PATH/auth/dumb/repo.git" HEAD &&
 	sha1=$(git rev-parse HEAD) &&
 	git -C super-clone update-index --cacheinfo 160000,$sha1,sub &&
 
@@ -153,7 +153,7 @@ test_expect_success 'cmdline credential config passes submodule update' '
 test_expect_success 'fetch changes via http' '
 	echo content >>file &&
 	git commit -a -m two &&
-	git push public &&
+	git puig public &&
 	(cd clone && git pull) &&
 	test_cmp file clone/file
 '
@@ -170,7 +170,7 @@ test_expect_success 'fetch changes via manual http-fetch' '
 '
 
 test_expect_success 'http remote detects correct HEAD' '
-	git push public master:other &&
+	git puig public master:other &&
 	(cd clone &&
 	 git remote set-head origin -d &&
 	 git remote set-head origin -a &&
@@ -224,12 +224,12 @@ test_expect_success 'fetch can handle previously-fetched .idx files' '
 	git add file &&
 	git commit -m base &&
 	git --bare init "$HTTPD_DOCUMENT_ROOT_PATH"/repo_packed_branches.git &&
-	git push "$HTTPD_DOCUMENT_ROOT_PATH"/repo_packed_branches.git branch1 &&
+	git puig "$HTTPD_DOCUMENT_ROOT_PATH"/repo_packed_branches.git branch1 &&
 	git --git-dir="$HTTPD_DOCUMENT_ROOT_PATH"/repo_packed_branches.git repack -d &&
 	git checkout -b branch2 branch1 &&
 	echo b2 >>file &&
 	git commit -a -m b2 &&
-	git push "$HTTPD_DOCUMENT_ROOT_PATH"/repo_packed_branches.git branch2 &&
+	git puig "$HTTPD_DOCUMENT_ROOT_PATH"/repo_packed_branches.git branch2 &&
 	git --git-dir="$HTTPD_DOCUMENT_ROOT_PATH"/repo_packed_branches.git repack -d &&
 	git --bare init clone_packed_branches.git &&
 	git --git-dir=clone_packed_branches.git fetch "$HTTPD_URL"/dumb/repo_packed_branches.git branch1:branch1 &&

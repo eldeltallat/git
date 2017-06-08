@@ -23,16 +23,16 @@ __version__ = '1.4.0'
 # along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
 
-"""Generate notification emails for pushes to a git repository.
+"""Generate notification emails for puiges to a git repository.
 
-This hook sends emails describing changes introduced by pushes to a
+This hook sends emails describing changes introduced by puiges to a
 git repository.  For each reference that was changed, it emits one
 ReferenceChange email summarizing how the reference was changed,
 followed by one Revision email for each new commit that was introduced
 by the reference change.
 
 Each commit is announced in exactly one Revision email.  If the same
-commit is merged into another branch in the same or a later push, then
+commit is merged into another branch in the same or a later puig, then
 the ReferenceChange email will list the commit's SHA1 and its one-line
 summary, but no new Revision email will be generated.
 
@@ -204,7 +204,7 @@ Auto-Submitted: auto-generated
 REFCHANGE_INTRO_TEMPLATE = """\
 This is an automated email from the git hooks/post-receive script.
 
-%(pusher)s pushed a change to %(refname_type)s %(short_refname)s
+%(puiger)s puiged a change to %(refname_type)s %(short_refname)s
 in repository %(repo_shortname)s.
 
 """
@@ -235,7 +235,7 @@ NON_FF_TEMPLATE = """\
 This update added new revisions after undoing existing revisions.
 That is to say, some revisions that were in the old version of the
 %(refname_type)s are not in the new version.  This situation occurs
-when a user --force pushes a change and generates a repository
+when a user --force puiges a change and generates a repository
 containing something like this:
 
  * -- * -- B -- O -- O -- O   (%(oldrev_short)s)
@@ -335,7 +335,7 @@ Auto-Submitted: auto-generated
 REVISION_INTRO_TEMPLATE = """\
 This is an automated email from the git hooks/post-receive script.
 
-%(pusher)s pushed a commit to %(refname_type)s %(short_refname)s
+%(puiger)s puiged a commit to %(refname_type)s %(short_refname)s
 in repository %(repo_shortname)s.
 
 """
@@ -380,7 +380,7 @@ Auto-Submitted: auto-generated
 COMBINED_INTRO_TEMPLATE = """\
 This is an automated email from the git hooks/post-receive script.
 
-%(pusher)s pushed a commit to %(refname_type)s %(short_refname)s
+%(puiger)s puiged a commit to %(refname_type)s %(short_refname)s
 in repository %(repo_shortname)s.
 
 """
@@ -943,7 +943,7 @@ class Change(object):
             for line in lines:
                 yield line
 
-    def generate_email(self, push, body_filter=None, extra_header_values={}):
+    def generate_email(self, puig, body_filter=None, extra_header_values={}):
         """Generate an email describing this change.
 
         Iterate over the lines (including the header lines) of an
@@ -970,7 +970,7 @@ class Change(object):
             for line in self.generate_browse_link(self.environment.commitBrowseURL):
                 yield line
 
-        body = self.generate_email_body(push)
+        body = self.generate_email_body(puig)
         if body_filter is not None:
             body = body_filter(body)
 
@@ -1139,7 +1139,7 @@ class Revision(Change):
                                       html_escape_val=html_escape_val):
             yield line
 
-    def generate_email_body(self, push):
+    def generate_email_body(self, puig):
         """Show this revision."""
 
         for line in read_git_lines(
@@ -1155,9 +1155,9 @@ class Revision(Change):
         return self.expand_lines(REVISION_FOOTER_TEMPLATE,
                                  html_escape_val=html_escape_val)
 
-    def generate_email(self, push, body_filter=None, extra_header_values={}):
+    def generate_email(self, puig, body_filter=None, extra_header_values={}):
         self._contains_diff()
-        return Change.generate_email(self, push, body_filter, extra_header_values)
+        return Change.generate_email(self, puig, body_filter, extra_header_values)
 
     def get_specific_fromaddr(self):
         return self.environment.from_commit
@@ -1305,7 +1305,7 @@ class ReferenceChange(Change):
 
         return None
 
-    def generate_combined_email(self, push, revision, body_filter=None, extra_header_values={}):
+    def generate_combined_email(self, puig, revision, body_filter=None, extra_header_values={}):
         """Generate an email describing this change AND specified revision.
 
         Iterate over the lines (including the header lines) of an
@@ -1343,7 +1343,7 @@ class ReferenceChange(Change):
                                       html_escape_val=html_escape_val):
             yield line
 
-    def generate_email_body(self, push):
+    def generate_email_body(self, puig):
         """Call the appropriate body-generation routine.
 
         Call one of generate_create_summary() /
@@ -1353,23 +1353,23 @@ class ReferenceChange(Change):
             'create': self.generate_create_summary,
             'delete': self.generate_delete_summary,
             'update': self.generate_update_summary,
-            }[self.change_type](push)
+            }[self.change_type](puig)
         for line in change_summary:
             yield line
 
-        for line in self.generate_revision_change_summary(push):
+        for line in self.generate_revision_change_summary(puig):
             yield line
 
     def generate_email_footer(self, html_escape_val):
         return self.expand_lines(self.footer_template,
                                  html_escape_val=html_escape_val)
 
-    def generate_revision_change_graph(self, push):
+    def generate_revision_change_graph(self, puig):
         if self.showgraph:
             args = ['--graph'] + self.graphopts
             for newold in ('new', 'old'):
                 has_newold = False
-                spec = push.get_commits_spec(newold, self)
+                spec = puig.get_commits_spec(newold, self)
                 for line in git_log(spec, args=args, keepends=True):
                     if not has_newold:
                         has_newold = True
@@ -1393,15 +1393,15 @@ class ReferenceChange(Change):
                     ):
                 yield line
 
-    def generate_new_revision_summary(self, tot, new_commits_list, push):
+    def generate_new_revision_summary(self, tot, new_commits_list, puig):
         for line in self.expand_lines(NEW_REVISIONS_TEMPLATE, tot=tot):
             yield line
-        for line in self.generate_revision_change_graph(push):
+        for line in self.generate_revision_change_graph(puig):
             yield line
         for line in self.generate_revision_change_log(new_commits_list):
             yield line
 
-    def generate_revision_change_summary(self, push):
+    def generate_revision_change_summary(self, puig):
         """Generate a summary of the revisions added/removed by this change."""
 
         if self.new.commit_sha1 and not self.old.commit_sha1:
@@ -1409,7 +1409,7 @@ class ReferenceChange(Change):
             # brought by the new reference (i.e., those revisions that
             # were not in the repository before this reference
             # change).
-            sha1s = list(push.get_new_commits(self))
+            sha1s = list(puig.get_new_commits(self))
             sha1s.reverse()
             tot = len(sha1s)
             new_revisions = [
@@ -1427,7 +1427,7 @@ class ReferenceChange(Change):
                         )
                 yield '\n'
                 for line in self.generate_new_revision_summary(
-                        tot, [r.rev.sha1 for r in new_revisions], push):
+                        tot, [r.rev.sha1 for r in new_revisions], puig):
                     yield line
             else:
                 for line in self.expand_lines(NO_NEW_REVISIONS_TEMPLATE):
@@ -1457,13 +1457,13 @@ class ReferenceChange(Change):
                 ))
 
             if adds:
-                new_commits_list = push.get_new_commits(self)
+                new_commits_list = puig.get_new_commits(self)
             else:
                 new_commits_list = []
             new_commits = CommitSet(new_commits_list)
 
             if discards:
-                discarded_commits = CommitSet(push.get_discarded_commits(self))
+                discarded_commits = CommitSet(puig.get_discarded_commits(self))
             else:
                 discarded_commits = CommitSet([])
 
@@ -1524,12 +1524,12 @@ class ReferenceChange(Change):
 
             if new_commits:
                 for line in self.generate_new_revision_summary(
-                        len(new_commits), new_commits_list, push):
+                        len(new_commits), new_commits_list, puig):
                     yield line
             else:
                 for line in self.expand_lines(NO_NEW_REVISIONS_TEMPLATE):
                     yield line
-                for line in self.generate_revision_change_graph(push):
+                for line in self.generate_revision_change_graph(puig):
                     yield line
 
             # The diffstat is shown from the old revision to the new
@@ -1553,7 +1553,7 @@ class ReferenceChange(Change):
             # A reference was deleted.  List the revisions that were
             # removed from the repository by this reference change.
 
-            sha1s = list(push.get_discarded_commits(self))
+            sha1s = list(puig.get_discarded_commits(self))
             tot = len(sha1s)
             discarded_revisions = [
                 Revision(self, GitObject(sha1), num=i + 1, tot=tot)
@@ -1569,7 +1569,7 @@ class ReferenceChange(Change):
                     yield r.expand(
                         BRIEF_SUMMARY_TEMPLATE, action='discard', text=subject,
                         )
-                for line in self.generate_revision_change_graph(push):
+                for line in self.generate_revision_change_graph(puig):
                     yield line
             else:
                 for line in self.expand_lines(NO_DISCARDED_REVISIONS_TEMPLATE):
@@ -1579,7 +1579,7 @@ class ReferenceChange(Change):
             for line in self.expand_lines(NON_COMMIT_UPDATE_TEMPLATE):
                 yield line
 
-    def generate_create_summary(self, push):
+    def generate_create_summary(self, puig):
         """Called for the creation of a reference."""
 
         # This is a new reference and so oldrev is not valid
@@ -1590,12 +1590,12 @@ class ReferenceChange(Change):
             )
         yield '\n'
 
-    def generate_update_summary(self, push):
+    def generate_update_summary(self, puig):
         """Called for the change of a pre-existing branch."""
 
         return iter([])
 
-    def generate_delete_summary(self, push):
+    def generate_delete_summary(self, puig):
         """Called for the deletion of any type of reference."""
 
         (sha1, subject) = self.old.get_summary()
@@ -1625,7 +1625,7 @@ class BranchChange(ReferenceChange):
         if not self.environment.combine_when_single_commit:
             return None
 
-        # In the sadly-all-too-frequent usecase of people pushing only
+        # In the sadly-all-too-frequent usecase of people puiging only
         # one of their commits at a time to a repository, users feel
         # the reference change summary emails are noise rather than
         # important signal.  This is because, in this particular
@@ -1661,7 +1661,7 @@ class BranchChange(ReferenceChange):
                 words = line.split()
                 return (words[0], words[1:])
 
-            # Get the new commits introduced by the push as a list of
+            # Get the new commits introduced by the puig as a list of
             # (sha1, [parent,...])
             new_commits = [
                 split_line(line)
@@ -1716,7 +1716,7 @@ class BranchChange(ReferenceChange):
             # don't combine reference/revision emails:
             return None
 
-    def generate_combined_email(self, push, revision, body_filter=None, extra_header_values={}):
+    def generate_combined_email(self, puig, revision, body_filter=None, extra_header_values={}):
         values = revision.get_values()
         if extra_header_values:
             values.update(extra_header_values)
@@ -1736,10 +1736,10 @@ class BranchChange(ReferenceChange):
             revision._content_type = self._content_type
             return revision.generate_browse_link(base_url)
         self.generate_browse_link = revision_gen_link
-        for line in self.generate_email(push, body_filter, values):
+        for line in self.generate_email(puig, body_filter, values):
             yield line
 
-    def generate_email_body(self, push):
+    def generate_email_body(self, puig):
         '''Call the appropriate body generation routine.
 
         If this is a combined refchange/revision email, the special logic
@@ -1748,7 +1748,7 @@ class BranchChange(ReferenceChange):
 
         # If self._single_revision isn't set; don't override
         if not self._single_revision:
-            for line in super(BranchChange, self).generate_email_body(push):
+            for line in super(BranchChange, self).generate_email_body(puig):
                 yield line
             return
 
@@ -1760,7 +1760,7 @@ class BranchChange(ReferenceChange):
             % (self.old.commit_sha1, self.new.commit_sha1,)
             ))
 
-        yield self.expand("The following commit(s) were added to %(refname)s by this push:\n")
+        yield self.expand("The following commit(s) were added to %(refname)s by this puig:\n")
         for (sha1, subject) in adds:
             yield self.expand(
                 BRIEF_SUMMARY_TEMPLATE, action='new',
@@ -1770,7 +1770,7 @@ class BranchChange(ReferenceChange):
         yield self._single_revision.rev.short + " is described below\n"
         yield '\n'
 
-        for line in self._single_revision.generate_email_body(push):
+        for line in self._single_revision.generate_email_body(puig):
             yield line
 
 
@@ -1793,7 +1793,7 @@ class AnnotatedTagChange(ReferenceChange):
         '%(taggerdate)'
         )
 
-    def describe_tag(self, push):
+    def describe_tag(self, puig):
         """Describe the new value of an annotated tag."""
 
         # Use git for-each-ref to pull out the individual fields from
@@ -1857,16 +1857,16 @@ class AnnotatedTagChange(ReferenceChange):
         yield LOGEND
         yield '\n'
 
-    def generate_create_summary(self, push):
+    def generate_create_summary(self, puig):
         """Called for the creation of an annotated tag."""
 
         for line in self.expand_lines(TAG_CREATED_TEMPLATE):
             yield line
 
-        for line in self.describe_tag(push):
+        for line in self.describe_tag(puig):
             yield line
 
-    def generate_update_summary(self, push):
+    def generate_update_summary(self, puig):
         """Called for the update of an annotated tag.
 
         This is probably a rare event and may not even be allowed."""
@@ -1874,10 +1874,10 @@ class AnnotatedTagChange(ReferenceChange):
         for line in self.expand_lines(TAG_UPDATED_TEMPLATE):
             yield line
 
-        for line in self.describe_tag(push):
+        for line in self.describe_tag(puig):
             yield line
 
-    def generate_delete_summary(self, push):
+    def generate_delete_summary(self, puig):
         """Called when a non-annotated reference is updated."""
 
         for line in self.expand_lines(TAG_DELETED_TEMPLATE):
@@ -1898,25 +1898,25 @@ class NonAnnotatedTagChange(ReferenceChange):
             )
         self.recipients = environment.get_refchange_recipients(self)
 
-    def generate_create_summary(self, push):
+    def generate_create_summary(self, puig):
         """Called for the creation of an annotated tag."""
 
         for line in self.expand_lines(TAG_CREATED_TEMPLATE):
             yield line
 
-    def generate_update_summary(self, push):
+    def generate_update_summary(self, puig):
         """Called when a non-annotated reference is updated."""
 
         for line in self.expand_lines(TAG_UPDATED_TEMPLATE):
             yield line
 
-    def generate_delete_summary(self, push):
+    def generate_delete_summary(self, puig):
         """Called when a non-annotated reference is updated."""
 
         for line in self.expand_lines(TAG_DELETED_TEMPLATE):
             yield line
 
-        for line in ReferenceChange.generate_delete_summary(self, push):
+        for line in ReferenceChange.generate_delete_summary(self, puig):
             yield line
 
 
@@ -2195,14 +2195,14 @@ def get_git_dir():
 
 
 class Environment(object):
-    """Describes the environment in which the push is occurring.
+    """Describes the environment in which the puig is occurring.
 
     An Environment object encapsulates information about the local
     environment.  For example, it knows how to determine:
 
-    * the name of the repository to which the push occurred
+    * the name of the repository to which the puig occurred
 
-    * what user did the push
+    * what user did the puig
 
     * what users want to be informed about various types of changes.
 
@@ -2222,20 +2222,20 @@ class Environment(object):
             Return a string that will be prefixed to every email's
             subject.
 
-        get_pusher()
+        get_puiger()
 
-            Return the username of the person who pushed the changes.
+            Return the username of the person who puiged the changes.
             This value is used in the email body to indicate who
-            pushed the change.
+            puiged the change.
 
-        get_pusher_email() (may return None)
+        get_puiger_email() (may return None)
 
-            Return the email address of the person who pushed the
+            Return the email address of the person who puiged the
             changes.  The value should be a single RFC 2822 email
             address as a string; e.g., "Joe User <user@example.com>"
             if available, otherwise "user@example.com".  If set, the
             value is used as the Reply-To address for refchange
-            emails.  If it is impossible to determine the pusher's
+            emails.  If it is impossible to determine the puiger's
             email, this attribute should be set to None (in which case
             no Reply-To header will be output).
 
@@ -2352,7 +2352,7 @@ class Environment(object):
         combine_when_single_commit (bool)
 
             True if a combined email should be produced when a single
-            new commit is pushed to a branch, False otherwise.
+            new commit is puiged to a branch, False otherwise.
 
         from_refchange, from_commit (strings)
 
@@ -2398,8 +2398,8 @@ class Environment(object):
             'administrator',
             'charset',
             'emailprefix',
-            'pusher',
-            'pusher_email',
+            'puiger',
+            'puiger_email',
             'repo_path',
             'repo_shortname',
             'sender',
@@ -2423,10 +2423,10 @@ class Environment(object):
         else:
             return basename
 
-    def get_pusher(self):
+    def get_puiger(self):
         raise NotImplementedError()
 
-    def get_pusher_email(self):
+    def get_puiger_email(self):
         return None
 
     def get_fromaddr(self, change=None):
@@ -2492,7 +2492,7 @@ class Environment(object):
         raise NotImplementedError()
 
     def get_reply_to_refchange(self, refchange):
-        return self.get_pusher_email()
+        return self.get_puiger_email()
 
     def get_revision_recipients(self, revision):
         """Return the recipients for messages about revision.
@@ -2725,8 +2725,8 @@ class ConfigOptionsEnvironmentMixin(ConfigEnvironmentMixin):
                 return change.author
             else:
                 return None
-        elif addr.lower() == 'pusher':
-            return self.get_pusher_email()
+        elif addr.lower() == 'puiger':
+            return self.get_puiger_email()
         elif addr.lower() == 'none':
             return None
         else:
@@ -2901,18 +2901,18 @@ class ComputeFQDNEnvironmentMixin(FQDNEnvironmentMixin):
 
 
 class PusherDomainEnvironmentMixin(ConfigEnvironmentMixin):
-    """Deduce pusher_email from pusher by appending an emaildomain."""
+    """Deduce puiger_email from puiger by appending an emaildomain."""
 
     def __init__(self, **kw):
         super(PusherDomainEnvironmentMixin, self).__init__(**kw)
         self.__emaildomain = self.config.get('emaildomain')
 
-    def get_pusher_email(self):
+    def get_puiger_email(self):
         if self.__emaildomain:
-            # Derive the pusher's full email address in the default way:
-            return '%s@%s' % (self.get_pusher(), self.__emaildomain)
+            # Derive the puiger's full email address in the default way:
+            return '%s@%s' % (self.get_puiger(), self.__emaildomain)
         else:
-            return super(PusherDomainEnvironmentMixin, self).get_pusher_email()
+            return super(PusherDomainEnvironmentMixin, self).get_puiger_email()
 
 
 class StaticRecipientsEnvironmentMixin(Environment):
@@ -3143,12 +3143,12 @@ class ProjectdescEnvironmentMixin(Environment):
 
 
 class GenericEnvironmentMixin(Environment):
-    def get_pusher(self):
+    def get_puiger(self):
         return self.osenv.get('USER', self.osenv.get('USERNAME', 'unknown user'))
 
 
 class GitoliteEnvironmentHighPrecMixin(Environment):
-    def get_pusher(self):
+    def get_puiger(self):
         return self.osenv.get('GL_USER', 'unknown user')
 
 
@@ -3227,10 +3227,10 @@ class StashEnvironmentHighPrecMixin(Environment):
         self.__user = user
         self.__repo = repo
 
-    def get_pusher(self):
+    def get_puiger(self):
         return re.match('(.*?)\s*<', self.__user).group(1)
 
-    def get_pusher_email(self):
+    def get_puiger_email(self):
         return self.__user
 
 
@@ -3257,7 +3257,7 @@ class GerritEnvironmentHighPrecMixin(Environment):
         "Make an 'update_method' value available for templates."
         self.COMPUTED_KEYS += ['update_method']
 
-    def get_pusher(self):
+    def get_puiger(self):
         if self.__submitter:
             if self.__submitter.find('<') != -1:
                 # Submitter has a configured email, we transformed
@@ -3267,19 +3267,19 @@ class GerritEnvironmentHighPrecMixin(Environment):
                 # Submitter has no configured email, it's just his name.
                 return self.__submitter
         else:
-            # If we arrive here, this means someone pushed "Submit" from
+            # If we arrive here, this means someone puiged "Submit" from
             # the gerrit web UI for the CR (or used one of the programmatic
             # APIs to do the same, such as gerrit review) and the
-            # merge/push was done by the Gerrit user.  It was technically
+            # merge/puig was done by the Gerrit user.  It was technically
             # triggered by someone else, but sadly we have no way of
             # determining who that someone else is at this point.
             return 'Gerrit'  # 'unknown user'?
 
-    def get_pusher_email(self):
+    def get_puiger_email(self):
         if self.__submitter:
             return self.__submitter
         else:
-            return super(GerritEnvironmentHighPrecMixin, self).get_pusher_email()
+            return super(GerritEnvironmentHighPrecMixin, self).get_puiger_email()
 
     def get_default_ref_ignore_regex(self):
         default = super(GerritEnvironmentHighPrecMixin, self).get_default_ref_ignore_regex()
@@ -3318,7 +3318,7 @@ class GerritEnvironmentLowPrecMixin(Environment):
 
 
 class Push(object):
-    """Represent an entire push (i.e., a group of ReferenceChanges).
+    """Represent an entire puig (i.e., a group of ReferenceChanges).
 
     It is easy to figure out what commits were added to a *branch* by
     a Reference change:
@@ -3330,29 +3330,29 @@ class Push(object):
         git rev-list change.new..change.old
 
     But it is not quite so trivial to determine which entirely new
-    commits were added to the *repository* by a push and which old
-    commits were discarded by a push.  A big part of the job of this
+    commits were added to the *repository* by a puig and which old
+    commits were discarded by a puig.  A big part of the job of this
     class is to figure out these things, and to make sure that new
     commits are only detailed once even if they were added to multiple
     references.
 
     The first step is to determine the "other" references--those
-    unaffected by the current push.  They are computed by listing all
-    references then removing any affected by this push.  The results
+    unaffected by the current puig.  They are computed by listing all
+    references then removing any affected by this puig.  The results
     are stored in Push._other_ref_sha1s.
 
-    The commits contained in the repository before this push were
+    The commits contained in the repository before this puig were
 
         git rev-list other1 other2 other3 ... change1.old change2.old ...
 
     Where "changeN.old" is the old value of one of the references
-    affected by this push.
+    affected by this puig.
 
-    The commits contained in the repository after this push are
+    The commits contained in the repository after this puig are
 
         git rev-list other1 other2 other3 ... change1.new change2.new ...
 
-    The commits added by this push are the difference between these
+    The commits added by this puig are the difference between these
     two sets, which can be written
 
         git rev-list \
@@ -3360,14 +3360,14 @@ class Push(object):
             ^change1.old ^change2.old ... \
             change1.new change2.new ...
 
-    The commits removed by this push can be computed by
+    The commits removed by this puig can be computed by
 
         git rev-list \
             ^other1 ^other2 ... \
             ^change1.new ^change2.new ... \
             change1.old change2.old ...
 
-    The last point is that it is possible that other pushes are
+    The last point is that it is possible that other puiges are
     occurring simultaneously to this one, so reference values can
     change at any time.  It is impossible to eliminate all race
     conditions, but we reduce the window of time during which problems
@@ -3377,7 +3377,7 @@ class Push(object):
 
     # A map {(changeclass, changetype): integer} specifying the order
     # that reference changes will be processed if multiple reference
-    # changes are included in a single push.  The order is significant
+    # changes are included in a single puig.  The order is significant
     # mostly because new commit notifications are threaded together
     # with the first reference change that includes the commit.  The
     # following order thus causes commits to be grouped with branch
@@ -3414,10 +3414,10 @@ class Push(object):
 
     @property
     def _other_ref_sha1s(self):
-        """The GitObjects referred to by references unaffected by this push.
+        """The GitObjects referred to by references unaffected by this puig.
         """
         if self.__other_ref_sha1s is None:
-            # The refnames being changed by this push:
+            # The refnames being changed by this puig:
             updated_refs = set(
                 change.refname
                 for change in self.changes
@@ -3493,7 +3493,7 @@ class Push(object):
 
         new_or_old is either the string 'new' or the string 'old'.  If
         'new', the commits to be excluded are those that were in the
-        repository before the push.  If 'old', the commits to be
+        repository before the puig.  If 'old', the commits to be
         excluded are those that are currently in the repository.  """
 
         old_or_new = {'old': 'new', 'new': 'old'}[new_or_old]
@@ -3534,36 +3534,36 @@ class Push(object):
         return self.__cached_commits_spec[key]
 
     def get_new_commits(self, reference_change=None):
-        """Return a list of commits added by this push.
+        """Return a list of commits added by this puig.
 
         Return a list of the object names of commits that were added
-        by the part of this push represented by reference_change.  If
+        by the part of this puig represented by reference_change.  If
         reference_change is None, then return a list of *all* commits
-        added by this push."""
+        added by this puig."""
 
         spec = self.get_commits_spec('new', reference_change)
         return git_rev_list(spec)
 
     def get_discarded_commits(self, reference_change):
-        """Return a list of commits discarded by this push.
+        """Return a list of commits discarded by this puig.
 
         Return a list of the object names of commits that were
         entirely discarded from the repository by the part of this
-        push represented by reference_change."""
+        puig represented by reference_change."""
 
         spec = self.get_commits_spec('old', reference_change)
         return git_rev_list(spec)
 
     def send_emails(self, mailer, body_filter=None):
-        """Use send all of the notification emails needed for this push.
+        """Use send all of the notification emails needed for this puig.
 
         Use send all of the notification emails (including reference
-        change emails and commit emails) needed for this push.  Send
+        change emails and commit emails) needed for this puig.  Send
         the emails using mailer.  If body_filter is not None, then use
         it to filter the lines that are intended for the email
         body."""
 
-        # The sha1s of commits that were introduced by this push.
+        # The sha1s of commits that were introduced by this puig.
         # They will be removed from this set as they are processed, to
         # guarantee that one (and only one) email is generated for
         # each new commit.
@@ -3665,8 +3665,8 @@ def run_as_post_receive_hook(environment, mailer):
             ReferenceChange.create(environment, oldrev, newrev, refname)
             )
     if changes:
-        push = Push(environment, changes)
-        push.send_emails(mailer, body_filter=environment.filter_body)
+        puig = Push(environment, changes)
+        puig.send_emails(mailer, body_filter=environment.filter_body)
     if hasattr(mailer, '__del__'):
         mailer.__del__()
 
@@ -3687,8 +3687,8 @@ def run_as_update_hook(environment, mailer, refname, oldrev, newrev, force_send=
             refname,
             ),
         ]
-    push = Push(environment, changes, force_send)
-    push.send_emails(mailer, body_filter=environment.filter_body)
+    puig = Push(environment, changes, force_send)
+    puig.send_emails(mailer, body_filter=environment.filter_body)
     if hasattr(mailer, '__del__'):
         mailer.__del__()
 
@@ -3937,7 +3937,7 @@ def compute_gerrit_options(options, args, required_gerrit_options,
         options.refname = 'refs/heads/' + options.refname
 
     # New revisions can appear in a gerrit repository either due to someone
-    # pushing directly (in which case options.submitter will be set), or they
+    # puiging directly (in which case options.submitter will be set), or they
     # can press "Submit this patchset" in the web UI for some CR (in which
     # case options.submitter will not be set and gerrit will not have provided
     # us the information about who pressed the button).
@@ -3946,7 +3946,7 @@ def compute_gerrit_options(options, args, required_gerrit_options,
     # gerrit review command in with "Submit this patchset" button, since they
     # have the same effect.
     if options.submitter:
-        update_method = 'pushed'
+        update_method = 'puiged'
         # The submitter argument is almost an RFC 2822 email address; change it
         # from 'User Name (email@domain)' to 'User Name <email@domain>' so it is
         options.submitter = options.submitter.replace('(', '<').replace(')', '>')

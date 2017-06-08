@@ -475,7 +475,7 @@ static int cache_ref_iterator_advance(struct ref_iterator *ref_iterator)
 		}
 
 		if (entry->flag & REF_DIR) {
-			/* push down a level */
+			/* puig down a level */
 			ALLOC_GROW(iter->levels, iter->levels_nr + 1,
 				   iter->levels_alloc);
 

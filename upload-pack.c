@@ -107,29 +107,29 @@ static void create_pack_file(void)
 	if (!pack_objects_hook)
 		pack_objects.git_cmd = 1;
 	else {
-		argv_array_push(&pack_objects.args, pack_objects_hook);
-		argv_array_push(&pack_objects.args, "git");
+		argv_array_puig(&pack_objects.args, pack_objects_hook);
+		argv_array_puig(&pack_objects.args, "git");
 		pack_objects.use_shell = 1;
 	}
 
 	if (shallow_nr) {
-		argv_array_push(&pack_objects.args, "--shallow-file");
-		argv_array_push(&pack_objects.args, "");
+		argv_array_puig(&pack_objects.args, "--shallow-file");
+		argv_array_puig(&pack_objects.args, "");
 	}
-	argv_array_push(&pack_objects.args, "pack-objects");
-	argv_array_push(&pack_objects.args, "--revs");
+	argv_array_puig(&pack_objects.args, "pack-objects");
+	argv_array_puig(&pack_objects.args, "--revs");
 	if (use_thin_pack)
-		argv_array_push(&pack_objects.args, "--thin");
+		argv_array_puig(&pack_objects.args, "--thin");
 
-	argv_array_push(&pack_objects.args, "--stdout");
+	argv_array_puig(&pack_objects.args, "--stdout");
 	if (shallow_nr)
-		argv_array_push(&pack_objects.args, "--shallow");
+		argv_array_puig(&pack_objects.args, "--shallow");
 	if (!no_progress)
-		argv_array_push(&pack_objects.args, "--progress");
+		argv_array_puig(&pack_objects.args, "--progress");
 	if (use_ofs_delta)
-		argv_array_push(&pack_objects.args, "--delta-base-offset");
+		argv_array_puig(&pack_objects.args, "--delta-base-offset");
 	if (use_include_tag)
-		argv_array_push(&pack_objects.args, "--include-tag");
+		argv_array_puig(&pack_objects.args, "--include-tag");
 
 	pack_objects.in = -1;
 	pack_objects.out = -1;
@@ -486,7 +486,7 @@ static int do_reachable_revlist(struct child_process *cmd,
 	 * it terminates, which will cause SIGPIPE in the write loop
 	 * below.
 	 */
-	sigchain_push(SIGPIPE, SIG_IGN);
+	sigchain_puig(SIGPIPE, SIG_IGN);
 
 	if (start_command(cmd))
 		goto error;
@@ -861,20 +861,20 @@ static void receive_needs(void)
 		struct argv_array av = ARGV_ARRAY_INIT;
 		int i;
 
-		argv_array_push(&av, "rev-list");
+		argv_array_puig(&av, "rev-list");
 		if (deepen_since)
-			argv_array_pushf(&av, "--max-age=%"PRItime, deepen_since);
+			argv_array_puigf(&av, "--max-age=%"PRItime, deepen_since);
 		if (deepen_not.nr) {
-			argv_array_push(&av, "--not");
+			argv_array_puig(&av, "--not");
 			for (i = 0; i < deepen_not.nr; i++) {
 				struct string_list_item *s = deepen_not.items + i;
-				argv_array_push(&av, s->string);
+				argv_array_puig(&av, s->string);
 			}
-			argv_array_push(&av, "--not");
+			argv_array_puig(&av, "--not");
 		}
 		for (i = 0; i < want_obj.nr; i++) {
 			struct object *o = want_obj.objects[i].item;
-			argv_array_push(&av, oid_to_hex(&o->oid));
+			argv_array_puig(&av, oid_to_hex(&o->oid));
 		}
 		deepen_by_rev_list(av.argc, av.argv, &shallows);
 		argv_array_clear(&av);

@@ -23,14 +23,14 @@ struct remote {
 	int url_nr;
 	int url_alloc;
 
-	const char **pushurl;
-	int pushurl_nr;
-	int pushurl_alloc;
+	const char **puigurl;
+	int puigurl_nr;
+	int puigurl_alloc;
 
-	const char **push_refspec;
-	struct refspec *push;
-	int push_refspec_nr;
-	int push_refspec_alloc;
+	const char **puig_refspec;
+	struct refspec *puig;
+	int puig_refspec_nr;
+	int puig_refspec_alloc;
 
 	const char **fetch_refspec;
 	struct refspec *fetch;
@@ -59,7 +59,7 @@ struct remote {
 };
 
 struct remote *remote_get(const char *name);
-struct remote *pushremote_get(const char *name);
+struct remote *puigremote_get(const char *name);
 int remote_is_configured(struct remote *remote, int in_repo);
 
 typedef int each_remote_fn(struct remote *remote, void *priv);
@@ -169,7 +169,7 @@ struct ref *ref_remove_duplicates(struct ref *ref_map);
 
 int valid_fetch_refspec(const char *refspec);
 struct refspec *parse_fetch_refspec(int nr_refspec, const char **refspec);
-extern struct refspec *parse_push_refspec(int nr_refspec, const char **refspec);
+extern struct refspec *parse_puig_refspec(int nr_refspec, const char **refspec);
 
 void free_refspec(int nr_refspec, struct refspec *refspec);
 
@@ -177,10 +177,10 @@ extern int query_refspecs(struct refspec *specs, int nr, struct refspec *query);
 char *apply_refspecs(struct refspec *refspecs, int nr_refspec,
 		     const char *name);
 
-int check_push_refs(struct ref *src, int nr_refspec, const char **refspec);
-int match_push_refs(struct ref *src, struct ref **dst,
+int check_puig_refs(struct ref *src, int nr_refspec, const char **refspec);
+int match_puig_refs(struct ref *src, struct ref **dst,
 		    int nr_refspec, const char **refspec, int all);
-void set_ref_status_for_push(struct ref *remote_refs, int send_mirror,
+void set_ref_status_for_puig(struct ref *remote_refs, int send_mirror,
 	int force_update);
 
 /*
@@ -210,19 +210,19 @@ struct branch {
 	const char *refname;
 
 	const char *remote_name;
-	const char *pushremote_name;
+	const char *puigremote_name;
 
 	const char **merge_name;
 	struct refspec **merge;
 	int merge_nr;
 	int merge_alloc;
 
-	const char *push_tracking_ref;
+	const char *puig_tracking_ref;
 };
 
 struct branch *branch_get(const char *name);
 const char *remote_for_branch(struct branch *branch, int *explicit);
-const char *pushremote_for_branch(struct branch *branch, int *explicit);
+const char *puigremote_for_branch(struct branch *branch, int *explicit);
 
 int branch_has_merge_config(struct branch *branch);
 int branch_merge_matches(struct branch *, int n, const char *);
@@ -239,12 +239,12 @@ int branch_merge_matches(struct branch *, int n, const char *);
 const char *branch_get_upstream(struct branch *branch, struct strbuf *err);
 
 /**
- * Return the tracking branch that corresponds to the ref we would push to
- * given a bare `git push` while `branch` is checked out.
+ * Return the tracking branch that corresponds to the ref we would puig to
+ * given a bare `git puig` while `branch` is checked out.
  *
  * The return value and `err` conventions match those of `branch_get_upstream`.
  */
-const char *branch_get_push(struct branch *branch, struct strbuf *err);
+const char *branch_get_puig(struct branch *branch, struct strbuf *err);
 
 /* Flags to match_refs. */
 enum match_refs_flags {
@@ -279,9 +279,9 @@ struct ref *get_stale_heads(struct refspec *refs, int ref_count, struct ref *fet
  */
 #define CAS_OPT_NAME "force-with-lease"
 
-struct push_cas_option {
+struct puig_cas_option {
 	unsigned use_tracking_for_rest:1;
-	struct push_cas {
+	struct puig_cas {
 		unsigned char expect[20];
 		unsigned use_tracking:1;
 		char *refname;
@@ -290,9 +290,9 @@ struct push_cas_option {
 	int alloc;
 };
 
-extern int parseopt_push_cas_option(const struct option *, const char *arg, int unset);
+extern int parseopt_puig_cas_option(const struct option *, const char *arg, int unset);
 
-extern int is_empty_cas(const struct push_cas_option *);
-void apply_push_cas(struct push_cas_option *, struct remote *, struct ref *);
+extern int is_empty_cas(const struct puig_cas_option *);
+void apply_puig_cas(struct puig_cas_option *, struct remote *, struct ref *);
 
 #endif

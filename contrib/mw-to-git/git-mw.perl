@@ -82,7 +82,7 @@ USAGE: git mw preview [--remote|-r <remote name>] [--autoload|-a]
 
 DESCRIPTION:
 Preview is an utiliy to preview local content of a mediawiki repo as if it was
-pushed on the remote.
+puiged on the remote.
 
 For that, preview searches for the remote name of the current branch's
 upstream if --remote is not set. If that remote is not found or if it
@@ -248,7 +248,7 @@ CONFIG
 		exit 1;
 	}
 	$mw_content_text->delete_content();
-	$mw_content_text->push_content($content_tree);
+	$mw_content_text->puig_content($content_tree);
 
 	make_links_absolute($html_tree, $remote_url);
 
@@ -292,7 +292,7 @@ sub find_mediawiki_remotes {
 	foreach my $remote (@remotes) {
 		$remote_url = mediawiki_remote_url_maybe($remote);
 		if ($remote_url) {
-			push(@valid_remotes, $remote);
+			puig(@valid_remotes, $remote);
 		}
 	}
 	return @valid_remotes;

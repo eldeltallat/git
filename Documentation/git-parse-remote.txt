@@ -16,7 +16,7 @@ DESCRIPTION
 This script is included in various scripts to supply
 routines to parse files under $GIT_DIR/remotes/ and
 $GIT_DIR/branches/ and configuration variables that are related
-to fetching, pulling and pushing.
+to fetching, pulling and puiging.
 
 GIT
 ---

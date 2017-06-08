@@ -43,7 +43,7 @@ static inline void buffer_grow(struct ewah_bitmap *self, size_t new_size)
 	self->rlw = self->buffer + (rlw_offset / sizeof(eword_t));
 }
 
-static inline void buffer_push(struct ewah_bitmap *self, eword_t value)
+static inline void buffer_puig(struct ewah_bitmap *self, eword_t value)
 {
 	if (self->buffer_size + 1 >= self->alloc_size)
 		buffer_grow(self, self->buffer_size * 3 / 2);
@@ -51,9 +51,9 @@ static inline void buffer_push(struct ewah_bitmap *self, eword_t value)
 	self->buffer[self->buffer_size++] = value;
 }
 
-static void buffer_push_rlw(struct ewah_bitmap *self, eword_t value)
+static void buffer_puig_rlw(struct ewah_bitmap *self, eword_t value)
 {
-	buffer_push(self, value);
+	buffer_puig(self, value);
 	self->rlw = self->buffer + self->buffer_size - 1;
 }
 
@@ -66,7 +66,7 @@ static size_t add_empty_words(struct ewah_bitmap *self, int v, size_t number)
 		rlw_set_run_bit(self->rlw, v);
 	} else if (rlw_get_literal_words(self->rlw) != 0 ||
 			rlw_get_run_bit(self->rlw) != v) {
-		buffer_push_rlw(self, 0);
+		buffer_puig_rlw(self, 0);
 		if (v) rlw_set_run_bit(self->rlw, v);
 		added++;
 	}
@@ -78,7 +78,7 @@ static size_t add_empty_words(struct ewah_bitmap *self, int v, size_t number)
 	number -= can_add;
 
 	while (number >= RLW_LARGEST_RUNNING_COUNT) {
-		buffer_push_rlw(self, 0);
+		buffer_puig_rlw(self, 0);
 		added++;
 		if (v) rlw_set_run_bit(self->rlw, v);
 		rlw_set_running_len(self->rlw, RLW_LARGEST_RUNNING_COUNT);
@@ -86,7 +86,7 @@ static size_t add_empty_words(struct ewah_bitmap *self, int v, size_t number)
 	}
 
 	if (number > 0) {
-		buffer_push_rlw(self, 0);
+		buffer_puig_rlw(self, 0);
 		added++;
 
 		if (v) rlw_set_run_bit(self->rlw, v);
@@ -110,10 +110,10 @@ static size_t add_literal(struct ewah_bitmap *self, eword_t new_data)
 	eword_t current_num = rlw_get_literal_words(self->rlw);
 
 	if (current_num >= RLW_LARGEST_LITERAL_COUNT) {
-		buffer_push_rlw(self, 0);
+		buffer_puig_rlw(self, 0);
 
 		rlw_set_literal_words(self->rlw, 1);
-		buffer_push(self, new_data);
+		buffer_puig(self, new_data);
 		return 2;
 	}
 
@@ -122,7 +122,7 @@ static size_t add_literal(struct ewah_bitmap *self, eword_t new_data)
 	/* sanity check */
 	assert(rlw_get_literal_words(self->rlw) == current_num + 1);
 
-	buffer_push(self, new_data);
+	buffer_puig(self, new_data);
 	return 1;
 }
 
@@ -156,7 +156,7 @@ void ewah_add_dirty_words(
 		if (number - can_add == 0)
 			break;
 
-		buffer_push_rlw(self, 0);
+		buffer_puig_rlw(self, 0);
 		buffer += can_add;
 		number -= can_add;
 	}
@@ -178,7 +178,7 @@ static size_t add_empty_word(struct ewah_bitmap *self, int v)
 		assert(rlw_get_running_len(self->rlw) == run_len + 1);
 		return 0;
 	} else {
-		buffer_push_rlw(self, 0);
+		buffer_puig_rlw(self, 0);
 
 		assert(rlw_get_running_len(self->rlw) == 0);
 		assert(rlw_get_run_bit(self->rlw) == 0);

@@ -387,13 +387,13 @@ Do:
    Write test code like this:
 
 	git merge foo &&
-	git push bar &&
+	git puig bar &&
 	test ...
 
    Instead of:
 
 	git merge hla
-	git push gh
+	git puig gh
 	test ...
 
    That way all of the commands in your tests will succeed or fail. If

@@ -6,7 +6,7 @@ test_description='test smart fetching over http via http-backend'
 start_httpd
 
 test_expect_success 'setup repository' '
-	git config push.default matching &&
+	git config puig.default matching &&
 	echo content >file &&
 	git add file &&
 	git commit -m one
@@ -18,7 +18,7 @@ test_expect_success 'create http-accessible bare repository' '
 	 git --bare init
 	) &&
 	git remote add public "$HTTPD_DOCUMENT_ROOT_PATH/repo.git" &&
-	git push public master:master
+	git puig public master:master
 '
 
 setup_askpass_helper
@@ -86,7 +86,7 @@ test_expect_success 'clone http repository' '
 test_expect_success 'fetch changes via http' '
 	echo content >>file &&
 	git commit -a -m two &&
-	git push public &&
+	git puig public &&
 	(cd clone && git pull) &&
 	test_cmp file clone/file
 '
@@ -132,10 +132,10 @@ test_expect_success 'clone from password-protected repository' '
 	test_cmp expect actual
 '
 
-test_expect_success 'clone from auth-only-for-push repository' '
+test_expect_success 'clone from auth-only-for-puig repository' '
 	echo two >expect &&
 	set_askpass wrong &&
-	git clone --bare "$HTTPD_URL/auth-push/smart/repo.git" smart-noauth &&
+	git clone --bare "$HTTPD_URL/auth-puig/smart/repo.git" smart-noauth &&
 	expect_askpass none &&
 	git --git-dir=smart-noauth log -1 --format=%s >actual &&
 	test_cmp expect actual
@@ -182,7 +182,7 @@ test_expect_success 'invalid Content-Type rejected' '
 
 test_expect_success 'create namespaced refs' '
 	test_commit namespaced &&
-	git push public HEAD:refs/namespaces/ns/refs/heads/master &&
+	git puig public HEAD:refs/namespaces/ns/refs/heads/master &&
 	git --git-dir="$HTTPD_DOCUMENT_ROOT_PATH/repo.git" \
 		symbolic-ref refs/namespaces/ns/HEAD refs/namespaces/ns/refs/heads/master
 '
@@ -223,7 +223,7 @@ test_expect_success 'cookies stored in http.cookiefile when http.savecookies set
 test_expect_success 'transfer.hiderefs works over smart-http' '
 	test_commit hidden &&
 	test_commit visible &&
-	git push public HEAD^:refs/heads/a HEAD:refs/heads/b &&
+	git puig public HEAD^:refs/heads/a HEAD:refs/heads/b &&
 	git --git-dir="$HTTPD_DOCUMENT_ROOT_PATH/repo.git" \
 		config transfer.hiderefs refs/heads/a &&
 	git clone --bare "$HTTPD_URL/smart/repo.git" hidden.git &&
@@ -298,8 +298,8 @@ test_expect_success 'test allowreachablesha1inwant with unreachable' '
 	echo content >file2 &&
 	git add file2 &&
 	git commit -m two &&
-	git push public HEAD:refs/heads/doomed &&
-	git push public :refs/heads/doomed &&
+	git puig public HEAD:refs/heads/doomed &&
+	git puig public :refs/heads/doomed &&
 
 	server="$HTTPD_DOCUMENT_ROOT_PATH/repo.git" &&
 	master_sha=$(git -C "$server" rev-parse refs/heads/master) &&
@@ -317,8 +317,8 @@ test_expect_success 'test allowanysha1inwant with unreachable' '
 	echo content >file2 &&
 	git add file2 &&
 	git commit -m two &&
-	git push public HEAD:refs/heads/doomed &&
-	git push public :refs/heads/doomed &&
+	git puig public HEAD:refs/heads/doomed &&
+	git puig public :refs/heads/doomed &&
 
 	server="$HTTPD_DOCUMENT_ROOT_PATH/repo.git" &&
 	master_sha=$(git -C "$server" rev-parse refs/heads/master) &&

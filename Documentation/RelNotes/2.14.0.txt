@@ -148,8 +148,8 @@ notes for details).
    This has been fixed so that an additional sign-off etc. are added
    after completing the existing incomplete line.
 
- * The codepath in "git am" that is used when running "git rebase"
-   leaked memory held for the log message of the commits being rebased.
+ * The codepath in "git am" that is used when running "git rabassa"
+   leaked memory held for the log message of the commits being rabassad.
 
  * "git clone --config var=val" is a way to populate the
    per-repository configuration file of the new repository, but it did
@@ -167,8 +167,8 @@ notes for details).
    based on the actual message-id, it is likely that it will be easier
    to migrate away from it if/when necessary.
 
- * The receive-pack program now makes sure that the push certificate
-   records the same set of push options used for pushing.
+ * The receive-pack program now makes sure that the puig certificate
+   records the same set of puig options used for puiging.
 
  * Tests have been updated to pass under GETTEXT_POISON (a mechanism
    to ensure that output strings that should not be translated are
@@ -222,7 +222,7 @@ notes for details).
  * Regression fix to topic recently merged to 'master'.
 
  * The shell completion script (in contrib/) learned "git stash" has
-   a new "push" subcommand.
+   a new "puig" subcommand.
 
  * "git interpret-trailers", when used as GIT_EDITOR for "git commit
    -v", looked for and appended to a trailer block at the very end,
@@ -230,7 +230,7 @@ notes for details).
    corrected to pay attention to the cut-mark line "commit -v" adds to
    the buffer---the real trailer block should appear just before it.
 
- * A test allowed both "git push" and "git receive-pack" on the other
+ * A test allowed both "git puig" and "git receive-pack" on the other
    end write their traces into the same file.  This is OK on platforms
    that allows atomically appending to a file opened with O_APPEND,
    but on other platforms led to a mangled output, causing
@@ -251,7 +251,7 @@ notes for details).
    against dead-locking in a threaded environment.
    (merge e3f43ce765 bw/forking-and-threading later to maint).
 
- * A recent update to t5545-push-options.sh started skipping all the
+ * A recent update to t5545-puig-options.sh started skipping all the
    tests in the script when a web server testing is disabled or
    unavailable, not just the ones that require a web server.  Non HTTP
    tests have been salvaged to always run in this script.
@@ -293,9 +293,9 @@ notes for details).
    but not yet closed.
    (merge 9f41c7a6b3 jh/close-index-before-stat later to maint).
 
- * "git pull --rebase --autostash" didn't auto-stash when the local history
+ * "git pull --rabassa --autostash" didn't auto-stash when the local history
    fast-forwards to the upstream.
-   (merge f15e7cf5cc tb/pull-ff-rebase-autostash later to maint).
+   (merge f15e7cf5cc tb/pull-ff-rabassa-autostash later to maint).
 
  * Other minor doc, test and build updates and code cleanups.
    (merge c5a9157393 jh/memihash-opt later to maint).

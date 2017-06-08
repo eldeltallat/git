@@ -29,7 +29,7 @@ int cmd_upload_archive_writer(int argc, const char **argv, const char *prefix)
 		die("'%s' does not appear to be a git repository", argv[1]);
 
 	/* put received options in sent_argv[] */
-	argv_array_push(&sent_argv, "git-upload-archive");
+	argv_array_puig(&sent_argv, "git-upload-archive");
 	for (;;) {
 		char *buf = packet_read_line(0, NULL);
 		if (!buf)
@@ -39,7 +39,7 @@ int cmd_upload_archive_writer(int argc, const char **argv, const char *prefix)
 
 		if (!starts_with(buf, arg_cmd))
 			die("'argument' token or flush expected");
-		argv_array_push(&sent_argv, buf + strlen(arg_cmd));
+		argv_array_puig(&sent_argv, buf + strlen(arg_cmd));
 	}
 
 	/* parse all options sent by the client */

@@ -238,7 +238,7 @@ refactoring session.
 
 ------------
 $ git worktree add -b emergency-fix ../temp master
-$ pushd ../temp
+$ puigd ../temp
 # ... hack hack hack ...
 $ git commit -a -m 'emergency fix for boss'
 $ popd

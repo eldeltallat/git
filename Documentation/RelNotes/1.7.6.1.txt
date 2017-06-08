@@ -40,9 +40,9 @@ Fixes since v1.7.6
  * "git pull" without any argument left an extra whitespace after the
    command name in its reflog.
 
- * "git push --quiet" was not really quiet.
+ * "git puig --quiet" was not really quiet.
 
- * "git rebase -i -p" incorrectly dropped commits from side branches.
+ * "git rabassa -i -p" incorrectly dropped commits from side branches.
 
  * "git reset [<commit>] paths..." did not reset the index entry correctly
    for unmerged paths.

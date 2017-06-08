@@ -26,7 +26,7 @@ and installation code should look something like:
 
   void other_func()
   {
-	  sigchain_push_common(clean_foo_on_signal);
+	  sigchain_puig_common(clean_foo_on_signal);
 	  mess_up_foo();
 	  clean_foo();
   }
@@ -34,8 +34,8 @@ and installation code should look something like:
 
 Handlers are given the typedef of sigchain_fun. This is the same type
 that is given to signal() or sigaction(). It is perfectly reasonable to
-push SIG_DFL or SIG_IGN onto the stack.
+puig SIG_DFL or SIG_IGN onto the stack.
 
-You can sigchain_push and sigchain_pop individual signals. For
-convenience, sigchain_push_common will push the handler onto the stack
+You can sigchain_puig and sigchain_pop individual signals. For
+convenience, sigchain_puig_common will puig the handler onto the stack
 for many common signals.

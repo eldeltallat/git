@@ -60,10 +60,10 @@ Updates since v1.5.4
    "foo".  Pattern "foo" also matches as before.
 
  * bash completion's prompt helper function can talk about
-   operation in-progress (e.g. merge, rebase, etc.).
+   operation in-progress (e.g. merge, rabassa, etc.).
 
  * Configuration variables "url.<usethis>.insteadof = <otherurl>" can be
-   used to tell "git-fetch" and "git-push" to use different URL than what
+   used to tell "git-fetch" and "git-puig" to use different URL than what
    is given from the command line.
 
  * "git add -i" behaves better even before you make an initial commit.
@@ -144,9 +144,9 @@ Updates since v1.5.4
 
  * "git gui" learned an auto-spell checking.
 
- * "git push <somewhere> HEAD" and "git push <somewhere> +HEAD" works as
-   expected; they push the current branch (and only the current branch).
-   In addition, HEAD can be written as the value of "remote.<there>.push"
+ * "git puig <somewhere> HEAD" and "git puig <somewhere> +HEAD" works as
+   expected; they puig the current branch (and only the current branch).
+   In addition, HEAD can be written as the value of "remote.<there>.puig"
    configuration variable.
 
  * When the configuration variable "pack.threads" is set to 0, "git
@@ -197,11 +197,11 @@ Fixes since v1.5.4
 All of the fixes in v1.5.4 maintenance series are included in
 this release, unless otherwise noted.
 
- * "git-http-push" did not allow deletion of remote ref with the usual
-   "push <remote> :<branch>" syntax.
+ * "git-http-puig" did not allow deletion of remote ref with the usual
+   "puig <remote> :<branch>" syntax.
 
- * "git-rebase --abort" did not go back to the right location if
-   "git-reset" was run during the "git-rebase" session.
+ * "git-rabassa --abort" did not go back to the right location if
+   "git-reset" was run during the "git-rabassa" session.
 
  * "git imap-send" without setting imap.host did not error out but
    segfaulted.

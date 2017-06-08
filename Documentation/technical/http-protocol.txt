@@ -138,7 +138,7 @@ servers MUST follow RFC 2616 for cache controls.
 Discovering References
 ----------------------
 
-All HTTP clients MUST begin either a fetch or a push exchange by
+All HTTP clients MUST begin either a fetch or a puig exchange by
 discovering the references available on the remote repository.
 
 Dumb Clients

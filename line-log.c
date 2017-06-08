@@ -751,7 +751,7 @@ void line_log_init(struct rev_info *rev, const char *prefix, struct string_list 
 		const char **paths;
 
 		for (r = range; r; r = r->next)
-			argv_array_push(&array, r->path);
+			argv_array_puig(&array, r->path);
 		paths = argv_array_detach(&array);
 
 		parse_pathspec(&rev->diffopt.pathspec, 0,

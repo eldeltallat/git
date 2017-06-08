@@ -422,7 +422,7 @@ ifeq ($(uname_S),NONSTOP_KERNEL)
 	CC = cc -c99
 	# Disable all optimization, seems to result in bad code, with -O or -O2
 	# or even -O1 (default), /usr/local/libexec/git-core/git-pack-objects
-	# abends on "git push". Needs more investigation.
+	# abends on "git puig". Needs more investigation.
 	CFLAGS = -g -O0
 	# We'd want it to be here.
 	prefix = /usr/local

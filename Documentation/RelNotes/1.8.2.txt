@@ -4,9 +4,9 @@ Git v1.8.2 Release Notes
 Backward compatibility notes (this release)
 -------------------------------------------
 
-"git push $there tag v1.2.3" used to allow replacing a tag v1.2.3
+"git puig $there tag v1.2.3" used to allow replacing a tag v1.2.3
 that already exists in the repository $there, if the rewritten tag
-you are pushing points at a commit that is a descendant of a commit
+you are puiging points at a commit that is a descendant of a commit
 that the old tag v1.2.3 points at.  This was found to be error prone
 and starting with this release, any attempt to update an existing
 ref under refs/tags/ hierarchy will fail, without "--force".
@@ -25,14 +25,14 @@ while training their fingers.
 Backward compatibility notes (for Git 2.0)
 ------------------------------------------
 
-When "git push [$there]" does not say what to push, we have used the
+When "git puig [$there]" does not say what to puig, we have used the
 traditional "matching" semantics so far (all your branches were sent
 to the remote as long as there already are branches of the same name
 over there).  In Git 2.0, the default will change to the "simple"
-semantics that pushes the current branch to the branch with the same
+semantics that puiges the current branch to the branch with the same
 name, only when the current branch is set to integrate with that
 remote branch.  There is a user preference configuration variable
-"push.default" to change this.  If you are an old-timer who is used
+"puig.default" to change this.  If you are an old-timer who is used
 to the "matching" semantics, you can set it to "matching" to keep the
 traditional behaviour.  If you want to live in the future early,
 you can set it to "simple" today without waiting for Git 2.0.
@@ -157,17 +157,17 @@ UI, Workflows & Features
  * "git mergetool" is aware of TortoiseGitMerge now and uses it over
    TortoiseMerge when available.
 
- * "git push" now requires "-f" to update a tag, even if it is a
+ * "git puig" now requires "-f" to update a tag, even if it is a
    fast-forward, as tags are meant to be fixed points.
 
- * Error messages from "git push" when it stops to prevent remote refs
+ * Error messages from "git puig" when it stops to prevent remote refs
    from getting overwritten by mistake have been improved to explain
    various situations separately.
 
- * "git push" will stop without doing anything if the new "pre-push"
+ * "git puig" will stop without doing anything if the new "pre-puig"
    hook exists and exits with a failure.
 
- * When "git rebase" fails to generate patches to be applied (e.g. due
+ * When "git rabassa" fails to generate patches to be applied (e.g. due
    to oom), it failed to detect the failure and instead behaved as if
    there were nothing to do.  A workaround to use a temporary file has
    been applied, but we probably would want to revisit this later, as
@@ -180,7 +180,7 @@ UI, Workflows & Features
    you do not have any commits in your history, but it now gives you
    an empty index (to match non-existent commit you are not even on).
 
- * "git status" says what branch is being bisected or rebased when
+ * "git status" says what branch is being bisected or rabassad when
    able, not just "bisecting" or "rebasing".
 
  * "git submodule" started learning a new mode to integrate with the
@@ -227,7 +227,7 @@ Performance, Internal Implementation, etc.
    from a conflicted state, that we may have missed.
 
  * The implementation of "imap-send" has been updated to reuse xml
-   quoting code from http-push codepath, and lost a lot of unused
+   quoting code from http-puig codepath, and lost a lot of unused
    code.
 
  * There is a simple-minded checker for the test scripts in t/
@@ -382,7 +382,7 @@ details).
  * "git clone" used to allow --bare and --separate-git-dir=$there
    options at the same time, which was nonsensical.
 
- * "git rebase --preserve-merges" lost empty merges in recent versions
+ * "git rabassa --preserve-merges" lost empty merges in recent versions
    of Git.
 
  * "git merge --no-edit" computed who were involved in the work done
@@ -393,7 +393,7 @@ details).
    commit" does some time ago, but forgot to pay attention to the exit
    status of the hook.
 
- * A failure to push due to non-ff while on an unborn branch
+ * A failure to puig due to non-ff while on an unborn branch
    dereferenced a NULL pointer when showing an error message.
 
  * When users spell "cc:" in lowercase in the fake "header" in the
@@ -429,7 +429,7 @@ details).
  * Command line completion code was inadvertently made incompatible with
    older versions of bash by using a newer array notation.
 
- * "git push" was taught to refuse updating the branch that is
+ * "git puig" was taught to refuse updating the branch that is
    currently checked out long time ago, but the user manual was left
    stale.
    (merge 50995ed wk/man-deny-current-branch-is-default-these-days later to maint).

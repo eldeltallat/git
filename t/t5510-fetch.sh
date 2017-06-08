@@ -479,10 +479,10 @@ test_expect_success 'non-matching refspecs do not confuse tracking update' '
 	)
 '
 
-test_expect_success 'pushing nonexistent branch by mistake should not segv' '
+test_expect_success 'puiging nonexistent branch by mistake should not segv' '
 
 	cd "$D" &&
-	test_must_fail git push seven no:no
+	test_must_fail git puig seven no:no
 
 '
 

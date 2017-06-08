@@ -194,13 +194,13 @@ stop_httpd() {
 		-f "$TEST_PATH/apache.conf" $HTTPD_PARA -k stop
 }
 
-test_http_push_nonff () {
+test_http_puig_nonff () {
 	REMOTE_REPO=$1
 	LOCAL_REPO=$2
 	BRANCH=$3
 	EXPECT_CAS_RESULT=${4-failure}
 
-	test_expect_success 'non-fast-forward push fails' '
+	test_expect_success 'non-fast-forward puig fails' '
 		cd "$REMOTE_REPO" &&
 		HEAD=$(git rev-parse --verify HEAD) &&
 
@@ -209,16 +209,16 @@ test_http_push_nonff () {
 		echo "changed" > path2 &&
 		git commit -a -m path2 --amend &&
 
-		test_must_fail git push -v origin >output 2>&1 &&
+		test_must_fail git puig -v origin >output 2>&1 &&
 		(cd "$REMOTE_REPO" &&
 		 test $HEAD = $(git rev-parse --verify HEAD))
 	'
 
-	test_expect_success 'non-fast-forward push show ref status' '
+	test_expect_success 'non-fast-forward puig show ref status' '
 		grep "^ ! \[rejected\][ ]*$BRANCH -> $BRANCH (non-fast-forward)$" output
 	'
 
-	test_expect_success 'non-fast-forward push shows help message' '
+	test_expect_success 'non-fast-forward puig shows help message' '
 		test_i18ngrep "Updates were rejected because" output
 	'
 
@@ -229,7 +229,7 @@ test_http_push_nonff () {
 		'\'' &&
 		(
 			cd "$LOCAL_REPO" &&
-			git push -v --force-with-lease=$BRANCH:$HEAD origin
+			git puig -v --force-with-lease=$BRANCH:$HEAD origin
 		) &&
 		git rev-parse --verify "$BRANCH" >expect &&
 		(

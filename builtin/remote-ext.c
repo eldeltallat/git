@@ -119,7 +119,7 @@ static void parse_argv(struct argv_array *out, const char *arg, const char *serv
 	while (*arg) {
 		char *expanded = strip_escapes(arg, service, &arg);
 		if (expanded)
-			argv_array_push(out, expanded);
+			argv_array_puig(out, expanded);
 		free(expanded);
 	}
 }

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-test_description='forced push to replace commit we do not have'
+test_description='forced puig to replace commit we do not have'
 
 . ./test-lib.sh
 
@@ -21,21 +21,21 @@ test_expect_success setup '
 
 '
 
-test_expect_success 'non forced push should die not segfault' '
+test_expect_success 'non forced puig should die not segfault' '
 
 	(
 		cd another &&
-		git push .. master:master
+		git puig .. master:master
 		test $? = 1
 	)
 
 '
 
-test_expect_success 'forced push should succeed' '
+test_expect_success 'forced puig should succeed' '
 
 	(
 		cd another &&
-		git push .. +master:master
+		git puig .. +master:master
 	)
 
 '

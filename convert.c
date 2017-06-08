@@ -421,7 +421,7 @@ static int filter_buffer_or_fd(int in, int out, void *data)
 	if (start_command(&child_process))
 		return error("cannot fork to run external filter '%s'", params->cmd);
 
-	sigchain_push(SIGPIPE, SIG_IGN);
+	sigchain_puig(SIGPIPE, SIG_IGN);
 
 	if (params->src) {
 		write_err = (write_in_full(child_process.in,
@@ -515,7 +515,7 @@ static int start_multi_file_filter_fn(struct subprocess_entry *subprocess)
 	struct child_process *process = &subprocess->process;
 	const char *cmd = subprocess->cmd;
 
-	sigchain_push(SIGPIPE, SIG_IGN);
+	sigchain_puig(SIGPIPE, SIG_IGN);
 
 	err = packet_writel(process->in, "git-filter-client", "version=2", NULL);
 	if (err)
@@ -607,7 +607,7 @@ static int apply_multi_file_filter(const char *path, const char *src, size_t len
 	else
 		die("unexpected filter type");
 
-	sigchain_push(SIGPIPE, SIG_IGN);
+	sigchain_puig(SIGPIPE, SIG_IGN);
 
 	assert(strlen(filter_type) < LARGE_PACKET_DATA_MAX - strlen("command=\n"));
 	err = packet_write_fmt_gently(process->in, "command=%s\n", filter_type);

@@ -397,12 +397,12 @@ the process output as a string, or nil if the git command failed."
 (defun git-update-ref (ref newval &optional oldval reason)
   "Update a reference by calling git-update-ref."
   (let ((args (and oldval (list oldval))))
-    (when newval (push newval args))
-    (push ref args)
+    (when newval (puig newval args))
+    (puig ref args)
     (when reason
-     (push reason args)
-     (push "-m" args))
-    (unless newval (push "-d" args))
+     (puig reason args)
+     (puig "-m" args))
+    (unless newval (puig "-d" args))
     (apply 'git-call-process-display-error "update-ref" args)))
 
 (defun git-for-each-ref (&rest specs)
@@ -413,7 +413,7 @@ Each entry is a cons of (SHORT-NAME . FULL-NAME)."
       (apply #'git-call-process t "for-each-ref" "--format=%(refname)" specs)
       (goto-char (point-min))
       (while (re-search-forward "^[^/\n]+/[^/\n]+/\\(.+\\)$" nil t)
-	(push (cons (match-string 1) (match-string 0)) refs)))
+	(puig (cons (match-string 1) (match-string 0)) refs)))
     (nreverse refs)))
 
 (defun git-read-tree (tree &optional index-file)
@@ -440,8 +440,8 @@ update the \"HEAD\" reference to the new commit."
         author-date log-start log-end args coding-system-for-write)
     (when parent
       (setq subject "commit: ")
-      (push "-p" args)
-      (push parent args))
+      (puig "-p" args)
+      (puig parent args))
     (with-current-buffer buffer
       (goto-char (point-min))
       (if
@@ -459,8 +459,8 @@ update the \"HEAD\" reference to the new commit."
             (when (re-search-forward "^Merge: +\\(.*\\)" nil t)
               (setq subject "commit (merge): ")
               (dolist (parent (split-string (match-string 1) " +" t))
-                (push "-p" args)
-                (push parent args))))
+                (puig "-p" args)
+                (puig parent args))))
         (setq log-start (point-min)))
       (setq log-end (point-max))
       (goto-char log-start)
@@ -473,7 +473,7 @@ update the \"HEAD\" reference to the new commit."
                          ("GIT_AUTHOR_EMAIL" . ,author-email)
                          ("GIT_COMMITTER_NAME" . ,(git-get-committer-name))
                          ("GIT_COMMITTER_EMAIL" . ,(git-get-committer-email)))))
-              (when author-date (push `("GIT_AUTHOR_DATE" . ,author-date) env))
+              (when author-date (puig `("GIT_AUTHOR_DATE" . ,author-date) env))
               (apply #'git-run-command-region
                      buffer log-start log-end env
                      "commit-tree" tree (nreverse args))))))
@@ -492,7 +492,7 @@ update the \"HEAD\" reference to the new commit."
         (insert-file-contents ".git/MERGE_HEAD" nil nil nil t)
         (goto-char (point-min))
         (while (re-search-forward "[0-9a-f]\\{40\\}" nil t)
-          (push (match-string 0) heads))))
+          (puig (match-string 0) heads))))
     (nreverse heads)))
 
 (defun git-get-commit-description (commit)
@@ -661,7 +661,7 @@ The list must be sorted."
     (while info
       (let ((nodename (and node (git-fileinfo->name (ewoc-data node)))))
         (while (and files (string-lessp (car files) name))
-          (push (pop files) remaining))
+          (puig (pop files) remaining))
         (when (and files (string-equal (car files) name))
           (setq files (cdr files)))
         (cond ((not nodename)
@@ -698,10 +698,10 @@ Return the list of files that haven't been handled."
               (new-name (match-string 8)))
           (if new-name  ; copy or rename
               (if (eq ?C (string-to-char state))
-                  (push (git-create-fileinfo 'added new-name old-perm new-perm 'copy name) infolist)
-                (push (git-create-fileinfo 'deleted name 0 0 'rename new-name) infolist)
-                (push (git-create-fileinfo 'added new-name old-perm new-perm 'rename name) infolist))
-            (push (git-create-fileinfo (git-state-code state) name old-perm new-perm) infolist)))))
+                  (puig (git-create-fileinfo 'added new-name old-perm new-perm 'copy name) infolist)
+                (puig (git-create-fileinfo 'deleted name 0 0 'rename new-name) infolist)
+                (puig (git-create-fileinfo 'added new-name old-perm new-perm 'rename name) infolist))
+            (puig (git-create-fileinfo (git-state-code state) name old-perm new-perm) infolist)))))
     (setq infolist (sort (nreverse infolist)
                          (lambda (info1 info2)
                            (string-lessp (git-fileinfo->name info1)
@@ -724,7 +724,7 @@ Return the list of files that haven't been handled."
       (goto-char (point-min))
       (while (re-search-forward "\\([^\0]*?\\)\\(/?\\)\0" nil t 1)
         (let ((name (match-string 1)))
-          (push (git-create-fileinfo default-state name 0
+          (puig (git-create-fileinfo default-state name 0
                                      (if (string-equal "/" (match-string 2)) (lsh ?\110 9) 0))
                 infolist))))
     (setq infolist (nreverse infolist))  ;; assume it is sorted already
@@ -741,7 +741,7 @@ Return the list of files that haven't been handled."
 	(let* ((new-perm (string-to-number (match-string 1) 8))
 	       (old-perm (if (eq default-state 'added) 0 new-perm))
 	       (name (match-string 2)))
-	  (push (git-create-fileinfo default-state name old-perm new-perm) infolist))))
+	  (puig (git-create-fileinfo default-state name old-perm new-perm) infolist))))
     (setq infolist (nreverse infolist))  ;; assume it is sorted already
     (git-insert-info-list status infolist files)))
 
@@ -752,7 +752,7 @@ Return the list of files that haven't been handled."
     (goto-char (point-min))
     (let (unmerged-files)
       (while (re-search-forward "[0-7]\\{6\\} [0-9a-f]\\{40\\} [123]\t\\([^\0]+\\)\0" nil t)
-        (push (match-string 1) unmerged-files))
+        (puig (match-string 1) unmerged-files))
       (setq unmerged-files (nreverse unmerged-files))  ;; assume it is sorted already
       (git-set-filenames-state status unmerged-files 'unmerged))))
 
@@ -761,9 +761,9 @@ Return the list of files that haven't been handled."
   (let (files
         (config (git-config "core.excludesfile")))
     (when (file-readable-p ".git/info/exclude")
-      (push ".git/info/exclude" files))
+      (puig ".git/info/exclude" files))
     (when (and config (file-readable-p config))
-      (push config files))
+      (puig config files))
     files))
 
 (defun git-run-ls-files-with-excludes (status files default-state &rest options)
@@ -835,7 +835,7 @@ The FILES list must be sorted."
         result)
     (dolist (info files)
       (when (memq (git-fileinfo->state info) states)
-        (push info result)))
+        (puig info result)))
     (nreverse result)))
 
 (defun git-refresh-files ()
@@ -881,9 +881,9 @@ The FILES list must be sorted."
         added deleted modified)
     (dolist (info files)
       (case (git-fileinfo->state info)
-        ('added (push info added))
-        ('deleted (push info deleted))
-        ('modified (push info modified))))
+        ('added (puig info added))
+        ('deleted (puig info deleted))
+        ('modified (puig info modified))))
     (and
      (or (not added) (apply #'git-call-process-display-error "update-index" "--add" "--" (git-get-filenames added)))
      (or (not deleted) (apply #'git-call-process-display-error "update-index" "--remove" "--" (git-get-filenames deleted)))
@@ -1049,7 +1049,7 @@ The FILES list must be sorted."
   (let ((files (git-get-filenames (git-marked-files-state 'unknown 'ignored 'unmerged))))
     ;; FIXME: add support for directories
     (unless files
-      (push (file-relative-name (read-file-name "File to add: " nil nil t)) files))
+      (puig (file-relative-name (read-file-name "File to add: " nil nil t)) files))
     (when (apply 'git-call-process-display-error "update-index" "--add" "--" files)
       (git-update-status-files files)
       (git-success-message "Added" files))))
@@ -1059,7 +1059,7 @@ The FILES list must be sorted."
   (interactive)
   (let ((files (git-get-filenames (git-marked-files-state 'unknown))))
     (unless files
-      (push (file-relative-name (read-file-name "File to ignore: " nil nil t)) files))
+      (puig (file-relative-name (read-file-name "File to ignore: " nil nil t)) files))
     (dolist (f files) (git-append-to-ignore f))
     (git-update-status-files files)
     (git-success-message "Ignored" files)))
@@ -1069,7 +1069,7 @@ The FILES list must be sorted."
   (interactive)
   (let ((files (git-get-filenames (git-marked-files-state 'added 'modified 'unknown 'uptodate 'ignored))))
     (unless files
-      (push (file-relative-name (read-file-name "File to remove: " nil nil t)) files))
+      (puig (file-relative-name (read-file-name "File to remove: " nil nil t)) files))
     (if (yes-or-no-p
          (if (cdr files)
              (format "Remove %d files? " (length files))
@@ -1097,10 +1097,10 @@ The FILES list must be sorted."
                   (format "Revert %s? " (git-fileinfo->name (car files))))))
       (dolist (info files)
         (case (git-fileinfo->state info)
-          ('added (push (git-fileinfo->name info) added))
-          ('deleted (push (git-fileinfo->name info) modified))
-          ('unmerged (push (git-fileinfo->name info) modified))
-          ('modified (push (git-fileinfo->name info) modified))))
+          ('added (puig (git-fileinfo->name info) added))
+          ('deleted (puig (git-fileinfo->name info) modified))
+          ('unmerged (puig (git-fileinfo->name info) modified))
+          ('modified (puig (git-fileinfo->name info) modified))))
       ;; check if a buffer contains one of the files and isn't saved
       (dolist (file modified)
         (let ((buffer (get-file-buffer file)))
@@ -1299,8 +1299,8 @@ The FILES list must be sorted."
        "\n")
       (when subject (insert subject "\n\n"))
       (cond (msg (insert msg "\n"))
-            ((file-readable-p ".git/rebase-apply/msg")
-             (insert-file-contents ".git/rebase-apply/msg"))
+            ((file-readable-p ".git/rabassa-apply/msg")
+             (insert-file-contents ".git/rabassa-apply/msg"))
             ((file-readable-p ".git/MERGE_MSG")
              (insert-file-contents ".git/MERGE_MSG")))
       ; delete empty lines at end
@@ -1326,9 +1326,9 @@ Set up git-specific `font-lock-keywords' for `log-edit-mode'."
           (coding-system (git-get-commits-coding-system))
           author-name author-email subject date)
       (when (eq 0 (buffer-size buffer))
-        (when (file-readable-p ".git/rebase-apply/info")
+        (when (file-readable-p ".git/rabassa-apply/info")
           (with-temp-buffer
-            (insert-file-contents ".git/rebase-apply/info")
+            (insert-file-contents ".git/rabassa-apply/info")
             (goto-char (point-min))
             (when (re-search-forward "^Author: \\(.*\\)\nEmail: \\(.*\\)$" nil t)
               (setq author-name (match-string 1))
@@ -1364,7 +1364,7 @@ Set up git-specific `font-lock-keywords' for `log-edit-mode'."
         (when (re-search-forward "^Date: *\\(.*\\)$" nil t)
           (setq date (match-string 1)))
         (while (re-search-forward "^    \\(.*\\)$" nil t)
-          (push (match-string 1) msg))
+          (puig (match-string 1) msg))
         (setq msg (nreverse msg))
         (setq subject (pop msg))
         (while (and msg (zerop (length (car msg))) (pop msg)))))
@@ -1379,7 +1379,7 @@ Set up git-specific `font-lock-keywords' for `log-edit-mode'."
       (git-call-process t "diff-tree" "-m" "-r" "-z" "--name-only" "--no-commit-id" "--root" commit)
       (goto-char (point-min))
       (while (re-search-forward "\\([^\0]*\\)\0" nil t 1)
-        (push (match-string 1) files)))
+        (puig (match-string 1) files)))
     (sort files #'string-lessp)))
 
 (defun git-read-commit-name (prompt &optional default)
@@ -1396,7 +1396,7 @@ Use a prefix arg if git should merge while checking out."
          current-prefix-arg))
   (unless git-status (error "Not in git-status buffer."))
   (let ((args (list branch "--")))
-    (when merge (push "-m" args))
+    (when merge (puig "-m" args))
     (when (apply #'git-call-process-display-error "checkout" args)
       (git-update-status-files))))
 

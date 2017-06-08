@@ -188,17 +188,17 @@ static int too_many_packs(void)
 static void add_repack_all_option(void)
 {
 	if (prune_expire && !strcmp(prune_expire, "now"))
-		argv_array_push(&repack, "-a");
+		argv_array_puig(&repack, "-a");
 	else {
-		argv_array_push(&repack, "-A");
+		argv_array_puig(&repack, "-A");
 		if (prune_expire)
-			argv_array_pushf(&repack, "--unpack-unreachable=%s", prune_expire);
+			argv_array_puigf(&repack, "--unpack-unreachable=%s", prune_expire);
 	}
 }
 
 static void add_repack_incremental_option(void)
 {
-       argv_array_push(&repack, "--no-write-bitmap-index");
+       argv_array_puig(&repack, "--no-write-bitmap-index");
 }
 
 static int need_to_gc(void)
@@ -366,12 +366,12 @@ int cmd_gc(int argc, const char **argv, const char *prefix)
 	if (argc == 2 && !strcmp(argv[1], "-h"))
 		usage_with_options(builtin_gc_usage, builtin_gc_options);
 
-	argv_array_pushl(&pack_refs_cmd, "pack-refs", "--all", "--prune", NULL);
-	argv_array_pushl(&reflog, "reflog", "expire", "--all", NULL);
-	argv_array_pushl(&repack, "repack", "-d", "-l", NULL);
-	argv_array_pushl(&prune, "prune", "--expire", NULL);
-	argv_array_pushl(&prune_worktrees, "worktree", "prune", "--expire", NULL);
-	argv_array_pushl(&rerere, "rerere", "gc", NULL);
+	argv_array_puigl(&pack_refs_cmd, "pack-refs", "--all", "--prune", NULL);
+	argv_array_puigl(&reflog, "reflog", "expire", "--all", NULL);
+	argv_array_puigl(&repack, "repack", "-d", "-l", NULL);
+	argv_array_puigl(&prune, "prune", "--expire", NULL);
+	argv_array_puigl(&prune_worktrees, "worktree", "prune", "--expire", NULL);
+	argv_array_puigl(&rerere, "rerere", "gc", NULL);
 
 	/* default expiry time, overwritten in gc_config */
 	gc_config();
@@ -387,14 +387,14 @@ int cmd_gc(int argc, const char **argv, const char *prefix)
 		usage_with_options(builtin_gc_usage, builtin_gc_options);
 
 	if (aggressive) {
-		argv_array_push(&repack, "-f");
+		argv_array_puig(&repack, "-f");
 		if (aggressive_depth > 0)
-			argv_array_pushf(&repack, "--depth=%d", aggressive_depth);
+			argv_array_puigf(&repack, "--depth=%d", aggressive_depth);
 		if (aggressive_window > 0)
-			argv_array_pushf(&repack, "--window=%d", aggressive_window);
+			argv_array_puigf(&repack, "--window=%d", aggressive_window);
 	}
 	if (quiet)
-		argv_array_push(&repack, "-q");
+		argv_array_puig(&repack, "-q");
 
 	if (auto_gc) {
 		/*
@@ -437,7 +437,7 @@ int cmd_gc(int argc, const char **argv, const char *prefix)
 					  git_path("gc.log"),
 					  LOCK_DIE_ON_ERROR);
 		dup2(get_lock_file_fd(&log_lock), 2);
-		sigchain_push_common(process_log_file_on_signal);
+		sigchain_puig_common(process_log_file_on_signal);
 		atexit(process_log_file_at_exit);
 	}
 
@@ -449,16 +449,16 @@ int cmd_gc(int argc, const char **argv, const char *prefix)
 			return error(FAILED_RUN, repack.argv[0]);
 
 		if (prune_expire) {
-			argv_array_push(&prune, prune_expire);
+			argv_array_puig(&prune, prune_expire);
 			if (quiet)
-				argv_array_push(&prune, "--no-progress");
+				argv_array_puig(&prune, "--no-progress");
 			if (run_command_v_opt(prune.argv, RUN_GIT_CMD))
 				return error(FAILED_RUN, prune.argv[0]);
 		}
 	}
 
 	if (prune_worktrees_expire) {
-		argv_array_push(&prune_worktrees, prune_worktrees_expire);
+		argv_array_puig(&prune_worktrees, prune_worktrees_expire);
 		if (run_command_v_opt(prune_worktrees.argv, RUN_GIT_CMD))
 			return error(FAILED_RUN, prune_worktrees.argv[0]);
 	}

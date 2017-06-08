@@ -24,7 +24,7 @@ Fixes since v1.5.1.1
   - various git-svn fixes.
 
   - Sample update hook incorrectly always refused requests to
-    delete branches through push.
+    delete branches through puig.
 
   - git-blame on a very long working tree path had buffer
     overrun problem.

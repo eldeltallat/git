@@ -34,9 +34,9 @@ static int find_tracked_branch(struct remote *remote, void *priv)
 	return 0;
 }
 
-static int should_setup_rebase(const char *origin)
+static int should_setup_rabassa(const char *origin)
 {
-	switch (autorebase) {
+	switch (autorabassa) {
 	case AUTOREBASE_NEVER:
 		return 0;
 	case AUTOREBASE_LOCAL:
@@ -59,7 +59,7 @@ int install_branch_config(int flag, const char *local, const char *origin, const
 {
 	const char *shortname = NULL;
 	struct strbuf key = STRBUF_INIT;
-	int rebasing = should_setup_rebase(origin);
+	int rebasing = should_setup_rabassa(origin);
 
 	if (skip_prefix(remote, "refs/heads/", &shortname)
 	    && !strcmp(local, shortname)
@@ -80,7 +80,7 @@ int install_branch_config(int flag, const char *local, const char *origin, const
 
 	if (rebasing) {
 		strbuf_reset(&key);
-		strbuf_addf(&key, "branch.%s.rebase", local);
+		strbuf_addf(&key, "branch.%s.rabassa", local);
 		if (git_config_set_gently(key.buf, "true") < 0)
 			goto out_err;
 	}
@@ -224,9 +224,9 @@ N_("\n"
 "branch that already exists at the remote, you may need to\n"
 "run \"git fetch\" to retrieve it.\n"
 "\n"
-"If you are planning to push out a new local branch that\n"
+"If you are planning to puig out a new local branch that\n"
 "will track its remote counterpart, you may want to use\n"
-"\"git push -u\" to set the upstream config as you push.");
+"\"git puig -u\" to set the upstream config as you puig.");
 
 void create_branch(const char *name, const char *start_name,
 		   int force, int reflog, int clobber_head,

@@ -49,9 +49,9 @@ Fixes since v1.6.3.1
  * "git grep --color ''" did not terminate.  The command also had
    subtle bugs with its -w option.
 
- * http-push had a small use-after-free bug.
+ * http-puig had a small use-after-free bug.
 
- * "git push" was converting OFS_DELTA pack representation into less
+ * "git puig" was converting OFS_DELTA pack representation into less
    efficient REF_DELTA representation unconditionally upon transfer,
    making the transferred data unnecessarily larger.
 

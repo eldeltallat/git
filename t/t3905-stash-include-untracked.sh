@@ -185,10 +185,10 @@ test_expect_success 'stash save --all is stash poppable' '
 	test -s .gitignore
 '
 
-test_expect_success 'stash push --include-untracked with pathspec' '
+test_expect_success 'stash puig --include-untracked with pathspec' '
 	>foo &&
 	>bar &&
-	git stash push --include-untracked -- foo &&
+	git stash puig --include-untracked -- foo &&
 	test_path_is_file bar &&
 	test_path_is_missing foo &&
 	git stash pop &&
@@ -196,12 +196,12 @@ test_expect_success 'stash push --include-untracked with pathspec' '
 	test_path_is_file foo
 '
 
-test_expect_success 'stash push with $IFS character' '
+test_expect_success 'stash puig with $IFS character' '
 	>"foo bar" &&
 	>foo &&
 	>bar &&
 	git add foo* &&
-	git stash push --include-untracked -- "foo b*" &&
+	git stash puig --include-untracked -- "foo b*" &&
 	test_path_is_missing "foo bar" &&
 	test_path_is_file foo &&
 	test_path_is_file bar &&

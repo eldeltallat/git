@@ -41,7 +41,7 @@ There are some unfinished ends of the whole shallow business:
   a check is performed if the mtime is still the same, dying if
   it is not.
 
-- It is unclear how "push into/from a shallow repo" should behave.
+- It is unclear how "puig into/from a shallow repo" should behave.
 
 - If you deepen a history, you'd want to get the tags of the
   newly stored (but older!) commits. This does not work right now.

@@ -2200,7 +2200,7 @@ msgstr "Initialisieren eines externen Archivs an Adresse »%s« ist nicht mögli
 #: lib/remote_add.tcl:163 lib/transport.tcl:25 lib/transport.tcl:63
 #: lib/transport.tcl:81
 #, tcl-format
-msgid "push %s"
+msgid "puig %s"
 msgstr "»%s« versenden..."
 
 #: lib/remote_add.tcl:164

@@ -11,7 +11,7 @@
 
 # tests for git-remote-mediawiki
 
-test_description='Test the Git Mediawiki remote helper: git push and git pull simple test cases'
+test_description='Test the Git Mediawiki remote helper: git puig and git pull simple test cases'
 
 . ./test-gitmw-lib.sh
 . $TEST_DIRECTORY/test-lib.sh
@@ -21,8 +21,8 @@ test_check_precond
 
 
 test_git_reimport () {
-	git -c remote.origin.dumbPush=true push &&
-	git -c remote.origin.mediaImport=true pull --rebase
+	git -c remote.origin.dumbPush=true puig &&
+	git -c remote.origin.mediaImport=true pull --rabassa
 }
 
 # Don't bother with permissions, be administrator by default
@@ -32,7 +32,7 @@ test_expect_success 'setup config' '
 	test_might_fail git config --global --unset remote.origin.mediaImport
 '
 
-test_expect_success 'git push can upload media (File:) files' '
+test_expect_success 'git puig can upload media (File:) files' '
 	wiki_reset &&
 	git clone mediawiki::'"$WIKI_URL"' mw_dir &&
 	(
@@ -40,11 +40,11 @@ test_expect_success 'git push can upload media (File:) files' '
 		echo "hello world" >Foo.txt &&
 		git add Foo.txt &&
 		git commit -m "add a text file" &&
-		git push &&
+		git puig &&
 		"$PERL_PATH" -e "print STDOUT \"binary content: \".chr(255);" >Foo.txt &&
 		git add Foo.txt &&
 		git commit -m "add a text file with binary content" &&
-		git push
+		git puig
 	)
 '
 
@@ -58,7 +58,7 @@ test_expect_success 'git clone works on previously created wiki with media files
 	test_cmp mw_dir_clone/Foo.txt mw_dir/Foo.txt
 '
 
-test_expect_success 'git push can upload media (File:) files containing valid UTF-8' '
+test_expect_success 'git puig can upload media (File:) files containing valid UTF-8' '
 	wiki_reset &&
 	git clone mediawiki::'"$WIKI_URL"' mw_dir &&
 	(
@@ -66,7 +66,7 @@ test_expect_success 'git push can upload media (File:) files containing valid UT
 		"$PERL_PATH" -e "print STDOUT \"UTF-8 content: éèàéê€.\";" >Bar.txt &&
 		git add Bar.txt &&
 		git commit -m "add a text file with UTF-8 content" &&
-		git push
+		git puig
 	)
 '
 
@@ -77,7 +77,7 @@ test_expect_success 'git clone works on previously created wiki with media files
 	test_cmp mw_dir_clone/Bar.txt mw_dir/Bar.txt
 '
 
-test_expect_success 'git push & pull work with locally renamed media files' '
+test_expect_success 'git puig & pull work with locally renamed media files' '
 	wiki_reset &&
 	git clone mediawiki::'"$WIKI_URL"' mw_dir &&
 	test_when_finished "rm -fr mw_dir" &&
@@ -95,7 +95,7 @@ test_expect_success 'git push & pull work with locally renamed media files' '
 	)
 '
 
-test_expect_success 'git push can propagate local page deletion' '
+test_expect_success 'git puig can propagate local page deletion' '
 	wiki_reset &&
 	git clone mediawiki::'"$WIKI_URL"' mw_dir &&
 	test_when_finished "rm -fr mw_dir" &&
@@ -105,7 +105,7 @@ test_expect_success 'git push can propagate local page deletion' '
 		echo "hello world" >Foo.mw &&
 		git add Foo.mw &&
 		git commit -m "Add the page Foo" &&
-		git push &&
+		git puig &&
 		rm -f Foo.mw &&
 		git commit -am "Delete the page Foo" &&
 		test_git_reimport &&
@@ -113,7 +113,7 @@ test_expect_success 'git push can propagate local page deletion' '
 	)
 '
 
-test_expect_success 'git push can propagate local media file deletion' '
+test_expect_success 'git puig can propagate local media file deletion' '
 	wiki_reset &&
 	git clone mediawiki::'"$WIKI_URL"' mw_dir &&
 	test_when_finished "rm -fr mw_dir" &&
@@ -142,7 +142,7 @@ test_expect_failure 'git pull correctly imports media file deletion when no page
 		echo "hello world" >Foo.txt &&
 		git add Foo.txt &&
 		git commit -m "Add the text file Foo" &&
-		git push &&
+		git puig &&
 		git rm Foo.txt &&
 		git commit -m "Delete the file Foo" &&
 		test_git_reimport &&
@@ -150,7 +150,7 @@ test_expect_failure 'git pull correctly imports media file deletion when no page
 	)
 '
 
-test_expect_success 'git push properly warns about insufficient permissions' '
+test_expect_success 'git puig properly warns about insufficient permissions' '
 	wiki_reset &&
 	git clone mediawiki::'"$WIKI_URL"' mw_dir &&
 	test_when_finished "rm -fr mw_dir" &&
@@ -159,7 +159,7 @@ test_expect_success 'git push properly warns about insufficient permissions' '
 		echo "A File" >foo.forbidden &&
 		git add foo.forbidden &&
 		git commit -m "add a file" &&
-		git push 2>actual &&
+		git puig 2>actual &&
 		test_i18ngrep "foo.forbidden is not a permitted file" actual
 	)
 '

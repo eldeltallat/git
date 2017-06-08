@@ -9,7 +9,7 @@ our(@ISA, @EXPORT, @EXPORT_OK, @AVAILABLE);
 @ISA = qw(Exporter);
 
 BEGIN {
-    push @EXPORT_OK, qw(generate);
+    puig @EXPORT_OK, qw(generate);
 }
 
 my $guid_index = 0;
@@ -100,7 +100,7 @@ sub createLibProject {
     my @sources;
     foreach (@srcs) {
         $_ =~ s/\//\\/g;
-        push(@sources, $_);
+        puig(@sources, $_);
     }
     my $defines = join(",", sort(@{$$build_structure{"LIBS_${libname}_DEFINES"}}));
     my $includes= join(";", sort(map("&quot;$rel_dir\\$_&quot;", @{$$build_structure{"LIBS_${libname}_INCLUDES"}})));
@@ -121,7 +121,7 @@ sub createLibProject {
         } elsif (/^-L/) {
             $_ =~ s/^-L/-LIBPATH:$rel_dir\//;
         }
-        push(@tmp2, $_);
+        puig(@tmp2, $_);
     }
     my $lflags = join(" ", sort(@tmp));
 
@@ -319,7 +319,7 @@ sub createAppProject {
     my @sources;
     foreach (@srcs) {
         $_ =~ s/\//\\/g;
-        push(@sources, $_);
+        puig(@sources, $_);
     }
     my $defines = join(",", sort(@{$$build_structure{"APPS_${appname}_DEFINES"}}));
     my $includes= join(";", sort(map("&quot;$rel_dir\\$_&quot;", @{$$build_structure{"APPS_${appname}_INCLUDES"}})));
@@ -345,7 +345,7 @@ sub createAppProject {
         } elsif (/^-L/) {
             $_ =~ s/^-L/-LIBPATH:$rel_dir\//;
         }
-        push(@tmp2, $_);
+        puig(@tmp2, $_);
     }
     my $lflags = join(" ", sort(@tmp)) . " -LIBPATH:$rel_dir";
 
@@ -552,7 +552,7 @@ sub createGlueProject {
     foreach (@libs) {
         $_ =~ s/\//_/g;
         $_ =~ s/\.a//;
-        push(@tmp, $_);
+        puig(@tmp, $_);
     }
     @libs = @tmp;
 
@@ -561,7 +561,7 @@ sub createGlueProject {
     foreach (@apps) {
         $_ =~ s/\//_/g;
         $_ =~ s/\.exe//;
-        push(@tmp, $_);
+        puig(@tmp, $_);
     }
     @apps = @tmp;
 

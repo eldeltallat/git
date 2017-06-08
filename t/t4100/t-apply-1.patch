@@ -26,36 +26,36 @@ rename to Documentation/git-ssh-pull.txt
  
  DESCRIPTION
  -----------
--Pulls from a remote repository over ssh connection, invoking git-rpush on
+-Pulls from a remote repository over ssh connection, invoking git-rpuig on
 -the other end.
-+Pulls from a remote repository over ssh connection, invoking git-ssh-push
++Pulls from a remote repository over ssh connection, invoking git-ssh-puig
 +on the other end.
  
  OPTIONS
  -------
-diff --git a/Documentation/git-rpush.txt b/Documentation/git-ssh-push.txt
+diff --git a/Documentation/git-rpuig.txt b/Documentation/git-ssh-puig.txt
 similarity index 71%
-rename from Documentation/git-rpush.txt
-rename to Documentation/git-ssh-push.txt
---- a/Documentation/git-rpush.txt
-+++ b/Documentation/git-ssh-push.txt
+rename from Documentation/git-rpuig.txt
+rename to Documentation/git-ssh-puig.txt
+--- a/Documentation/git-rpuig.txt
++++ b/Documentation/git-ssh-puig.txt
 @@ -1,19 +1,19 @@
--git-rpush(1)
+-git-rpuig(1)
 -============
-+git-ssh-push(1)
++git-ssh-puig(1)
 +===============
  v0.1, May 2005
  
  NAME
  ----
--git-rpush - Helper "server-side" program used by git-rpull
-+git-ssh-push - Helper "server-side" program used by git-ssh-pull
+-git-rpuig - Helper "server-side" program used by git-rpull
++git-ssh-puig - Helper "server-side" program used by git-ssh-pull
  
  
  SYNOPSIS
  --------
--'git-rpush'
-+'git-ssh-push'
+-'git-rpuig'
++'git-ssh-puig'
  
  DESCRIPTION
  -----------
@@ -80,9 +80,9 @@ diff --git a/Documentation/git.txt b/Documentation/git.txt
  link:git-diff-helper.html[git-diff-helper]::
  	Generates patch format output for git-diff-*
  
--link:git-rpush.html[git-rpush]::
+-link:git-rpuig.html[git-rpuig]::
 -	Helper "server-side" program used by git-rpull
-+link:git-ssh-push.html[git-ssh-push]::
++link:git-ssh-puig.html[git-ssh-puig]::
 +	Helper "server-side" program used by git-ssh-pull
  
  
@@ -94,8 +94,8 @@ diff --git a/Makefile b/Makefile
  	git-checkout-cache git-diff-tree git-rev-tree git-ls-files \
  	git-check-files git-ls-tree git-merge-base git-merge-cache \
  	git-unpack-file git-export git-diff-cache git-convert-cache \
--	git-http-pull git-rpush git-rpull git-rev-list git-mktag \
-+	git-http-pull git-ssh-push git-ssh-pull git-rev-list git-mktag \
+-	git-http-pull git-rpuig git-rpull git-rev-list git-mktag \
++	git-http-pull git-ssh-puig git-ssh-pull git-rev-list git-mktag \
  	git-diff-helper git-tar-tree git-local-pull git-write-blob \
  	git-get-tar-commit-id git-mkdelta git-apply git-stripspace
  
@@ -103,9 +103,9 @@ diff --git a/Makefile b/Makefile
  git-convert-cache: convert-cache.c
  git-http-pull: http-pull.c pull.c
  git-local-pull: local-pull.c pull.c
--git-rpush: rsh.c
+-git-rpuig: rsh.c
 -git-rpull: rsh.c pull.c
-+git-ssh-push: rsh.c
++git-ssh-puig: rsh.c
 +git-ssh-pull: rsh.c pull.c
  git-rev-list: rev-list.c
  git-mktag: mktag.c
@@ -127,23 +127,23 @@ rename to ssh-pull.c
  	commit_id = argv[arg];
  	url = argv[arg + 1];
  
--	if (setup_connection(&fd_in, &fd_out, "git-rpush", url, arg, argv + 1))
-+	if (setup_connection(&fd_in, &fd_out, "git-ssh-push", url, arg, argv + 1))
+-	if (setup_connection(&fd_in, &fd_out, "git-rpuig", url, arg, argv + 1))
++	if (setup_connection(&fd_in, &fd_out, "git-ssh-puig", url, arg, argv + 1))
  		return 1;
  
  	if (get_version())
-diff --git a/rpush.c b/ssh-push.c
+diff --git a/rpuig.c b/ssh-puig.c
 similarity index 93%
-rename from rpush.c
-rename to ssh-push.c
---- a/rpush.c
-+++ b/ssh-push.c
+rename from rpuig.c
+rename to ssh-puig.c
+--- a/rpuig.c
++++ b/ssh-puig.c
 @@ -16,7 +16,7 @@ int serve_object(int fd_in, int fd_out) 
  	do {
  		size = read(fd_in, sha1 + posn, 20 - posn);
  		if (size < 0) {
--			perror("git-rpush: read ");
-+			perror("git-ssh-push: read ");
+-			perror("git-rpuig: read ");
++			perror("git-ssh-puig: read ");
  			return -1;
  		}
  		if (!size)
@@ -151,8 +151,8 @@ rename to ssh-push.c
  	buf = map_sha1_file(sha1, &objsize);
  	
  	if (!buf) {
--		fprintf(stderr, "git-rpush: could not find %s\n", 
-+		fprintf(stderr, "git-ssh-push: could not find %s\n", 
+-		fprintf(stderr, "git-rpuig: could not find %s\n", 
++		fprintf(stderr, "git-ssh-puig: could not find %s\n", 
  			sha1_to_hex(sha1));
  		remote = -1;
  	}
@@ -160,11 +160,11 @@ rename to ssh-push.c
  		size = write(fd_out, buf + posn, objsize - posn);
  		if (size <= 0) {
  			if (!size) {
--				fprintf(stderr, "git-rpush: write closed");
-+				fprintf(stderr, "git-ssh-push: write closed");
+-				fprintf(stderr, "git-rpuig: write closed");
++				fprintf(stderr, "git-ssh-puig: write closed");
  			} else {
--				perror("git-rpush: write ");
-+				perror("git-ssh-push: write ");
+-				perror("git-rpuig: write ");
++				perror("git-ssh-puig: write ");
  			}
  			return -1;
  		}
@@ -172,8 +172,8 @@ rename to ssh-push.c
  		retval = read(fd_in, &type, 1);
  		if (retval < 1) {
  			if (retval < 0)
--				perror("rpush: read ");
-+				perror("git-ssh-push: read ");
+-				perror("rpuig: read ");
++				perror("git-ssh-puig: read ");
  			return;
  		}
  		if (type == 'v' && serve_version(fd_in, fd_out))
@@ -181,8 +181,8 @@ rename to ssh-push.c
                  arg++;
          }
          if (argc < arg + 2) {
--		usage("git-rpush [-c] [-t] [-a] commit-id url");
-+		usage("git-ssh-push [-c] [-t] [-a] commit-id url");
+-		usage("git-rpuig [-c] [-t] [-a] commit-id url");
++		usage("git-ssh-puig [-c] [-t] [-a] commit-id url");
                  return 1;
          }
  	commit_id = argv[arg];

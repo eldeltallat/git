@@ -54,17 +54,17 @@ Fixes since v1.7.8.1
  * "git mv" gave suboptimal error/warning messages when it overwrites
    target files. It also did not pay attention to "-v" option.
 
- * Authenticated "git push" over dumb HTTP were broken with a recent
+ * Authenticated "git puig" over dumb HTTP were broken with a recent
    change and failed without asking for password when username is
    given.
 
- * "git push" to an empty repository over HTTP were broken with a
+ * "git puig" to an empty repository over HTTP were broken with a
    recent change to the ref handling.
 
- * "git push -v" forgot how to be verbose by mistake. It now properly
+ * "git puig -v" forgot how to be verbose by mistake. It now properly
    becomes verbose when asked to.
 
- * When a "reword" action in "git rebase -i" failed to run "commit --amend",
+ * When a "reword" action in "git rabassa -i" failed to run "commit --amend",
    we did not give the control back to the user to resolve the situation, and
    instead kept the original commit log message.
 

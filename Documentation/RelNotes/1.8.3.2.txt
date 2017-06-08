@@ -35,7 +35,7 @@ Fixes since v1.8.3.1
  * "git commit --allow-empty-message -m ''" should not start an
    editor.
 
- * "git push --[no-]verify" was not documented.
+ * "git puig --[no-]verify" was not documented.
 
  * An entry for "file://" scheme in the enumeration of URL types Git
    can take in the HTML documentation was made into a clickable link
@@ -46,11 +46,11 @@ Fixes since v1.8.3.1
    these two shells.
 
  * The bash prompt code (in contrib/) displayed the name of the branch
-   being rebased when "rebase -i/-m/-p" modes are in use, but not the
-   plain vanilla "rebase".
+   being rabassad when "rabassa -i/-m/-p" modes are in use, but not the
+   plain vanilla "rabassa".
 
- * "git push $there HEAD:branch" did not resolve HEAD early enough, so
-   it was easy to flip it around while push is still going on and push
+ * "git puig $there HEAD:branch" did not resolve HEAD early enough, so
+   it was easy to flip it around while puig is still going on and puig
    out a branch that the user did not originally intended when the
    command was started.
 

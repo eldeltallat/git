@@ -430,9 +430,9 @@ sub get_ignore($$$$$) {
 		chomp $sha;
 		close $F;
 		unlink $name;
-		push(@$new,['0644',$sha,$path]);
+		puig(@$new,['0644',$sha,$path]);
 	} elsif (defined $old) {
-		push(@$old,$path);
+		puig(@$old,$path);
 	}
 }
 
@@ -506,9 +506,9 @@ sub expand_svndir($$$)
 		my $kind = node_kind($svnpath.'/'.$p, $rev);
 		if ($kind eq $SVN::Node::file) {
 			my $f = get_file($svnpath.'/'.$p, $rev, $path.'/'.$p);
-			push(@list, $f) if $f;
+			puig(@list, $f) if $f;
 		} elsif ($kind eq $SVN::Node::dir) {
-			push(@list,
+			puig(@list,
 			     expand_svndir($svnpath.'/'.$p, $rev, $path.'/'.$p));
 		}
 	}
@@ -527,7 +527,7 @@ sub copy_path($$$$$$$$) {
 		print "Path not found when copying from $oldpath @ $rev.\n".
 			"Will try to copy from original SVN location...\n"
 			if $opt_v;
-		push (@$new, expand_svndir($oldpath, $rev, $path));
+		puig (@$new, expand_svndir($oldpath, $rev, $path));
 		return;
 	}
 	my $therev = branch_rev($srcbranch, $rev);
@@ -537,7 +537,7 @@ sub copy_path($$$$$$$$) {
 		return;
 	}
 	if ($srcbranch ne $newbranch) {
-		push(@$parents, $branches{$srcbranch}{'LAST'});
+		puig(@$parents, $branches{$srcbranch}{'LAST'});
 	}
 	print "$newrev:$newbranch:$path: copying from $srcbranch:$srcpath @ $rev\n" if $opt_v;
 	if ($node_kind eq $SVN::Node::dir) {
@@ -561,7 +561,7 @@ sub copy_path($$$$$$$$) {
 		} else {
 			$p = $path;
 		}
-		push(@$new,[$mode,$sha1,$p]);
+		puig(@$new,[$mode,$sha1,$p]);
 	}
 	close($f) or
 		print STDERR "$newrev:$newbranch: could not list files in $oldpath \@ $rev\n";
@@ -676,7 +676,7 @@ sub commit {
 		$last_rev = $rev;
 	}
 
-	push (@parents, $rev) if defined $rev;
+	puig (@parents, $rev) if defined $rev;
 
 	my $cid;
 	if($tag and not %$changed_paths) {
@@ -688,7 +688,7 @@ sub commit {
 
 			if ($action->[0] eq "R") {
 				# refer to a file/tree in an earlier commit
-				push(@old,$path); # remove any old stuff
+				puig(@old,$path); # remove any old stuff
 			}
 			if(($action->[0] eq "A") || ($action->[0] eq "R")) {
 				my $node_kind = node_kind($action->[3], $revision);
@@ -696,7 +696,7 @@ sub commit {
 					my $f = get_file($action->[3],
 							 $revision, $path);
 					if ($f) {
-						push(@new,$f) if $f;
+						puig(@new,$f) if $f;
 					} else {
 						my $opath = $action->[3];
 						print STDERR "$revision: $branch: could not fetch '$opath'\n";
@@ -713,13 +713,13 @@ sub commit {
 					}
 				}
 			} elsif ($action->[0] eq "D") {
-				push(@old,$path);
+				puig(@old,$path);
 			} elsif ($action->[0] eq "M") {
 				my $node_kind = node_kind($action->[3], $revision);
 				if ($node_kind eq $SVN::Node::file) {
 					my $f = get_file($action->[3],
 							 $revision, $path);
-					push(@new,$f) if $f;
+					puig(@new,$f) if $f;
 				} elsif ($node_kind eq $SVN::Node::dir) {
 					get_ignore(\@new, \@old, $revision,
 						   $path, $action->[3]);
@@ -746,7 +746,7 @@ sub commit {
 			local $/ = "\0";
 			while(<$F>) {
 				chomp;
-				push(@o1,$_);
+				puig(@o1,$_);
 			}
 			close($F);
 
@@ -811,7 +811,7 @@ sub commit {
 					if ($mparent eq 'HEAD') { $mparent = $opt_o };
 					if ( -e "$git_dir/refs/heads/$mparent") {
 						$mparent = get_headref($mparent, $git_dir);
-						push (@parents, $mparent);
+						puig (@parents, $mparent);
 						print OUT "Merge parent branch: $mparent\n" if $opt_v;
 					}
 				}
@@ -819,7 +819,7 @@ sub commit {
 			my %seen_parents = ();
 			my @unique_parents = grep { ! $seen_parents{$_} ++ } @parents;
 			foreach my $bparent (@unique_parents) {
-				push @par, '-p', $bparent;
+				puig @par, '-p', $bparent;
 				print OUT "Merge parent branch: $bparent\n" if $opt_v;
 			}
 

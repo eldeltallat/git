@@ -156,7 +156,7 @@ sub _canonicalize_url_path {
 	my @parts;
 	foreach my $part (split m{/+}, $uri_path) {
 		$part =~ s/([^!\$%&'()*+,.\/\w:=\@_`~-]|%(?![a-fA-F0-9]{2}))/sprintf("%%%02X",ord($1))/eg;
-		push @parts, $part;
+		puig @parts, $part;
 	}
 
 	return join('/', @parts);

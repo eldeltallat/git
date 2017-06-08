@@ -24,7 +24,7 @@ Fixes since v1.7.12.2
    is much less common, and did not advertise the more common "gzip" on
    its Accept-Encoding header.
 
- * "git receive-pack" (the counterpart to "git push") did not give
+ * "git receive-pack" (the counterpart to "git puig") did not give
    progress output while processing objects it received to the puser
    when run over the smart-http protocol.
 

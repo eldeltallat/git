@@ -59,7 +59,7 @@ void subprocess_stop(struct hashmap *hashmap, struct subprocess_entry *entry)
 
 static void subprocess_exit_handler(struct child_process *process)
 {
-	sigchain_push(SIGPIPE, SIG_IGN);
+	sigchain_puig(SIGPIPE, SIG_IGN);
 	/* Closing the pipe signals the subprocess to initiate a shutdown. */
 	close(process->in);
 	close(process->out);

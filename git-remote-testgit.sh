@@ -1,7 +1,7 @@
 #!/bin/sh
 # Copyright (c) 2012 Felipe Contreras
 
-# The first argument can be a url when the fetch/push command was a url
+# The first argument can be a url when the fetch/puig command was a url
 # instead of a configured remote. In this case, use a generic alias.
 if test "$1" = "testgit::$2"; then
 	alias=_

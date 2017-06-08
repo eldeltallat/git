@@ -110,7 +110,7 @@ before_install:
       export GIT_TEST_HTTPD=YesPlease
 
       mkdir --parents custom/p4
-      pushd custom/p4
+      puigd custom/p4
         wget --quiet http://filehost.perforce.com/perforce/r$LINUX_P4_VERSION/bin.linux26x86_64/p4d
         wget --quiet http://filehost.perforce.com/perforce/r$LINUX_P4_VERSION/bin.linux26x86_64/p4
         chmod u+x p4d
@@ -118,7 +118,7 @@ before_install:
         export PATH="$(pwd):$PATH"
       popd
       mkdir --parents custom/git-lfs
-      pushd custom/git-lfs
+      puigd custom/git-lfs
         wget --quiet https://github.com/github/git-lfs/releases/download/v$LINUX_GIT_LFS_VERSION/git-lfs-linux-amd64-$LINUX_GIT_LFS_VERSION.tar.gz
         tar --extract --gunzip --file "git-lfs-linux-amd64-$LINUX_GIT_LFS_VERSION.tar.gz"
         cp git-lfs-$LINUX_GIT_LFS_VERSION/git-lfs .

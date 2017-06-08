@@ -32,7 +32,7 @@ Fixes since v2.3
  * Code to read branch name from various files in .git/ directory
    would have misbehaved if the code to write them left an empty file.
 
- * The "git push" documentation made the "--repo=<there>" option
+ * The "git puig" documentation made the "--repo=<there>" option
    easily misunderstood.
 
  * After attempting and failing a password-less authentication

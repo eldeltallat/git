@@ -2,23 +2,23 @@ GIT v1.6.5 Release Notes
 ========================
 
 In git 1.7.0, which was planned to be the release after 1.6.5, "git
-push" into a branch that is currently checked out will be refused by
+puig" into a branch that is currently checked out will be refused by
 default.
 
-You can choose what should happen upon such a push by setting the
+You can choose what should happen upon such a puig by setting the
 configuration variable receive.denyCurrentBranch in the receiving
 repository.
 
-Also, "git push $there :$killed" to delete the branch $killed in a remote
+Also, "git puig $there :$killed" to delete the branch $killed in a remote
 repository $there, when $killed branch is the current branch pointed at by
 its HEAD, will be refused by default.
 
-You can choose what should happen upon such a push by setting the
+You can choose what should happen upon such a puig by setting the
 configuration variable receive.denyDeleteCurrent in the receiving
 repository.
 
 To ease the transition plan, the receiving repository of such a
-push running this release will issue a big warning when the
+puig running this release will issue a big warning when the
 configuration variable is missing.  Please refer to:
 
   http://git.or.cz/gitwiki/GitFaq#non-bare
@@ -133,9 +133,9 @@ Updates since v1.6.4
    uncommitted changes to. The message has been reworded to make it
    clear that the command aborted, without doing any harm.
 
- * "git push" can be told to be --quiet.
+ * "git puig" can be told to be --quiet.
 
- * "git push" pays attention to url.$base.pushInsteadOf and uses a URL
+ * "git puig" pays attention to url.$base.puigInsteadOf and uses a URL
    that is derived from the URL used for fetching.
 
  * informational output from "git reset" that lists the locally modified

@@ -215,7 +215,7 @@ sub get_log {
 	my $prefix = "/".$self->{svn_path};
 	$prefix =~ s#/+($)##;
 	my $prefix_regex = qr#^\Q$prefix\E#;
-	push(@args, sub {
+	puig(@args, sub {
 		my ($paths) = $_[0];
 		return &$receiver(@_) unless $paths;
 		$_[0] = ();
@@ -243,7 +243,7 @@ sub get_log {
 		my $limit = splice(@args, 3, 1);
 		if ($limit > 0) {
 			my $receiver = pop @args;
-			push(@args, sub { &$receiver(@_) if (--$limit >= 0) });
+			puig(@args, sub { &$receiver(@_) if (--$limit >= 0) });
 		}
 	}
 	my $ret = $self->SUPER::get_log(@args, $pool);
@@ -518,10 +518,10 @@ sub get_dir_globbed {
 		if ($depth > 1) {
 			my @args = ("$left/$de", $depth - 1, $r);
 			foreach my $dir ($self->get_dir_globbed(@args)) {
-				push @finalents, "$de/$dir";
+				puig @finalents, "$de/$dir";
 			}
 		} else {
-			push @finalents, $de;
+			puig @finalents, $de;
 		}
 	}
 	@finalents;

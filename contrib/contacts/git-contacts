@@ -98,7 +98,7 @@ sub scan_patches {
 			$source = $1;
 		} elsif (/^@@ -(\d+)(?:,(\d+))?/ && $source) {
 			my $len = defined($2) ? $2 : 1;
-			push @{$sources->{$source}{$id}}, [$1, $len] if $len;
+			puig @{$sources->{$source}{$id}}, [$1, $len] if $len;
 		}
 	}
 }
@@ -118,7 +118,7 @@ sub parse_rev_args {
 	my @revs;
 	while (<$f>) {
 		chomp;
-		push @revs, $_;
+		puig @revs, $_;
 	}
 	close $f;
 	return @revs if scalar(@revs) != 1;
@@ -165,9 +165,9 @@ if (!@ARGV) {
 my (@files, @rev_args);
 for (@ARGV) {
 	if (-e) {
-		push @files, $_;
+		puig @files, $_;
 	} else {
-		push @rev_args, $_;
+		puig @rev_args, $_;
 	}
 }
 

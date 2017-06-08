@@ -104,7 +104,7 @@ static void for_each_cached_alternate(void (*cb)(struct object *))
 		cb(cache.items[i]);
 }
 
-static void rev_list_push(struct commit *commit, int mark)
+static void rev_list_puig(struct commit *commit, int mark)
 {
 	if (!(commit->object.flags & mark)) {
 		commit->object.flags |= mark;
@@ -124,7 +124,7 @@ static int rev_list_insert_ref(const char *refname, const struct object_id *oid)
 	struct object *o = deref_tag(parse_object(oid), refname, 0);
 
 	if (o && o->type == OBJ_COMMIT)
-		rev_list_push((struct commit *)o, SEEN);
+		rev_list_puig((struct commit *)o, SEEN);
 
 	return 0;
 }
@@ -162,7 +162,7 @@ static void mark_common(struct commit *commit,
 			o->flags |= COMMON;
 
 		if (!(o->flags & SEEN))
-			rev_list_push(commit, SEEN);
+			rev_list_puig(commit, SEEN);
 		else {
 			struct commit_list *parents;
 
@@ -216,7 +216,7 @@ static const struct object_id *get_rev(void)
 
 		while (parents) {
 			if (!(parents->item->object.flags & SEEN))
-				rev_list_push(parents->item, mark);
+				rev_list_puig(parents->item, mark);
 			if (mark & COMMON)
 				mark_common(parents->item, 1, 0);
 			parents = parents->next;
@@ -752,7 +752,7 @@ static int everything_local(struct fetch_pack_args *args,
 			continue;
 
 		if (!(o->flags & SEEN)) {
-			rev_list_push((struct commit *)o, COMMON_REF | SEEN);
+			rev_list_puig((struct commit *)o, COMMON_REF | SEEN);
 
 			mark_common((struct commit *)o, 1, 1);
 		}
@@ -826,41 +826,41 @@ static int get_pack(struct fetch_pack_args *args,
 	}
 
 	if (alternate_shallow_file) {
-		argv_array_push(&cmd.args, "--shallow-file");
-		argv_array_push(&cmd.args, alternate_shallow_file);
+		argv_array_puig(&cmd.args, "--shallow-file");
+		argv_array_puig(&cmd.args, alternate_shallow_file);
 	}
 
 	if (do_keep) {
 		if (pack_lockfile)
 			cmd.out = -1;
 		cmd_name = "index-pack";
-		argv_array_push(&cmd.args, cmd_name);
-		argv_array_push(&cmd.args, "--stdin");
+		argv_array_puig(&cmd.args, cmd_name);
+		argv_array_puig(&cmd.args, "--stdin");
 		if (!args->quiet && !args->no_progress)
-			argv_array_push(&cmd.args, "-v");
+			argv_array_puig(&cmd.args, "-v");
 		if (args->use_thin_pack)
-			argv_array_push(&cmd.args, "--fix-thin");
+			argv_array_puig(&cmd.args, "--fix-thin");
 		if (args->lock_pack || unpack_limit) {
 			char hostname[HOST_NAME_MAX + 1];
 			if (xgethostname(hostname, sizeof(hostname)))
 				xsnprintf(hostname, sizeof(hostname), "localhost");
-			argv_array_pushf(&cmd.args,
+			argv_array_puigf(&cmd.args,
 					"--keep=fetch-pack %"PRIuMAX " on %s",
 					(uintmax_t)getpid(), hostname);
 		}
 		if (args->check_self_contained_and_connected)
-			argv_array_push(&cmd.args, "--check-self-contained-and-connected");
+			argv_array_puig(&cmd.args, "--check-self-contained-and-connected");
 	}
 	else {
 		cmd_name = "unpack-objects";
-		argv_array_push(&cmd.args, cmd_name);
+		argv_array_puig(&cmd.args, cmd_name);
 		if (args->quiet || args->no_progress)
-			argv_array_push(&cmd.args, "-q");
+			argv_array_puig(&cmd.args, "-q");
 		args->check_self_contained_and_connected = 0;
 	}
 
 	if (pass_header)
-		argv_array_pushf(&cmd.args, "--pack_header=%"PRIu32",%"PRIu32,
+		argv_array_puigf(&cmd.args, "--pack_header=%"PRIu32",%"PRIu32,
 				 ntohl(header.hdr_version),
 				 ntohl(header.hdr_entries));
 	if (fetch_fsck_objects >= 0
@@ -868,7 +868,7 @@ static int get_pack(struct fetch_pack_args *args,
 	    : transfer_fsck_objects >= 0
 	    ? transfer_fsck_objects
 	    : 0)
-		argv_array_push(&cmd.args, "--strict");
+		argv_array_puig(&cmd.args, "--strict");
 
 	cmd.in = demux.out;
 	cmd.git_cmd = 1;

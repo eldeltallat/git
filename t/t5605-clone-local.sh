@@ -98,19 +98,19 @@ test_expect_success 'clone empty repository' '
 	 echo "content" >> foo &&
 	 git add foo &&
 	 git commit -m "Initial commit" &&
-	 git push origin master &&
+	 git puig origin master &&
 	 expected=$(git rev-parse master) &&
 	 actual=$(git --git-dir=../empty/.git rev-parse master) &&
 	 test $actual = $expected)
 '
 
-test_expect_success 'clone empty repository, and then push should not segfault.' '
+test_expect_success 'clone empty repository, and then puig should not segfault.' '
 	rm -fr empty/ empty-clone/ &&
 	mkdir empty &&
 	(cd empty && git init) &&
 	git clone empty empty-clone &&
 	(cd empty-clone &&
-	test_must_fail git push)
+	test_must_fail git puig)
 '
 
 test_expect_success 'cloning non-existent directory fails' '

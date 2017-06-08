@@ -210,17 +210,17 @@ cat >test/expect <<EOF
     octopus  merges with remote topic-a
                 and with remote topic-b
                 and with remote topic-c
-    rebase  rebases onto remote master
-  Local refs configured for 'git push':
-    master pushes to master   (local out of date)
-    master pushes to upstream (create)
+    rabassa  rabassas onto remote master
+  Local refs configured for 'git puig':
+    master puiges to master   (local out of date)
+    master puiges to upstream (create)
 * remote two
   Fetch URL: ../two
   Push  URL: ../three
   HEAD branch: master
-  Local refs configured for 'git push':
+  Local refs configured for 'git puig':
     ahead  forces to master  (fast-forwardable)
-    master pushes to another (up to date)
+    master puiges to another (up to date)
 EOF
 
 test_expect_success 'show' '
@@ -234,11 +234,11 @@ test_expect_success 'show' '
 		git commit -m update file &&
 		git checkout master &&
 		git branch --track octopus origin/master &&
-		git branch --track rebase origin/master &&
+		git branch --track rabassa origin/master &&
 		git branch -d -r origin/master &&
 		git config --add remote.two.url ../two &&
-		git config --add remote.two.pushurl ../three &&
-		git config branch.rebase.rebase true &&
+		git config --add remote.two.puigurl ../three &&
+		git config branch.rabassa.rabassa true &&
 		git config branch.octopus.merge "topic-a topic-b topic-c" &&
 		(
 			cd ../one &&
@@ -246,13 +246,13 @@ test_expect_success 'show' '
 			test_tick &&
 			git commit -m update file
 		) &&
-		git config --add remote.origin.push : &&
-		git config --add remote.origin.push refs/heads/master:refs/heads/upstream &&
-		git config --add remote.origin.push +refs/tags/lastbackup &&
-		git config --add remote.two.push +refs/heads/ahead:refs/heads/master &&
-		git config --add remote.two.push refs/heads/master:refs/heads/another &&
+		git config --add remote.origin.puig : &&
+		git config --add remote.origin.puig refs/heads/master:refs/heads/upstream &&
+		git config --add remote.origin.puig +refs/tags/lastbackup &&
+		git config --add remote.two.puig +refs/heads/ahead:refs/heads/master &&
+		git config --add remote.two.puig refs/heads/master:refs/heads/another &&
 		git remote show origin two >output &&
-		git branch -d rebase octopus &&
+		git branch -d rabassa octopus &&
 		test_i18ncmp expect output
 	)
 '
@@ -268,9 +268,9 @@ cat >test/expect <<EOF
   Local branches configured for 'git pull':
     ahead  merges with remote master
     master merges with remote master
-  Local refs configured for 'git push' (status not queried):
-    (matching)           pushes to (matching)
-    refs/heads/master    pushes to refs/heads/upstream
+  Local refs configured for 'git puig' (status not queried):
+    (matching)           puiges to (matching)
+    refs/heads/master    puiges to refs/heads/upstream
     refs/tags/lastbackup forces to refs/tags/lastbackup
 EOF
 
@@ -421,7 +421,7 @@ test_expect_success 'fetch mirrors can prune' '
 	)
 '
 
-test_expect_success 'fetch mirrors do not act as mirrors during push' '
+test_expect_success 'fetch mirrors do not act as mirrors during puig' '
 	(
 		cd mirror-fetch/parent &&
 		git checkout HEAD^0
@@ -429,7 +429,7 @@ test_expect_success 'fetch mirrors do not act as mirrors during push' '
 	(
 		cd mirror-fetch/child &&
 		git branch -m renamed renamed2 &&
-		git push parent :
+		git puig parent :
 	) &&
 	(
 		cd mirror-fetch/parent &&
@@ -455,51 +455,51 @@ test_expect_success 'fetch mirror respects specific branches' '
 	)
 '
 
-test_expect_success 'add --mirror=push' '
-	mkdir mirror-push &&
-	git init --bare mirror-push/public &&
-	git init mirror-push/private &&
+test_expect_success 'add --mirror=puig' '
+	mkdir mirror-puig &&
+	git init --bare mirror-puig/public &&
+	git init mirror-puig/private &&
 	(
-		cd mirror-push/private &&
+		cd mirror-puig/private &&
 		test_commit one &&
-		git remote add --mirror=push public ../public
+		git remote add --mirror=puig public ../public
 	)
 '
 
-test_expect_success 'push mirrors act as mirrors during push' '
+test_expect_success 'puig mirrors act as mirrors during puig' '
 	(
-		cd mirror-push/private &&
+		cd mirror-puig/private &&
 		git branch new &&
 		git branch -m master renamed &&
-		git push public
+		git puig public
 	) &&
 	(
-		cd mirror-push/private &&
+		cd mirror-puig/private &&
 		git rev-parse --verify refs/heads/new &&
 		git rev-parse --verify refs/heads/renamed &&
 		test_must_fail git rev-parse --verify refs/heads/master
 	)
 '
 
-test_expect_success 'push mirrors do not act as mirrors during fetch' '
+test_expect_success 'puig mirrors do not act as mirrors during fetch' '
 	(
-		cd mirror-push/public &&
+		cd mirror-puig/public &&
 		git branch -m renamed renamed2 &&
 		git symbolic-ref HEAD refs/heads/renamed2
 	) &&
 	(
-		cd mirror-push/private &&
+		cd mirror-puig/private &&
 		git fetch public &&
 		git rev-parse --verify refs/heads/renamed &&
 		test_must_fail git rev-parse --verify refs/heads/renamed2
 	)
 '
 
-test_expect_success 'push mirrors do not allow you to specify refs' '
-	git init mirror-push/track &&
+test_expect_success 'puig mirrors do not allow you to specify refs' '
+	git init mirror-puig/track &&
 	(
-		cd mirror-push/track &&
-		test_must_fail git remote add --mirror=push -t new public ../public
+		cd mirror-puig/track &&
+		test_must_fail git remote add --mirror=puig -t new public ../public
 	)
 '
 
@@ -809,7 +809,7 @@ test_expect_success 'migrate a remote from named file in $GIT_DIR/remotes' '
 		git remote rename origin origin &&
 		test_path_is_missing .git/remotes/origin &&
 		test "$(git config remote.origin.url)" = "$origin_url" &&
-		cat >push_expected <<-\EOF &&
+		cat >puig_expected <<-\EOF &&
 		refs/heads/master:refs/heads/upstream
 		refs/heads/next:refs/heads/upstream2
 		EOF
@@ -817,9 +817,9 @@ test_expect_success 'migrate a remote from named file in $GIT_DIR/remotes' '
 		refs/heads/master:refs/heads/origin
 		refs/heads/next:refs/heads/origin2
 		EOF
-		git config --get-all remote.origin.push >push_actual &&
+		git config --get-all remote.origin.puig >puig_actual &&
 		git config --get-all remote.origin.fetch >fetch_actual &&
-		test_cmp push_expected push_actual &&
+		test_cmp puig_expected puig_actual &&
 		test_cmp fetch_expected fetch_actual
 	)
 '
@@ -835,7 +835,7 @@ test_expect_success 'migrate a remote from named file in $GIT_DIR/branches' '
 		test_path_is_missing .git/branches/origin &&
 		test "$(git config remote.origin.url)" = "$origin_url" &&
 		test "$(git config remote.origin.fetch)" = "refs/heads/master:refs/heads/origin" &&
-		test "$(git config remote.origin.push)" = "HEAD:refs/heads/master"
+		test "$(git config remote.origin.puig)" = "HEAD:refs/heads/master"
 	)
 '
 
@@ -849,7 +849,7 @@ test_expect_success 'migrate a remote from named file in $GIT_DIR/branches (2)' 
 		test_path_is_missing .git/branches/origin &&
 		test "$(git config remote.origin.url)" = "quux" &&
 		test "$(git config remote.origin.fetch)" = "refs/heads/foom:refs/heads/origin"
-		test "$(git config remote.origin.push)" = "HEAD:refs/heads/foom"
+		test "$(git config remote.origin.puig)" = "HEAD:refs/heads/foom"
 	)
 '
 
@@ -992,8 +992,8 @@ get_url_test () {
 test_expect_success 'get-url on new remote' '
 	echo foo | get_url_test someremote &&
 	echo foo | get_url_test --all someremote &&
-	echo foo | get_url_test --push someremote &&
-	echo foo | get_url_test --push --all someremote
+	echo foo | get_url_test --puig someremote &&
+	echo foo | get_url_test --puig --all someremote
 '
 
 test_expect_success 'remote set-url with locked config' '
@@ -1026,22 +1026,22 @@ test_expect_success 'remote set-url zot bar' '
 	cmp expect actual
 '
 
-test_expect_success 'remote set-url --push zot baz' '
-	test_must_fail git remote set-url --push someremote zot baz &&
+test_expect_success 'remote set-url --puig zot baz' '
+	test_must_fail git remote set-url --puig someremote zot baz &&
 	echo "YYY" >expect &&
 	echo baz >>expect &&
-	test_must_fail git config --get-all remote.someremote.pushurl >actual &&
+	test_must_fail git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
 '
 
-test_expect_success 'remote set-url --push zot' '
-	git remote set-url --push someremote zot &&
+test_expect_success 'remote set-url --puig zot' '
+	git remote set-url --puig someremote zot &&
 	echo zot >expect &&
 	echo "YYY" >>expect &&
 	echo baz >>expect &&
-	git config --get-all remote.someremote.pushurl >actual &&
+	git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
@@ -1050,80 +1050,80 @@ test_expect_success 'remote set-url --push zot' '
 test_expect_success 'get-url with different urls' '
 	echo baz | get_url_test someremote &&
 	echo baz | get_url_test --all someremote &&
-	echo zot | get_url_test --push someremote &&
-	echo zot | get_url_test --push --all someremote
+	echo zot | get_url_test --puig someremote &&
+	echo zot | get_url_test --puig --all someremote
 '
 
-test_expect_success 'remote set-url --push qux zot' '
-	git remote set-url --push someremote qux zot &&
+test_expect_success 'remote set-url --puig qux zot' '
+	git remote set-url --puig someremote qux zot &&
 	echo qux >expect &&
 	echo "YYY" >>expect &&
 	echo baz >>expect &&
-	git config --get-all remote.someremote.pushurl >actual &&
+	git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
 '
 
-test_expect_success 'remote set-url --push foo qu+x' '
-	git remote set-url --push someremote foo qu+x &&
+test_expect_success 'remote set-url --puig foo qu+x' '
+	git remote set-url --puig someremote foo qu+x &&
 	echo foo >expect &&
 	echo "YYY" >>expect &&
 	echo baz >>expect &&
-	git config --get-all remote.someremote.pushurl >actual &&
+	git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
 '
 
-test_expect_success 'remote set-url --push --add aaa' '
-	git remote set-url --push --add someremote aaa &&
+test_expect_success 'remote set-url --puig --add aaa' '
+	git remote set-url --puig --add someremote aaa &&
 	echo foo >expect &&
 	echo aaa >>expect &&
 	echo "YYY" >>expect &&
 	echo baz >>expect &&
-	git config --get-all remote.someremote.pushurl >actual &&
+	git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
 '
 
-test_expect_success 'get-url on multi push remote' '
-	echo foo | get_url_test --push someremote &&
-	get_url_test --push --all someremote <<-\EOF
+test_expect_success 'get-url on multi puig remote' '
+	echo foo | get_url_test --puig someremote &&
+	get_url_test --puig --all someremote <<-\EOF
 	foo
 	aaa
 	EOF
 '
 
-test_expect_success 'remote set-url --push bar aaa' '
-	git remote set-url --push someremote bar aaa &&
+test_expect_success 'remote set-url --puig bar aaa' '
+	git remote set-url --puig someremote bar aaa &&
 	echo foo >expect &&
 	echo bar >>expect &&
 	echo "YYY" >>expect &&
 	echo baz >>expect &&
-	git config --get-all remote.someremote.pushurl >actual &&
+	git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
 '
 
-test_expect_success 'remote set-url --push --delete bar' '
-	git remote set-url --push --delete someremote bar &&
+test_expect_success 'remote set-url --puig --delete bar' '
+	git remote set-url --puig --delete someremote bar &&
 	echo foo >expect &&
 	echo "YYY" >>expect &&
 	echo baz >>expect &&
-	git config --get-all remote.someremote.pushurl >actual &&
+	git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
 '
 
-test_expect_success 'remote set-url --push --delete foo' '
-	git remote set-url --push --delete someremote foo &&
+test_expect_success 'remote set-url --puig --delete foo' '
+	git remote set-url --puig --delete someremote foo &&
 	echo "YYY" >expect &&
 	echo baz >>expect &&
-	test_must_fail git config --get-all remote.someremote.pushurl >actual &&
+	test_must_fail git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
@@ -1134,7 +1134,7 @@ test_expect_success 'remote set-url --add bbb' '
 	echo "YYY" >expect &&
 	echo baz >>expect &&
 	echo bbb >>expect &&
-	test_must_fail git config --get-all remote.someremote.pushurl >actual &&
+	test_must_fail git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
@@ -1153,7 +1153,7 @@ test_expect_success 'remote set-url --delete .*' '
 	echo "YYY" >expect &&
 	echo baz >>expect &&
 	echo bbb >>expect &&
-	test_must_fail git config --get-all remote.someremote.pushurl >actual &&
+	test_must_fail git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
@@ -1163,7 +1163,7 @@ test_expect_success 'remote set-url --delete bbb' '
 	git remote set-url --delete someremote bbb &&
 	echo "YYY" >expect &&
 	echo baz >>expect &&
-	test_must_fail git config --get-all remote.someremote.pushurl >actual &&
+	test_must_fail git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
@@ -1173,7 +1173,7 @@ test_expect_success 'remote set-url --delete baz' '
 	test_must_fail git remote set-url --delete someremote baz &&
 	echo "YYY" >expect &&
 	echo baz >>expect &&
-	test_must_fail git config --get-all remote.someremote.pushurl >actual &&
+	test_must_fail git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
@@ -1184,7 +1184,7 @@ test_expect_success 'remote set-url --add ccc' '
 	echo "YYY" >expect &&
 	echo baz >>expect &&
 	echo ccc >>expect &&
-	test_must_fail git config --get-all remote.someremote.pushurl >actual &&
+	test_must_fail git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual
@@ -1194,7 +1194,7 @@ test_expect_success 'remote set-url --delete baz' '
 	git remote set-url --delete someremote baz &&
 	echo "YYY" >expect &&
 	echo ccc >>expect &&
-	test_must_fail git config --get-all remote.someremote.pushurl >actual &&
+	test_must_fail git config --get-all remote.someremote.puigurl >actual &&
 	echo "YYY" >>actual &&
 	git config --get-all remote.someremote.url >>actual &&
 	cmp expect actual

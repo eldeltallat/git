@@ -35,7 +35,7 @@ test_expect_success 'submodule on detached working tree' '
 			git rev-parse --verify HEAD >actual &&
 			test_cmp ../../../../expect actual
 		) &&
-		git push origin master
+		git puig origin master
 	) &&
 	mkdir home2 &&
 	(
@@ -67,7 +67,7 @@ test_expect_success 'submodule on detached working pointed by core.worktree' '
 		git checkout master &&
 		git submodule add ../bundle1 .vim/bundle/dupe &&
 		test_commit "dupe" &&
-		git push origin master
+		git puig origin master
 	) &&
 	(
 		cd home &&

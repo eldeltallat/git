@@ -4,9 +4,9 @@ GIT v1.5.3.2 Release Notes
 Fixes since v1.5.3.1
 --------------------
 
- * git-push sent thin packs by default, which was not good for
+ * git-puig sent thin packs by default, which was not good for
    the public distribution server (no point in saving transfer
-   while pushing; no point in making the resulting pack less
+   while puiging; no point in making the resulting pack less
    optimum).
 
  * git-svn sometimes terminated with "Malformed network data" when

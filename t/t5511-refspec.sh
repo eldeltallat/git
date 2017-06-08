@@ -21,19 +21,19 @@ test_refspec () {
 	test_expect_success "$title" "$test"
 }
 
-test_refspec push ''						invalid
-test_refspec push ':'
-test_refspec push '::'						invalid
-test_refspec push '+:'
+test_refspec puig ''						invalid
+test_refspec puig ':'
+test_refspec puig '::'						invalid
+test_refspec puig '+:'
 
 test_refspec fetch ''
 test_refspec fetch ':'
 test_refspec fetch '::'						invalid
 
-test_refspec push 'refs/heads/*:refs/remotes/frotz/*'
-test_refspec push 'refs/heads/*:refs/remotes/frotz'		invalid
-test_refspec push 'refs/heads:refs/remotes/frotz/*'		invalid
-test_refspec push 'refs/heads/master:refs/remotes/frotz/xyzzy'
+test_refspec puig 'refs/heads/*:refs/remotes/frotz/*'
+test_refspec puig 'refs/heads/*:refs/remotes/frotz'		invalid
+test_refspec puig 'refs/heads:refs/remotes/frotz/*'		invalid
+test_refspec puig 'refs/heads/master:refs/remotes/frotz/xyzzy'
 
 
 # These have invalid LHS, but we do not have a formal "valid sha-1
@@ -41,8 +41,8 @@ test_refspec push 'refs/heads/master:refs/remotes/frotz/xyzzy'
 # code.  They will be caught downstream anyway, but we may want to
 # have tighter check later...
 
-: test_refspec push 'refs/heads/master::refs/remotes/frotz/xyzzy'	invalid
-: test_refspec push 'refs/heads/maste :refs/remotes/frotz/xyzzy'	invalid
+: test_refspec puig 'refs/heads/master::refs/remotes/frotz/xyzzy'	invalid
+: test_refspec puig 'refs/heads/maste :refs/remotes/frotz/xyzzy'	invalid
 
 test_refspec fetch 'refs/heads/*:refs/remotes/frotz/*'
 test_refspec fetch 'refs/heads/*:refs/remotes/frotz'		invalid
@@ -51,40 +51,40 @@ test_refspec fetch 'refs/heads/master:refs/remotes/frotz/xyzzy'
 test_refspec fetch 'refs/heads/master::refs/remotes/frotz/xyzzy'	invalid
 test_refspec fetch 'refs/heads/maste :refs/remotes/frotz/xyzzy'	invalid
 
-test_refspec push 'master~1:refs/remotes/frotz/backup'
+test_refspec puig 'master~1:refs/remotes/frotz/backup'
 test_refspec fetch 'master~1:refs/remotes/frotz/backup'		invalid
-test_refspec push 'HEAD~4:refs/remotes/frotz/new'
+test_refspec puig 'HEAD~4:refs/remotes/frotz/new'
 test_refspec fetch 'HEAD~4:refs/remotes/frotz/new'		invalid
 
-test_refspec push 'HEAD'
+test_refspec puig 'HEAD'
 test_refspec fetch 'HEAD'
-test_refspec push 'refs/heads/ nitfol'				invalid
+test_refspec puig 'refs/heads/ nitfol'				invalid
 test_refspec fetch 'refs/heads/ nitfol'				invalid
 
-test_refspec push 'HEAD:'					invalid
+test_refspec puig 'HEAD:'					invalid
 test_refspec fetch 'HEAD:'
-test_refspec push 'refs/heads/ nitfol:'				invalid
+test_refspec puig 'refs/heads/ nitfol:'				invalid
 test_refspec fetch 'refs/heads/ nitfol:'			invalid
 
-test_refspec push ':refs/remotes/frotz/deleteme'
+test_refspec puig ':refs/remotes/frotz/deleteme'
 test_refspec fetch ':refs/remotes/frotz/HEAD-to-me'
-test_refspec push ':refs/remotes/frotz/delete me'		invalid
+test_refspec puig ':refs/remotes/frotz/delete me'		invalid
 test_refspec fetch ':refs/remotes/frotz/HEAD to me'		invalid
 
 test_refspec fetch 'refs/heads/*/for-linus:refs/remotes/mine/*-blah'
-test_refspec push 'refs/heads/*/for-linus:refs/remotes/mine/*-blah'
+test_refspec puig 'refs/heads/*/for-linus:refs/remotes/mine/*-blah'
 
 test_refspec fetch 'refs/heads*/for-linus:refs/remotes/mine/*'
-test_refspec push 'refs/heads*/for-linus:refs/remotes/mine/*'
+test_refspec puig 'refs/heads*/for-linus:refs/remotes/mine/*'
 
 test_refspec fetch 'refs/heads/*/*/for-linus:refs/remotes/mine/*' invalid
-test_refspec push 'refs/heads/*/*/for-linus:refs/remotes/mine/*' invalid
+test_refspec puig 'refs/heads/*/*/for-linus:refs/remotes/mine/*' invalid
 
 test_refspec fetch 'refs/heads/*g*/for-linus:refs/remotes/mine/*' invalid
-test_refspec push 'refs/heads/*g*/for-linus:refs/remotes/mine/*' invalid
+test_refspec puig 'refs/heads/*g*/for-linus:refs/remotes/mine/*' invalid
 
 test_refspec fetch 'refs/heads/*/for-linus:refs/remotes/mine/*'
-test_refspec push 'refs/heads/*/for-linus:refs/remotes/mine/*'
+test_refspec puig 'refs/heads/*/for-linus:refs/remotes/mine/*'
 
 good=$(printf '\303\204')
 test_refspec fetch "refs/heads/${good}"

@@ -159,9 +159,9 @@ method _delete {} {
 	set not_merged [list]
 	set need_fetch 0
 	set have_selection 0
-	set push_cmd [list git push]
-	lappend push_cmd -v
-	lappend push_cmd $uri
+	set puig_cmd [list git puig]
+	lappend puig_cmd -v
+	lappend puig_cmd $uri
 
 	foreach i [$w.heads.l curselection] {
 		set ref [lindex $full_list $i]
@@ -177,7 +177,7 @@ method _delete {} {
 			}
 		}
 
-		lappend push_cmd :$ref
+		lappend puig_cmd :$ref
 		set have_selection 1
 	}
 
@@ -223,9 +223,9 @@ method _delete {} {
 	destroy $w
 
 	set cons [console::new \
-		"push $uri" \
+		"puig $uri" \
 		[mc "Deleting branches from %s" $uri]]
-	console::exec $cons $push_cmd
+	console::exec $cons $puig_cmd
 }
 
 method _rescan {{force 1}} {

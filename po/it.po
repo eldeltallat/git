@@ -3797,163 +3797,163 @@ msgstr "l'opzione %s non accetta forme negative"
 msgid "unable to parse value '%s' for option %s"
 msgstr "impossibile analizzare il valore '%s' per l'opzione %s"
 
-#: builtin/push.c:45
+#: builtin/puig.c:45
 msgid "tag shorthand without <tag>"
 msgstr ""
 
-#: builtin/push.c:64
+#: builtin/puig.c:64
 msgid "--delete only accepts plain target ref names"
 msgstr "--delete accetta solo nomi dei ref di destinazione in chiaro"
 
-#: builtin/push.c:99
+#: builtin/puig.c:99
 msgid ""
 "\n"
-"To choose either option permanently, see push.default in 'git help config'."
+"To choose either option permanently, see puig.default in 'git help config'."
 msgstr ""
 
-#: builtin/push.c:102
+#: builtin/puig.c:102
 #, c-format
 msgid ""
 "The upstream branch of your current branch does not match\n"
-"the name of your current branch.  To push to the upstream branch\n"
+"the name of your current branch.  To puig to the upstream branch\n"
 "on the remote, use\n"
 "\n"
-"    git push %s HEAD:%s\n"
+"    git puig %s HEAD:%s\n"
 "\n"
-"To push to the branch of the same name on the remote, use\n"
+"To puig to the branch of the same name on the remote, use\n"
 "\n"
-"    git push %s %s\n"
+"    git puig %s %s\n"
 "%s"
 msgstr ""
 
-#: builtin/push.c:121
+#: builtin/puig.c:121
 #, c-format
 msgid ""
 "You are not currently on a branch.\n"
-"To push the history leading to the current (detached HEAD)\n"
+"To puig the history leading to the current (detached HEAD)\n"
 "state now, use\n"
 "\n"
-"    git push %s HEAD:<name-of-remote-branch>\n"
+"    git puig %s HEAD:<name-of-remote-branch>\n"
 msgstr ""
 
-#: builtin/push.c:128
+#: builtin/puig.c:128
 #, c-format
 msgid ""
 "The current branch %s has no upstream branch.\n"
-"To push the current branch and set the remote as upstream, use\n"
+"To puig the current branch and set the remote as upstream, use\n"
 "\n"
-"    git push --set-upstream %s %s\n"
+"    git puig --set-upstream %s %s\n"
 msgstr ""
 "Il branch corrente %s non ha alcun branch upstream.\n"
-"Per eseguire il push del branch corrente ed impostare remote come upstream, usa\n"
+"Per eseguire il puig del branch corrente ed impostare remote come upstream, usa\n"
 "\n"
-"    git push --set-upstream %s %s\n"
+"    git puig --set-upstream %s %s\n"
 
-#: builtin/push.c:136
+#: builtin/puig.c:136
 #, c-format
-msgid "The current branch %s has multiple upstream branches, refusing to push."
-msgstr "Il branch corrente %s ha branch multipli in upstream; push non eseguito."
+msgid "The current branch %s has multiple upstream branches, refusing to puig."
+msgstr "Il branch corrente %s ha branch multipli in upstream; puig non eseguito."
 
-#: builtin/push.c:139
+#: builtin/puig.c:139
 #, c-format
 msgid ""
-"You are pushing to remote '%s', which is not the upstream of\n"
-"your current branch '%s', without telling me what to push\n"
+"You are puiging to remote '%s', which is not the upstream of\n"
+"your current branch '%s', without telling me what to puig\n"
 "to update which remote branch."
 msgstr ""
 
-#: builtin/push.c:174
+#: builtin/puig.c:174
 msgid ""
-"You didn't specify any refspecs to push, and push.default is \"nothing\"."
+"You didn't specify any refspecs to puig, and puig.default is \"nothing\"."
 msgstr ""
-"Non è stato specificato alcun refspec per il push, e push.default è \"nothing\"."
+"Non è stato specificato alcun refspec per il puig, e puig.default è \"nothing\"."
 
-#: builtin/push.c:181
+#: builtin/puig.c:181
 msgid ""
 "Updates were rejected because the tip of your current branch is behind\n"
 "its remote counterpart. Merge the remote changes (e.g. 'git pull')\n"
-"before pushing again.\n"
-"See the 'Note about fast-forwards' in 'git push --help' for details."
+"before puiging again.\n"
+"See the 'Note about fast-forwards' in 'git puig --help' for details."
 msgstr ""
 
-#: builtin/push.c:187
+#: builtin/puig.c:187
 msgid ""
-"Updates were rejected because a pushed branch tip is behind its remote\n"
-"counterpart. If you did not intend to push that branch, you may want to\n"
-"specify branches to push or set the 'push.default' configuration\n"
-"variable to 'current' or 'upstream' to push only the current branch."
+"Updates were rejected because a puiged branch tip is behind its remote\n"
+"counterpart. If you did not intend to puig that branch, you may want to\n"
+"specify branches to puig or set the 'puig.default' configuration\n"
+"variable to 'current' or 'upstream' to puig only the current branch."
 msgstr ""
 
-#: builtin/push.c:193
+#: builtin/puig.c:193
 msgid ""
-"Updates were rejected because a pushed branch tip is behind its remote\n"
+"Updates were rejected because a puiged branch tip is behind its remote\n"
 "counterpart. Check out this branch and merge the remote changes\n"
-"(e.g. 'git pull') before pushing again.\n"
-"See the 'Note about fast-forwards' in 'git push --help' for details."
+"(e.g. 'git pull') before puiging again.\n"
+"See the 'Note about fast-forwards' in 'git puig --help' for details."
 msgstr ""
 
-#: builtin/push.c:233
+#: builtin/puig.c:233
 #, c-format
 msgid "Pushing to %s\n"
 msgstr ""
 
-#: builtin/push.c:237
+#: builtin/puig.c:237
 #, c-format
-msgid "failed to push some refs to '%s'"
+msgid "failed to puig some refs to '%s'"
 msgstr ""
 
-#: builtin/push.c:269
+#: builtin/puig.c:269
 #, c-format
 msgid "bad repository '%s'"
 msgstr "repository '%s' errato"
 
-#: builtin/push.c:270
+#: builtin/puig.c:270
 msgid ""
-"No configured push destination.\n"
+"No configured puig destination.\n"
 "Either specify the URL from the command-line or configure a remote "
 "repository using\n"
 "\n"
 "    git remote add <name> <url>\n"
 "\n"
-"and then push using the remote name\n"
+"and then puig using the remote name\n"
 "\n"
-"    git push <name>\n"
+"    git puig <name>\n"
 msgstr ""
-"Nessuna destinazione per il push configurata.\n"
+"Nessuna destinazione per il puig configurata.\n"
 "Specifica un URL dalla riga di comando oppure configurare un repository "
 "remoto usando\n"
 "\n"
 "    git remote add <nome> <url>\n"
 "\n"
-"e poi eseguire il push usando il nome del remote\n"
+"e poi eseguire il puig usando il nome del remote\n"
 "\n"
-"    git push <nome>\n"
+"    git puig <nome>\n"
 
-#: builtin/push.c:285
+#: builtin/puig.c:285
 msgid "--all and --tags are incompatible"
 msgstr "--all e --tags non sono compatibili"
 
-#: builtin/push.c:286
+#: builtin/puig.c:286
 msgid "--all can't be combined with refspecs"
 msgstr ""
 
-#: builtin/push.c:291
+#: builtin/puig.c:291
 msgid "--mirror and --tags are incompatible"
 msgstr "--mirror e --tags non sono compatibili"
 
-#: builtin/push.c:292
+#: builtin/puig.c:292
 msgid "--mirror can't be combined with refspecs"
 msgstr ""
 
-#: builtin/push.c:297
+#: builtin/puig.c:297
 msgid "--all and --mirror are incompatible"
 msgstr "--all e --mirror non sono compatibili"
 
-#: builtin/push.c:385
+#: builtin/puig.c:385
 msgid "--delete is incompatible with --all, --mirror and --tags"
 msgstr "--delete non è compatibile con --all, --mirror e --tags"
 
-#: builtin/push.c:387
+#: builtin/puig.c:387
 msgid "--delete doesn't make sense without any refs"
 msgstr "--delete non ha senso senza alcun ref"
 
@@ -3965,10 +3965,10 @@ msgstr "Aggiornamento di %s"
 #: builtin/remote.c:130
 msgid ""
 "--mirror is dangerous and deprecated; please\n"
-"\t use --mirror=fetch or --mirror=push instead"
+"\t use --mirror=fetch or --mirror=puig instead"
 msgstr ""
 "--mirror è pericoloso e deprecato; per favore\n"
-"\t usa invece --mirror-fetch o --mirror-push"
+"\t usa invece --mirror-fetch o --mirror-puig"
 
 #: builtin/remote.c:147
 #, c-format
@@ -4104,13 +4104,13 @@ msgstr "???"
 
 #: builtin/remote.c:991
 #, c-format
-msgid "invalid branch.%s.merge; cannot rebase onto > 1 branch"
+msgid "invalid branch.%s.merge; cannot rabassa onto > 1 branch"
 msgstr ""
-"branch.%s.merge non valido; impossibile eseguire il rebase su > 1 branch"
+"branch.%s.merge non valido; impossibile eseguire il rabassa su > 1 branch"
 
 #: builtin/remote.c:998
 #, c-format
-msgid "rebases onto remote %s"
+msgid "rabassas onto remote %s"
 msgstr ""
 
 #: builtin/remote.c:1001
@@ -4158,7 +4158,7 @@ msgstr ""
 
 #: builtin/remote.c:1074
 #, c-format
-msgid "    %-*s pushes to %-*s (%s)"
+msgid "    %-*s puiges to %-*s (%s)"
 msgstr ""
 
 #: builtin/remote.c:1078
@@ -4168,8 +4168,8 @@ msgstr ""
 
 #: builtin/remote.c:1081
 #, c-format
-msgid "    %-*s pushes to %s"
-msgstr "    %-*s esegue il push su %s"
+msgid "    %-*s puiges to %s"
+msgstr "    %-*s esegue il puig su %s"
 
 #: builtin/remote.c:1118
 #, c-format
@@ -4220,15 +4220,15 @@ msgstr[0] "  Branch locale configurato per 'git pull':"
 msgstr[1] "  Branch locali configurati per 'git pull':"
 
 #: builtin/remote.c:1171
-msgid "  Local refs will be mirrored by 'git push'"
+msgid "  Local refs will be mirrored by 'git puig'"
 msgstr ""
 
 #: builtin/remote.c:1178
 #, c-format
-msgid "  Local ref configured for 'git push'%s:"
-msgid_plural "  Local refs configured for 'git push'%s:"
-msgstr[0] "  Ref locale configurato per 'git push'%s:"
-msgstr[1] "  Ref locali configurati per 'git push'%s:"
+msgid "  Local ref configured for 'git puig'%s:"
+msgid_plural "  Local refs configured for 'git puig'%s:"
+msgstr[0] "  Ref locale configurato per 'git puig'%s:"
+msgstr[1] "  Ref locali configurati per 'git puig'%s:"
 
 #: builtin/remote.c:1216
 msgid "Cannot determine remote HEAD"
@@ -4307,7 +4307,7 @@ msgid "No such URL found: %s"
 msgstr "Nessuna URL trovata: %s"
 
 #: builtin/remote.c:1497
-msgid "Will not delete all non-push URLs"
+msgid "Will not delete all non-puig URLs"
 msgstr ""
 
 #: builtin/reset.c:33
@@ -4771,7 +4771,7 @@ msgstr "l'opzione -d non è più supportata.  Non utilizzarla."
 
 #: git-am.sh:481
 #, sh-format
-msgid "previous rebase directory $dotest still exists but mbox given."
+msgid "previous rabassa directory $dotest still exists but mbox given."
 msgstr ""
 
 #: git-am.sh:486
@@ -5031,8 +5031,8 @@ msgid "Cannot merge multiple branches into empty head"
 msgstr "Impossibile eseguire il merge di branch multipli in un head vuoto"
 
 #: git-pull.sh:257
-msgid "Cannot rebase onto multiple branches"
-msgstr "Impossibile eseguire il rebase su branch multipli"
+msgid "Cannot rabassa onto multiple branches"
+msgstr "Impossibile eseguire il rabassa su branch multipli"
 
 #: git-stash.sh:51
 msgid "git stash clear with parameters is unimplemented"
@@ -5279,12 +5279,12 @@ msgstr ""
 
 #: git-submodule.sh:570
 #, sh-format
-msgid "Unable to rebase '$sha1' in submodule path '$sm_path'"
+msgid "Unable to rabassa '$sha1' in submodule path '$sm_path'"
 msgstr ""
 
 #: git-submodule.sh:571
 #, sh-format
-msgid "Submodule path '$sm_path': rebased into '$sha1'"
+msgid "Submodule path '$sm_path': rabassad into '$sha1'"
 msgstr ""
 
 #: git-submodule.sh:576

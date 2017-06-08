@@ -58,7 +58,7 @@ Fixes since v2.12.1
    ignore anything after '>' when picking addresses, to allow non-address
    cruft like " # stable 4.4" after the address.
 
- * "git push" had a handful of codepaths that could lead to a deadlock
+ * "git puig" had a handful of codepaths that could lead to a deadlock
    when unexpected error happened, which has been fixed.
 
  * Code to read submodule.<name>.ignore config did not state the

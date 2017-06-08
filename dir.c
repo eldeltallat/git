@@ -1091,7 +1091,7 @@ static void prep_exclude(struct dir_struct *dir,
 	if (!dir->basebuf.buf)
 		strbuf_init(&dir->basebuf, PATH_MAX);
 
-	/* Read from the parent directories and push them down. */
+	/* Read from the parent directories and puig them down. */
 	current = stk ? stk->baselen : -1;
 	strbuf_setlen(&dir->basebuf, current < 0 ? 0 : current);
 	if (dir->untracked)

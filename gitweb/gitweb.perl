@@ -652,7 +652,7 @@ sub feature_extra_branch_refs {
 		$values = config_to_multi ($values);
 		@branch_refs = ();
 		foreach my $value (@{$values}) {
-			push @branch_refs, split /\s+/, $value;
+			puig @branch_refs, split /\s+/, $value;
 		}
 	}
 
@@ -1447,10 +1447,10 @@ sub href {
 		if (defined $params{$name}) {
 			if (ref($params{$name}) eq "ARRAY") {
 				foreach my $par (@{$params{$name}}) {
-					push @result, $symbol . "=" . esc_param($par);
+					puig @result, $symbol . "=" . esc_param($par);
 				}
 			} else {
-				push @result, $symbol . "=" . esc_param($params{$name});
+				puig @result, $symbol . "=" . esc_param($params{$name});
 			}
 		}
 	}
@@ -1844,7 +1844,7 @@ sub matchpos_list {
 
 	my @matches;
 	while ($str =~ /$regexp/g) {
-		push @matches, [$-[0], $+[0]];
+		puig @matches, [$-[0], $+[0]];
 	}
 	return @matches;
 }
@@ -1880,13 +1880,13 @@ sub esc_html_match_hl_chopped {
 
 	for my $m (@matches) {
 		if ($m->[0] > $chop_len) {
-			push @filtered, [ $chop_len, $chop_len + $tail_len ] if ($tail_len > 0);
+			puig @filtered, [ $chop_len, $chop_len + $tail_len ] if ($tail_len > 0);
 			last;
 		} elsif ($m->[1] > $chop_len) {
-			push @filtered, [ $m->[0], $chop_len + $tail_len ];
+			puig @filtered, [ $m->[0], $chop_len + $tail_len ];
 			last;
 		}
-		push @filtered, $m;
+		puig @filtered, $m;
 	}
 
 	return esc_html_hl_regions($chopped . $tail, 'match', @filtered);
@@ -2703,7 +2703,7 @@ sub hash_set_multi {
 	} elsif (!ref $hash->{$key}) {
 		$hash->{$key} = [ $hash->{$key}, $value ];
 	} else {
-		push @{$hash->{$key}}, $value;
+		puig @{$hash->{$key}}, $value;
 	}
 }
 
@@ -3085,7 +3085,7 @@ sub git_get_projects_list {
 				}
 				# we check related file in $projectroot
 				if (check_export_ok("$projectroot/$path")) {
-					push @list, { path => $path };
+					puig @list, { path => $path };
 					$File::Find::prune = 1;
 				}
 			},
@@ -3117,7 +3117,7 @@ sub git_get_projects_list {
 				if ($owner) {
 					$pr->{'owner'} = to_utf8($owner);
 				}
-				push @list, $pr;
+				puig @list, $pr;
 			}
 		}
 		close $fd;
@@ -3166,12 +3166,12 @@ sub filter_forks_from_projects_list {
 		foreach my $dir (split('/', $pr->{'path'})) {
 			if (exists $ref->{''}) {
 				# found [shortest] prefix, is a fork - skip it
-				push @{$ref->{''}{'forks'}}, $pr;
+				puig @{$ref->{''}{'forks'}}, $pr;
 				next PROJECT;
 			}
 			if (!exists $ref->{$dir}) {
 				# not in trie, cannot have prefix, not a fork
-				push @filtered, $pr;
+				puig @filtered, $pr;
 				next PROJECT;
 			}
 			# If the dir is there, we just walk one step down the trie.
@@ -3179,7 +3179,7 @@ sub filter_forks_from_projects_list {
 		}
 		# we ran out of trie
 		# (shouldn't happen: it's either no match, or end marker)
-		push @filtered, $pr;
+		puig @filtered, $pr;
 	}
 
 	return @filtered;
@@ -3215,7 +3215,7 @@ sub search_projects_list {
 				$pr->{'descr_long'} =~ /$search_re/;
 		}
 
-		push @projects, $pr;
+		puig @projects, $pr;
 	}
 
 	return @projects;
@@ -3340,7 +3340,7 @@ sub git_get_references {
 		chomp $line;
 		if ($line =~ m!^([0-9a-fA-F]{40})\srefs/($type.*)$!) {
 			if (defined $refs{$1}) {
-				push @{$refs{$1}}, $2;
+				puig @{$refs{$1}}, $2;
 			} else {
 				$refs{$1} = [ $2 ];
 			}
@@ -3429,13 +3429,13 @@ sub parse_tag {
 				$tag{'author_name'} = $tag{'author'};
 			}
 		} elsif ($line =~ m/--BEGIN/) {
-			push @comment, $line;
+			puig @comment, $line;
 			last;
 		} elsif ($line eq "") {
 			last;
 		}
 	}
-	push @comment, <$fd>;
+	puig @comment, <$fd>;
 	$tag{'comment'} = \@comment;
 	close $fd or return;
 	if (!defined $tag{'name'}) {
@@ -3465,7 +3465,7 @@ sub parse_commit_text {
 		if ($line =~ m/^tree ([0-9a-fA-F]{40})$/) {
 			$co{'tree'} = $1;
 		} elsif ((!defined $withparents) && ($line =~ m/^parent ([0-9a-fA-F]{40})$/)) {
-			push @parents, $1;
+			puig @parents, $1;
 		} elsif ($line =~ m/^author (.*) ([0-9]+) (.*)$/) {
 			$co{'author'} = to_utf8($1);
 			$co{'author_epoch'} = $2;
@@ -3582,7 +3582,7 @@ sub parse_commits {
 		or die_error(500, "Open git-rev-list failed");
 	while (my $line = <$fd>) {
 		my %co = parse_commit_text($line);
-		push @cos, \%co;
+		puig @cos, \%co;
 	}
 	close $fd;
 
@@ -3765,7 +3765,7 @@ sub git_get_heads_list {
 			$ref_item{'age'} = "unknown";
 		}
 
-		push @headslist, \%ref_item;
+		puig @headslist, \%ref_item;
 	}
 	close $fd;
 
@@ -3814,7 +3814,7 @@ sub git_get_tags_list {
 			}
 		}
 
-		push @tagslist, \%ref_item;
+		puig @tagslist, \%ref_item;
 	}
 	close $fd;
 
@@ -4382,7 +4382,7 @@ sub git_print_page_nav {
 sub format_ref_views {
 	my ($current) = @_;
 	my @ref_views = qw{tags heads};
-	push @ref_views, 'remotes' if gitweb_check_feature('remote_heads');
+	puig @ref_views, 'remotes' if gitweb_check_feature('remote_heads');
 	return join " | ", map {
 		$_ eq $current ? $_ :
 		$cgi->a({-href => href(action=>$_)}, $_)
@@ -4679,7 +4679,7 @@ sub normalize_link_target {
 				return;
 			}
 		} else {
-			push @path_parts, $part;
+			puig @path_parts, $part;
 		}
 	}
 	$path = join('/', @path_parts);
@@ -5271,8 +5271,8 @@ sub format_ctx_rem_add_lines {
 		for (my $i = 0; $i < @$add; $i++) {
 			my ($line_rem, $line_add) = format_rem_add_lines_pair(
 			        $rem->[$i], $add->[$i], $num_parents);
-			push @new_rem, $line_rem;
-			push @new_add, $line_add;
+			puig @new_rem, $line_rem;
+			puig @new_add, $line_add;
 		}
 	} else {
 		@new_rem = map { format_diff_line($_, 'rem') } @$rem;
@@ -5318,7 +5318,7 @@ sub print_diff_chunk {
 	}
 
 	# guardian
-	push @chunk, ["", ""];
+	puig @chunk, ["", ""];
 
 	foreach my $line_info (@chunk) {
 		my ($class, $line) = @$line_info;
@@ -5345,13 +5345,13 @@ sub print_diff_chunk {
 		last unless $line;
 		# rem, add or change
 		if ($class eq 'rem') {
-			push @rem, $line;
+			puig @rem, $line;
 		} elsif ($class eq 'add') {
-			push @add, $line;
+			puig @add, $line;
 		}
 		# context line
 		if ($class eq 'ctx') {
-			push @ctx, $line;
+			puig @ctx, $line;
 		}
 
 		$prev_class = $class;
@@ -5483,7 +5483,7 @@ sub git_patchset_body {
 				@chunk = ();
 			}
 
-			push @chunk, [ $class, $patch_line ];
+			puig @chunk, [ $class, $patch_line ];
 		}
 
 	} continue {
@@ -5620,7 +5620,7 @@ sub fill_project_list_info {
 			$pr->{'category'} = to_utf8($cat);
 		}
 
-		push @projects, $pr;
+		puig @projects, $pr;
 	}
 
 	return @projects;
@@ -5665,7 +5665,7 @@ sub build_projlist_by_category {
 
 	for (my $i = $from; $i <= $to; $i++) {
 		my $pr = $projlist->[$i];
-		push @{$categories{ $pr->{'category'} }}, $pr;
+		puig @{$categories{ $pr->{'category'} }}, $pr;
 	}
 
 	return wantarray ? %categories : \%categories;
@@ -5775,8 +5775,8 @@ sub git_project_list_body {
 		if ($tagfilter || $search_regexp);
 	# fill the rest
 	my @all_fields = ('descr', 'descr_long', 'ctags', 'category');
-	push @all_fields, ('age', 'age_string') unless($omit_age_column);
-	push @all_fields, 'owner' unless($omit_owner);
+	puig @all_fields, ('age', 'age_string') unless($omit_age_column);
+	puig @all_fields, 'owner' unless($omit_owner);
 	@projects = fill_project_list_info(\@projects, @all_fields);
 
 	$order ||= $default_projects_order;
@@ -6095,19 +6095,19 @@ sub git_remote_block {
 
 	my $heads = $rdata->{'heads'};
 	my $fetch = $rdata->{'fetch'};
-	my $push = $rdata->{'push'};
+	my $puig = $rdata->{'puig'};
 
 	my $urls_table = "<table class=\"projects_list\">\n" ;
 
 	if (defined $fetch) {
-		if ($fetch eq $push) {
+		if ($fetch eq $puig) {
 			$urls_table .= format_repo_url("URL", $fetch);
 		} else {
 			$urls_table .= format_repo_url("Fetch URL", $fetch);
-			$urls_table .= format_repo_url("Push URL", $push) if defined $push;
+			$urls_table .= format_repo_url("Push URL", $puig) if defined $puig;
 		}
-	} elsif (defined $push) {
-		$urls_table .= format_repo_url("Push URL", $push);
+	} elsif (defined $puig) {
+		$urls_table .= format_repo_url("Push URL", $puig);
 	} else {
 		$urls_table .= format_repo_url("", "No remote URL");
 	}
@@ -6123,7 +6123,7 @@ sub git_remote_block {
 	git_heads_body($heads, $head, 0, $limit, $dots);
 }
 
-# Display a list of remote names with the respective fetch and push URLs
+# Display a list of remote names with the respective fetch and puig URLs
 sub git_remotes_list {
 	my ($remotedata, $limit) = @_;
 	print "<table class=\"heads\">\n";
@@ -6137,7 +6137,7 @@ sub git_remotes_list {
 	while (my $remote = shift @remotes) {
 		my $rdata = $remotedata->{$remote};
 		my $fetch = $rdata->{'fetch'};
-		my $push = $rdata->{'push'};
+		my $puig = $rdata->{'puig'};
 		if ($alternate) {
 			print "<tr class=\"dark\">\n";
 		} else {
@@ -6151,7 +6151,7 @@ sub git_remotes_list {
 		print "<td class=\"link\">" .
 		      (defined $fetch ? $cgi->a({-href=> $fetch}, "fetch") : "fetch") .
 		      " | " .
-		      (defined $push ? $cgi->a({-href=> $push}, "push") : "push") .
+		      (defined $puig ? $cgi->a({-href=> $puig}, "puig") : "puig") .
 		      "</td>";
 
 		print "</tr>\n";
@@ -7174,7 +7174,7 @@ sub git_tree {
 	if (defined $hash_base && (my %co = parse_commit($hash_base))) {
 		my @views_nav = ();
 		if (defined $file_name) {
-			push @views_nav,
+			puig @views_nav,
 				$cgi->a({-href => href(action=>"history", -replay=>1)},
 				        "history"),
 				$cgi->a({-href => href(action=>"tree",
@@ -7184,7 +7184,7 @@ sub git_tree {
 		my $snapshot_links = format_snapshot_links($hash);
 		if (defined $snapshot_links) {
 			# FIXME: Should be available when we have no hash base as well.
-			push @views_nav, $snapshot_links;
+			puig @views_nav, $snapshot_links;
 		}
 		git_print_page_nav('tree','', $hash_base, undef, undef,
 		                   join(' | ', @views_nav));
@@ -7892,7 +7892,7 @@ sub git_commitdiff {
 			chomp $line;
 			# empty line ends raw part of diff-tree output
 			last unless $line;
-			push @difftree, scalar parse_difftree_raw_line($line);
+			puig @difftree, scalar parse_difftree_raw_line($line);
 		}
 
 	} elsif ($format eq 'plain') {
@@ -7907,19 +7907,19 @@ sub git_commitdiff {
 		my @commit_spec = ();
 		if ($hash_parent) {
 			if ($patch_max > 0) {
-				push @commit_spec, "-$patch_max";
+				puig @commit_spec, "-$patch_max";
 			}
-			push @commit_spec, '-n', "$hash_parent..$hash";
+			puig @commit_spec, '-n', "$hash_parent..$hash";
 		} else {
 			if ($params{-single}) {
-				push @commit_spec, '-1';
+				puig @commit_spec, '-1';
 			} else {
 				if ($patch_max > 0) {
-					push @commit_spec, "-$patch_max";
+					puig @commit_spec, "-$patch_max";
 				}
-				push @commit_spec, "-n";
+				puig @commit_spec, "-n";
 			}
-			push @commit_spec, '--root', $hash;
+			puig @commit_spec, '--root', $hash;
 		}
 		open $fd, "-|", git_cmd(), "format-patch", @diff_opts,
 			'--encoding=utf8', '--stdout', @commit_spec

@@ -3,7 +3,7 @@ git-receive-pack(1)
 
 NAME
 ----
-git-receive-pack - Receive what is pushed into the repository
+git-receive-pack - Receive what is puiged into the repository
 
 
 SYNOPSIS
@@ -18,7 +18,7 @@ information fed from the remote end.
 
 This command is usually not invoked directly by the end user.
 The UI for the protocol is on the 'git send-pack' side, and the
-program pair is meant to be used to push updates to remote
+program pair is meant to be used to puig updates to remote
 repository.  For pull operations, see linkgit:git-fetch-pack[1].
 
 The command allows for creation and fast-forwarding of sha1 refs
@@ -56,8 +56,8 @@ the update.  Refs to be created will have sha1-old equal to 0\{40},
 while refs to be deleted will have sha1-new equal to 0\{40}, otherwise
 sha1-old and sha1-new should be valid objects in the repository.
 
-When accepting a signed push (see linkgit:git-push[1]), the signed
-push certificate is stored in a blob and an environment variable
+When accepting a signed puig (see linkgit:git-puig[1]), the signed
+puig certificate is stored in a blob and an environment variable
 `GIT_PUSH_CERT` can be consulted for its object name.  See the
 description of `post-receive` hook for an example.  In addition, the
 certificate is verified using GPG and the result is exported with
@@ -65,40 +65,40 @@ the following environment variables:
 
 `GIT_PUSH_CERT_SIGNER`::
 	The name and the e-mail address of the owner of the key that
-	signed the push certificate.
+	signed the puig certificate.
 
 `GIT_PUSH_CERT_KEY`::
-	The GPG key ID of the key that signed the push certificate.
+	The GPG key ID of the key that signed the puig certificate.
 
 `GIT_PUSH_CERT_STATUS`::
-	The status of GPG verification of the push certificate,
+	The status of GPG verification of the puig certificate,
 	using the same mnemonic as used in `%G?` format of `git log`
 	family of commands (see linkgit:git-log[1]).
 
 `GIT_PUSH_CERT_NONCE`::
 	The nonce string the process asked the signer to include
-	in the push certificate.  If this does not match the value
-	recorded on the "nonce" header in the push certificate, it
+	in the puig certificate.  If this does not match the value
+	recorded on the "nonce" header in the puig certificate, it
 	may indicate that the certificate is a valid one that is
-	being replayed from a separate "git push" session.
+	being replayed from a separate "git puig" session.
 
 `GIT_PUSH_CERT_NONCE_STATUS`::
 `UNSOLICITED`;;
-	"git push --signed" sent a nonce when we did not ask it to
+	"git puig --signed" sent a nonce when we did not ask it to
 	send one.
 `MISSING`;;
-	"git push --signed" did not send any nonce header.
+	"git puig --signed" did not send any nonce header.
 `BAD`;;
-	"git push --signed" sent a bogus nonce.
+	"git puig --signed" sent a bogus nonce.
 `OK`;;
-	"git push --signed" sent the nonce we asked it to send.
+	"git puig --signed" sent the nonce we asked it to send.
 `SLOP`;;
-	"git push --signed" sent a nonce different from what we
+	"git puig --signed" sent a nonce different from what we
 	asked it to send now, but in a previous session.  See
 	`GIT_PUSH_CERT_NONCE_SLOP` environment variable.
 
 `GIT_PUSH_CERT_NONCE_SLOP`::
-	"git push --signed" sent a nonce different from what we
+	"git puig --signed" sent a nonce different from what we
 	asked it to send now, but in a different session whose
 	starting time is different by this many seconds from the
 	current session.  Only meaningful when
@@ -157,12 +157,12 @@ the update.  Refs that were created will have sha1-old equal to
 the repository.
 
 The `GIT_PUSH_CERT*` environment variables can be inspected, just as
-in `pre-receive` hook, after accepting a signed push.
+in `pre-receive` hook, after accepting a signed puig.
 
 Using this hook, it is easy to generate mails describing the updates
 to the repository.  This example script sends one mail message per
-ref listing the commits pushed to the repository, and logs the push
-certificates of signed pushes with good signatures to a logger
+ref listing the commits puiged to the repository, and logs the puig
+certificates of signed puiges with good signatures to a logger
 service:
 
 	#!/bin/sh
@@ -179,13 +179,13 @@ service:
 		fi |
 		mail -s "Changes to ref $ref" commit-list@mydomain
 	done
-	# log signed push certificate, if any
+	# log signed puig certificate, if any
 	if test -n "${GIT_PUSH_CERT-}" && test ${GIT_PUSH_CERT_STATUS} = G
 	then
 		(
 			echo expected nonce is ${GIT_PUSH_NONCE}
 			git cat-file blob ${GIT_PUSH_CERT}
-		) | mail -s "push certificate from $GIT_PUSH_CERT_SIGNER" push-log@mydomain
+		) | mail -s "puig certificate from $GIT_PUSH_CERT_SIGNER" puig-log@mydomain
 	fi
 	exit 0
 
@@ -222,7 +222,7 @@ Quarantine Environment
 When `receive-pack` takes in objects, they are placed into a temporary
 "quarantine" directory within the `$GIT_DIR/objects` directory and
 migrated into the main object store only after the `pre-receive` hook
-has completed. If the push fails before then, the temporary directory is
+has completed. If the puig fails before then, the temporary directory is
 removed entirely.
 
 This has a few user-visible effects and caveats:
@@ -230,7 +230,7 @@ This has a few user-visible effects and caveats:
   1. Pushes which fail due to problems with the incoming pack, missing
      objects, or due to the `pre-receive` hook will not leave any
      on-disk data. This is usually helpful to prevent repeated failed
-     pushes from filling up your disk, but can make debugging more
+     puiges from filling up your disk, but can make debugging more
      challenging.
 
   2. Any objects created by the `pre-receive` hook will be created in

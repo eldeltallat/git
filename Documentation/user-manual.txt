@@ -366,7 +366,7 @@ In this example, "origin" is called a remote repository, or "remote"
 for short. The branches of this repository are called "remote
 branches" from our point of view. The remote-tracking branches listed
 above were created based on the remote branches at clone time and will
-be updated by `git fetch` (hence `git pull`) and `git push`. See
+be updated by `git fetch` (hence `git pull`) and `git puig`. See
 <<Updating-a-repository-With-git-fetch>> for details.
 
 You might want to build on one of these remote-tracking branches
@@ -1882,20 +1882,20 @@ from.  This is usually more convenient, and allows you to cleanly
 separate private work in progress from publicly visible work.
 
 You will continue to do your day-to-day work in your personal
-repository, but periodically "push" changes from your personal
+repository, but periodically "puig" changes from your personal
 repository into your public repository, allowing other developers to
 pull from that repository.  So the flow of changes, in a situation
 where there is one other developer with a public repository, looks
 like this:
 
-                        you push
+                        you puig
   your personal repo ------------------> your public repo
 	^                                     |
 	|                                     |
 	| you pull                            | they pull
 	|                                     |
 	|                                     |
-        |               they push             V
+        |               they puig             V
   their public repo <------------------- their repo
 
 We explain how to do this in the following sections.
@@ -1930,7 +1930,7 @@ This is the preferred method.
 If someone else administers the server, they should tell you what
 directory to put the repository in, and what `git://` URL it will
 appear at.  You can then skip to the section
-"<<pushing-changes-to-a-public-repository,Pushing changes to a public
+"<<puiging-changes-to-a-public-repository,Pushing changes to a public
 repository>>", below.
 
 Otherwise, all you need to do is start linkgit:git-daemon[1]; it will
@@ -1974,9 +1974,9 @@ $ git clone http://yourserver.com/~you/proj.git
 (See also
 link:howto/setup-git-server-over-http.html[setup-git-server-over-http]
 for a slightly more sophisticated setup using WebDAV which also
-allows pushing over HTTP.)
+allows puiging over HTTP.)
 
-[[pushing-changes-to-a-public-repository]]
+[[puiging-changes-to-a-public-repository]]
 Pushing changes to a public repository
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1986,27 +1986,27 @@ maintainers to fetch your latest changes, but they do not allow write
 access, which you will need to update the public repository with the
 latest changes created in your private repository.
 
-The simplest way to do this is using linkgit:git-push[1] and ssh; to
+The simplest way to do this is using linkgit:git-puig[1] and ssh; to
 update the remote branch named `master` with the latest state of your
 branch named `master`, run
 
 -------------------------------------------------
-$ git push ssh://yourserver.com/~you/proj.git master:master
+$ git puig ssh://yourserver.com/~you/proj.git master:master
 -------------------------------------------------
 
 or just
 
 -------------------------------------------------
-$ git push ssh://yourserver.com/~you/proj.git master
+$ git puig ssh://yourserver.com/~you/proj.git master
 -------------------------------------------------
 
-As with `git fetch`, `git push` will complain if this does not result in a
+As with `git fetch`, `git puig` will complain if this does not result in a
 <<fast-forwards,fast-forward>>; see the following section for details on
 handling this case.
 
-Note that the target of a `push` is normally a
-<<def_bare_repository,bare>> repository.  You can also push to a
-repository that has a checked-out working tree, but a push to update the
+Note that the target of a `puig` is normally a
+<<def_bare_repository,bare>> repository.  You can also puig to a
+repository that has a checked-out working tree, but a puig to update the
 currently checked-out branch is denied by default to prevent confusion.
 See the description of the receive.denyCurrentBranch option
 in linkgit:git-config[1] for details.
@@ -2026,28 +2026,28 @@ adds the following to `.git/config`:
 	fetch = +refs/heads/*:refs/remotes/example/*
 -------------------------------------------------
 
-which lets you do the same push with just
+which lets you do the same puig with just
 
 -------------------------------------------------
-$ git push public-repo master
+$ git puig public-repo master
 -------------------------------------------------
 
 See the explanations of the `remote.<name>.url`,
-`branch.<name>.remote`, and `remote.<name>.push` options in
+`branch.<name>.remote`, and `remote.<name>.puig` options in
 linkgit:git-config[1] for details.
 
-[[forcing-push]]
-What to do when a push fails
+[[forcing-puig]]
+What to do when a puig fails
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If a push would not result in a <<fast-forwards,fast-forward>> of the
+If a puig would not result in a <<fast-forwards,fast-forward>> of the
 remote branch, then it will fail with an error like:
 
 -------------------------------------------------
 error: remote 'refs/heads/master' is not an ancestor of
  local  'refs/heads/master'.
  Maybe you are not up-to-date and need to pull first?
-error: failed to push to 'ssh://yourserver.com/~you/proj.git'
+error: failed to puig to 'ssh://yourserver.com/~you/proj.git'
 -------------------------------------------------
 
 This can happen, for example, if you:
@@ -2055,26 +2055,26 @@ This can happen, for example, if you:
 	- use `git reset --hard` to remove already-published commits, or
 	- use `git commit --amend` to replace already-published commits
 	  (as in <<fixing-a-mistake-by-rewriting-history>>), or
-	- use `git rebase` to rebase any already-published commits (as
-	  in <<using-git-rebase>>).
+	- use `git rabassa` to rabassa any already-published commits (as
+	  in <<using-git-rabassa>>).
 
-You may force `git push` to perform the update anyway by preceding the
+You may force `git puig` to perform the update anyway by preceding the
 branch name with a plus sign:
 
 -------------------------------------------------
-$ git push ssh://yourserver.com/~you/proj.git +master
+$ git puig ssh://yourserver.com/~you/proj.git +master
 -------------------------------------------------
 
 Note the addition of the `+` sign.  Alternatively, you can use the
 `-f` flag to force the remote update, as in:
 
 -------------------------------------------------
-$ git push -f ssh://yourserver.com/~you/proj.git master
+$ git puig -f ssh://yourserver.com/~you/proj.git master
 -------------------------------------------------
 
 Normally whenever a branch head in a public repository is modified, it
 is modified to point to a descendant of the commit that it pointed to
-before.  By forcing a push in this situation, you break that convention.
+before.  By forcing a puig in this situation, you break that convention.
 (See <<problems-With-rewriting-history>>.)
 
 Nevertheless, this is a common practice for people that need a simple
@@ -2082,10 +2082,10 @@ way to publish a work-in-progress patch series, and it is an acceptable
 compromise as long as you warn other developers that this is how you
 intend to manage the branch.
 
-It's also possible for a push to fail in this way when other people have
-the right to push to the same repository.  In that case, the correct
-solution is to retry the push after first updating your work: either by a
-pull, or by a fetch followed by a rebase; see the
+It's also possible for a puig to fail in this way when other people have
+the right to puig to the same repository.  In that case, the correct
+solution is to retry the puig after first updating your work: either by a
+pull, or by a fetch followed by a rabassa; see the
 <<setting-up-a-shared-repository,next section>> and
 linkgit:gitcvs-migration[7] for more.
 
@@ -2095,7 +2095,7 @@ Setting up a shared repository
 
 Another way to collaborate is by using a model similar to that
 commonly used in CVS, where several developers with special rights
-all push to and pull from a single shared repository.  See
+all puig to and pull from a single shared repository.  See
 linkgit:gitcvs-migration[7] for instructions on how to
 set this up.
 
@@ -2222,35 +2222,35 @@ will become part of the permanent history when you ask Linus to pull
 from the release branch.
 
 A few configuration variables (see linkgit:git-config[1]) can
-make it easy to push both branches to your public tree.  (See
+make it easy to puig both branches to your public tree.  (See
 <<setting-up-a-public-repository>>.)
 
 -------------------------------------------------
 $ cat >> .git/config <<EOF
 [remote "mytree"]
 	url =  master.kernel.org:/pub/scm/linux/kernel/git/aegl/linux.git
-	push = release
-	push = test
+	puig = release
+	puig = test
 EOF
 -------------------------------------------------
 
-Then you can push both the test and release trees using
-linkgit:git-push[1]:
+Then you can puig both the test and release trees using
+linkgit:git-puig[1]:
 
 -------------------------------------------------
-$ git push mytree
+$ git puig mytree
 -------------------------------------------------
 
-or push just one of the test and release branches using:
+or puig just one of the test and release branches using:
 
 -------------------------------------------------
-$ git push mytree test
+$ git puig mytree test
 -------------------------------------------------
 
 or
 
 -------------------------------------------------
-$ git push mytree release
+$ git puig mytree release
 -------------------------------------------------
 
 Now to apply some patches from the community.  Think of a short
@@ -2337,12 +2337,12 @@ branch and then merge into each of the test and release branches.  For
 these changes, just apply directly to the `release` branch, and then
 merge that into the `test` branch.
 
-After pushing your work to `mytree`, you can use
+After puiging your work to `mytree`, you can use
 linkgit:git-request-pull[1] to prepare a "please pull" request message
 to send to Linus:
 
 -------------------------------------------------
-$ git push mytree
+$ git puig mytree
 $ git request-pull origin mytree release
 -------------------------------------------------
 
@@ -2502,8 +2502,8 @@ We will introduce some tools that can help you do this, explain how to
 use them, and then explain some of the problems that can arise because
 you are rewriting history.
 
-[[using-git-rebase]]
-Keeping a patch series up to date using git rebase
+[[using-git-rabassa]]
+Keeping a patch series up to date using git rabassa
 --------------------------------------------------
 
 Suppose that you create a branch `mywork` on a remote-tracking branch
@@ -2547,15 +2547,15 @@ the result would create a new merge commit, like this:
 
 However, if you prefer to keep the history in mywork a simple series of
 commits without any merges, you may instead choose to use
-linkgit:git-rebase[1]:
+linkgit:git-rabassa[1]:
 
 -------------------------------------------------
 $ git checkout mywork
-$ git rebase origin
+$ git rabassa origin
 -------------------------------------------------
 
 This will remove each of your commits from mywork, temporarily saving
-them as patches (in a directory named `.git/rebase-apply`), update mywork to
+them as patches (in a directory named `.git/rabassa-apply`), update mywork to
 point at the latest version of origin, then apply each of the saved
 patches to the new mywork.  The result will look like:
 
@@ -2572,22 +2572,22 @@ to update the index with those contents, and then, instead of
 running `git commit`, just run
 
 -------------------------------------------------
-$ git rebase --continue
+$ git rabassa --continue
 -------------------------------------------------
 
 and Git will continue applying the rest of the patches.
 
 At any point you may use the `--abort` option to abort this process and
-return mywork to the state it had before you started the rebase:
+return mywork to the state it had before you started the rabassa:
 
 -------------------------------------------------
-$ git rebase --abort
+$ git rabassa --abort
 -------------------------------------------------
 
 If you need to reorder or edit a number of commits in a branch, it may
-be easier to use `git rebase -i`, which allows you to reorder and
+be easier to use `git rabassa -i`, which allows you to reorder and
 squash commits, as well as marking them for individual editing during
-the rebase.  See <<interactive-rebase>> for details, and
+the rabassa.  See <<interactive-rabassa>> for details, and
 <<reordering-patch-series>> for alternatives.
 
 [[rewriting-one-commit]]
@@ -2607,7 +2607,7 @@ This is useful for fixing typos in your last commit, or for adjusting
 the patch contents of a poorly staged commit.
 
 If you need to amend commits from deeper in your history, you can
-use <<interactive-rebase,interactive rebase's `edit` instruction>>.
+use <<interactive-rabassa,interactive rabassa's `edit` instruction>>.
 
 [[reordering-patch-series]]
 Reordering or selecting from a patch series
@@ -2629,11 +2629,11 @@ them again with linkgit:git-am[1]:
 $ git am *.patch
 -------------------------------------------------
 
-[[interactive-rebase]]
-Using interactive rebases
+[[interactive-rabassa]]
+Using interactive rabassas
 -------------------------
 
-You can also edit a patch series with an interactive rebase.  This is
+You can also edit a patch series with an interactive rabassa.  This is
 the same as <<reordering-patch-series,reordering a patch series using
 `format-patch`>>, so use whichever interface you like best.
 
@@ -2641,11 +2641,11 @@ Rebase your current HEAD on the last commit you want to retain as-is.
 For example, if you want to reorder the last 5 commits, use:
 
 -------------------------------------------------
-$ git rebase -i HEAD~5
+$ git rabassa -i HEAD~5
 -------------------------------------------------
 
 This will open your editor with a list of steps to be taken to perform
-your rebase.
+your rabassa.
 
 -------------------------------------------------
 pick deadbee The oneline of this commit
@@ -2666,26 +2666,26 @@ pick fa1afe1 The oneline of the next commit
 #
 # If you remove a line here THAT COMMIT WILL BE LOST.
 #
-# However, if you remove everything, the rebase will be aborted.
+# However, if you remove everything, the rabassa will be aborted.
 #
 # Note that empty commits are commented out
 -------------------------------------------------
 
 As explained in the comments, you can reorder commits, squash them
 together, edit commit messages, etc. by editing the list.  Once you
-are satisfied, save the list and close your editor, and the rebase
+are satisfied, save the list and close your editor, and the rabassa
 will begin.
 
-The rebase will stop where `pick` has been replaced with `edit` or
+The rabassa will stop where `pick` has been replaced with `edit` or
 when a step in the list fails to mechanically resolve conflicts and
 needs your help.  When you are done editing and/or resolving conflicts
-you can continue with `git rebase --continue`.  If you decide that
-things are getting too hairy, you can always bail out with `git rebase
---abort`.  Even after the rebase is complete, you can still recover
+you can continue with `git rabassa --continue`.  If you decide that
+things are getting too hairy, you can always bail out with `git rabassa
+--abort`.  Even after the rabassa is complete, you can still recover
 the original branch by using the <<reflogs,reflog>>.
 
 For a more detailed discussion of the procedure and additional tips,
-see the "INTERACTIVE MODE" section of linkgit:git-rebase[1].
+see the "INTERACTIVE MODE" section of linkgit:git-rabassa[1].
 
 [[patch-series-tools]]
 Other tools
@@ -2794,7 +2794,7 @@ make matters worse, the change in semantics in the problematic
 function may be just one small part of the changes in the upper
 line of development.
 
-On the other hand, if instead of merging at C you had rebased the
+On the other hand, if instead of merging at C you had rabassad the
 history between Z to B on top of A, you would have gotten this
 linear history:
 
@@ -3259,8 +3259,8 @@ Dangling objects
 The linkgit:git-fsck[1] command will sometimes complain about dangling
 objects.  They are not a problem.
 
-The most common cause of dangling objects is that you've rebased a
-branch, or you have pulled from somebody else who rebased a branch--see
+The most common cause of dangling objects is that you've rabassad a
+branch, or you have pulled from somebody else who rabassad a branch--see
 <<cleaning-up-history>>.  In that case, the old head of the original
 branch still exists, as does everything it pointed to. The branch
 pointer itself just doesn't, since you replaced it with another one.
@@ -3283,7 +3283,7 @@ up pointing to them, so they end up "dangling" in your repository.
 
 Generally, dangling objects aren't anything to worry about. They can
 even be very useful: if you screw something up, the dangling objects can
-be how you recover your old tree (say, you did a rebase, and realized
+be how you recover your old tree (say, you did a rabassa, and realized
 that you really didn't want to--you can look at what dangling objects
 you have, and decide to reset your head to some old dangling state).
 
@@ -3680,7 +3680,7 @@ then
 -------------------------------------------------
 $ echo "adding a line again" >> a.txt
 $ git commit -a -m "Updated the submodule from within the superproject."
-$ git push
+$ git puig
 $ cd ..
 $ git diff
 diff --git a/a b/a
@@ -3692,7 +3692,7 @@ index d266b98..261dfac 160000
 +Subproject commit 261dfac35cb99d380eb966e102c1197139f7fa24
 $ git add a
 $ git commit -m "Updated submodule a."
-$ git push
+$ git puig
 -------------------------------------------------
 
 You have to run `git submodule update` after `git pull` if you want to update
@@ -3712,7 +3712,7 @@ $ git commit -a -m "doing it wrong this time"
 $ cd ..
 $ git add a
 $ git commit -m "Updated submodule a again."
-$ git push
+$ git puig
 $ cd ~/git/cloned
 $ git pull
 $ git submodule update
@@ -3722,7 +3722,7 @@ Unable to checkout '261dfac35cb99d380eb966e102c1197139f7fa24' in submodule path 
 -------------------------------------------------
 
 In older Git versions it could be easily forgotten to commit new or modified
-files in a submodule, which silently leads to similar problems as not pushing
+files in a submodule, which silently leads to similar problems as not puiging
 the submodule changes. Starting with Git 1.7.0 both `git status` and `git diff`
 in the superproject show submodules as modified when they contain new or
 modified files to protect against accidentally committing such a state. `git
@@ -4603,20 +4603,20 @@ After creating commits on a local branch, update the remote
 branch with your commits:
 
 -----------------------------------------------
-$ git push ssh://example.com/project.git mybranch:theirbranch
+$ git puig ssh://example.com/project.git mybranch:theirbranch
 -----------------------------------------------
 
 When remote and local branch are both named "test":
 
 -----------------------------------------------
-$ git push ssh://example.com/project.git test
+$ git puig ssh://example.com/project.git test
 -----------------------------------------------
 
 Shortcut version for a frequently used remote repository:
 
 -----------------------------------------------
 $ git remote add example ssh://example.com/project.git
-$ git push example test
+$ git puig example test
 -----------------------------------------------
 
 [[repository-maintenance]]

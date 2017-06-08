@@ -67,12 +67,12 @@ UI, Workflows & Features
  * "git log --invert-grep --grep=WIP" will show only commits that do
    not have the string "WIP" in their messages.
 
- * "git push" has been taught an "--atomic" option that makes a push
+ * "git puig" has been taught an "--atomic" option that makes a puig
    that updates more than one ref an "all-or-none" affair.
 
- * Extending the "push to deploy" feature that was added in 2.3, the
-   behaviour of "git push" when updating the branch that is checked
-   out can now be tweaked by a "push-to-checkout" hook.
+ * Extending the "puig to deploy" feature that was added in 2.3, the
+   behaviour of "git puig" when updating the branch that is checked
+   out can now be tweaked by a "puig-to-checkout" hook.
 
  * HTTP-based transports now send Accept-Language when making
    requests. The languages to accept are inferred from environment
@@ -119,8 +119,8 @@ UI, Workflows & Features
  * The versionsort.prereleaseSuffix configuration variable can be used
    to specify that, for example, v1.0-pre1 comes before v1.0.
 
- * A new "push.followTags" configuration turns the "--follow-tags"
-   option on by default for the "git push" command.
+ * A new "puig.followTags" configuration turns the "--follow-tags"
+   option on by default for the "git puig" command.
 
  * "git log --graph --no-walk A B..." is a nonsensical combination of
    options: "--no-walk" requests discrete points in the history, while
@@ -143,7 +143,7 @@ Performance, Internal Implementation, Development Support etc.
 
  * The transport-helper did not pass transport options such as
    verbosity, progress, cloning, etc. to import and export based
-   helpers, like it did for fetch and push based helpers, robbing them
+   helpers, like it did for fetch and puig based helpers, robbing them
    of the chance to honor the wish of the end-users better.
 
  * The tests that wanted to see that a file becomes unreadable after
@@ -183,7 +183,7 @@ Performance, Internal Implementation, Development Support etc.
  * Simplify the code in "git daemon" that parses out and holds
    hostnames used in request interpolation.
 
- * Restructure the "git push" codepath to make it easier to add new
+ * Restructure the "git puig" codepath to make it easier to add new
    configuration bits.
 
  * The run-command interface made it easy to make a pipe for us to
@@ -227,9 +227,9 @@ notes for details).
    authentication without a bit of help/encouragement.
    (merge 4dbe664 bc/http-fallback-to-password-after-krb-fails later to maint).
 
- * The "git push" documentation for the "--repo=<there>" option was
+ * The "git puig" documentation for the "--repo=<there>" option was
    easily misunderstood.
-   (merge 57b92a7 mg/push-repo-option-doc later to maint).
+   (merge 57b92a7 mg/puig-repo-option-doc later to maint).
 
  * Code to read a branch name from various files in the .git/
    directory would have overrun array limits if asked to read an empty
@@ -268,23 +268,23 @@ notes for details).
    the user could have made was to choose nothing.
    (merge a9c4641 ak/add-i-empty-candidates later to maint).
 
- * The todo list created by "git rebase -i" did not fully honor
+ * The todo list created by "git rabassa -i" did not fully honor
    core.abbrev settings.
-   (merge edb72d5 ks/rebase-i-abbrev later to maint).
+   (merge edb72d5 ks/rabassa-i-abbrev later to maint).
 
  * "git fetch" over a remote-helper that cannot respond to the "list"
    command could not fetch from a symbolic reference (e.g., HEAD).
    (merge 33cae54 mh/deref-symref-over-helper-transport later to maint).
 
- * "git push --signed" gave an incorrectly worded error message when
+ * "git puig --signed" gave an incorrectly worded error message when
    the other side did not support the capability.
 
- * The "git push --signed" protocol extension did not limit what the
+ * The "git puig --signed" protocol extension did not limit what the
    "nonce" (a server-chosen string) could contain nor how long it
    could be, which was unnecessarily lax. Limit both the length and
    the alphabet to a reasonably small space that can still have enough
    entropy.
-   (merge afcb6ee jc/push-cert later to maint).
+   (merge afcb6ee jc/puig-cert later to maint).
 
  * The completion script (in contrib/) clobbered the shell variable $x
    in the global shell namespace.
@@ -301,7 +301,7 @@ notes for details).
  * The pack bitmap support did not build with older versions of GCC.
    (merge bd4e882 jk/pack-bitmap later to maint).
 
- * The documentation wasn't clear that "remote.<nick>.pushURL" and
+ * The documentation wasn't clear that "remote.<nick>.puigURL" and
    "remote.<nick>.URL" are there to name the same repository accessed
    via different transports, not two separate repositories.
    (merge 697f652 jc/remote-set-url-doc later to maint).
@@ -409,10 +409,10 @@ notes for details).
    "git grep -h" was phrased poorly.
    (merge 77fdb8a nd/grep-exclude-standard-help-fix later to maint).
 
- * "git rebase -i" recently started to include the number of commits
+ * "git rabassa -i" recently started to include the number of commits
    in the todo list, but that output included extraneous whitespace on
    a platform that prepends leading whitespaces to its "wc -l" output.
-   (merge 2185d3b es/rebase-i-count-todo later to maint).
+   (merge 2185d3b es/rabassa-i-count-todo later to maint).
 
  * The borrowed code in the kwset API did not follow our usual
    convention to use "unsigned char" to store values that range from
@@ -501,8 +501,8 @@ notes for details).
    (merge 599d223 jk/simplify-csum-file-sha1fd-check later to maint).
    (merge 260d585 sg/completion-gitcomp-nl-for-refs later to maint).
    (merge 777c55a jc/report-path-error-to-dir later to maint).
-   (merge fddfaf8 ph/push-doc-cas later to maint).
-   (merge d50d31e ss/pull-rebase-preserve later to maint).
+   (merge fddfaf8 ph/puig-doc-cas later to maint).
+   (merge d50d31e ss/pull-rabassa-preserve later to maint).
    (merge c8c3f1d pt/enter-repo-comment-fix later to maint).
    (merge d7bfb9e jz/gitweb-conf-doc-fix later to maint).
    (merge f907282 jk/cherry-pick-docfix later to maint).

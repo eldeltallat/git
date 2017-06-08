@@ -22,14 +22,14 @@ test_pack_input_limit () {
 		git --git-dir=dest config receive.unpacklimit "$unpack_limit"
 	'
 
-	test_expect_success 'setting receive.maxInputSize to 512 rejects push' '
+	test_expect_success 'setting receive.maxInputSize to 512 rejects puig' '
 		git --git-dir=dest config receive.maxInputSize 512 &&
-		test_must_fail git push dest HEAD
+		test_must_fail git puig dest HEAD
 	'
 
-	test_expect_success 'bumping limit to 4k allows push' '
+	test_expect_success 'bumping limit to 4k allows puig' '
 		git --git-dir=dest config receive.maxInputSize 4k &&
-		git push dest HEAD
+		git puig dest HEAD
 	'
 
 	test_expect_success 'prepare destination repository (again)' '
@@ -37,9 +37,9 @@ test_pack_input_limit () {
 		git --bare init dest
 	'
 
-	test_expect_success 'lifting the limit allows push' '
+	test_expect_success 'lifting the limit allows puig' '
 		git --git-dir=dest config receive.maxInputSize 0 &&
-		git push dest HEAD
+		git puig dest HEAD
 	'
 }
 

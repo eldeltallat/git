@@ -52,14 +52,14 @@ Fixes since v1.7.10.1
  * Octopus merge strategy did not reduce heads that are recorded in the
    final commit correctly.
 
- * "git push" over smart-http lost progress output a few releases ago;
+ * "git puig" over smart-http lost progress output a few releases ago;
    this release resurrects it.
 
- * The error and advice messages given by "git push" when it fails due
+ * The error and advice messages given by "git puig" when it fails due
    to non-ff were not very helpful to new users; it has been broken
    into three cases, and each is given a separate advice message.
 
- * The insn sheet given by "rebase -i" did not make it clear that the
+ * The insn sheet given by "rabassa -i" did not make it clear that the
    insn lines can be re-ordered to affect the order of the commits in
    the resulting history.
 

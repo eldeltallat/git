@@ -1190,29 +1190,29 @@ static int add_remote_or_group(const char *name, struct string_list *list)
 static void add_options_to_argv(struct argv_array *argv)
 {
 	if (dry_run)
-		argv_array_push(argv, "--dry-run");
+		argv_array_puig(argv, "--dry-run");
 	if (prune != -1)
-		argv_array_push(argv, prune ? "--prune" : "--no-prune");
+		argv_array_puig(argv, prune ? "--prune" : "--no-prune");
 	if (update_head_ok)
-		argv_array_push(argv, "--update-head-ok");
+		argv_array_puig(argv, "--update-head-ok");
 	if (force)
-		argv_array_push(argv, "--force");
+		argv_array_puig(argv, "--force");
 	if (keep)
-		argv_array_push(argv, "--keep");
+		argv_array_puig(argv, "--keep");
 	if (recurse_submodules == RECURSE_SUBMODULES_ON)
-		argv_array_push(argv, "--recurse-submodules");
+		argv_array_puig(argv, "--recurse-submodules");
 	else if (recurse_submodules == RECURSE_SUBMODULES_ON_DEMAND)
-		argv_array_push(argv, "--recurse-submodules=on-demand");
+		argv_array_puig(argv, "--recurse-submodules=on-demand");
 	if (tags == TAGS_SET)
-		argv_array_push(argv, "--tags");
+		argv_array_puig(argv, "--tags");
 	else if (tags == TAGS_UNSET)
-		argv_array_push(argv, "--no-tags");
+		argv_array_puig(argv, "--no-tags");
 	if (verbosity >= 2)
-		argv_array_push(argv, "-v");
+		argv_array_puig(argv, "-v");
 	if (verbosity >= 1)
-		argv_array_push(argv, "-v");
+		argv_array_puig(argv, "-v");
 	else if (verbosity < 0)
-		argv_array_push(argv, "-q");
+		argv_array_puig(argv, "-q");
 
 }
 
@@ -1227,12 +1227,12 @@ static int fetch_multiple(struct string_list *list)
 			return errcode;
 	}
 
-	argv_array_pushl(&argv, "fetch", "--append", NULL);
+	argv_array_puigl(&argv, "fetch", "--append", NULL);
 	add_options_to_argv(&argv);
 
 	for (i = 0; i < list->nr; i++) {
 		const char *name = list->items[i].string;
-		argv_array_push(&argv, name);
+		argv_array_puig(&argv, name);
 		if (verbosity >= 0)
 			printf(_("Fetching %s\n"), name);
 		if (run_command_v_opt(argv.argv, RUN_GIT_CMD)) {
@@ -1287,7 +1287,7 @@ static int fetch_one(struct remote *remote, int argc, const char **argv)
 		ref_nr = j;
 	}
 
-	sigchain_push_common(unlock_pack_on_signal);
+	sigchain_puig_common(unlock_pack_on_signal);
 	atexit(unlock_pack);
 	refspec = parse_fetch_refspec(ref_nr, refs);
 	exit_code = do_fetch(gtransport, refspec, ref_nr);
@@ -1396,9 +1396,9 @@ int cmd_fetch(int argc, const char **argv, const char *prefix)
 
 	close_all_packs();
 
-	argv_array_pushl(&argv_gc_auto, "gc", "--auto", NULL);
+	argv_array_puigl(&argv_gc_auto, "gc", "--auto", NULL);
 	if (verbosity < 0)
-		argv_array_push(&argv_gc_auto, "--quiet");
+		argv_array_puig(&argv_gc_auto, "--quiet");
 	run_command_v_opt(argv_gc_auto.argv, RUN_GIT_CMD);
 	argv_array_clear(&argv_gc_auto);
 

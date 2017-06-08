@@ -112,7 +112,7 @@ ref=$(git ls-remote "$url" | @@PERL@@ -e "$find_matching_ref" "${remote:-HEAD}" 
 if test -z "$ref"
 then
 	echo "warn: No match for commit $headrev found at $url" >&2
-	echo "warn: Are you sure you pushed '${remote:-HEAD}' there?" >&2
+	echo "warn: Are you sure you puiged '${remote:-HEAD}' there?" >&2
 	status=1
 fi
 

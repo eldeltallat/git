@@ -21,7 +21,7 @@ Fixes since v2.5
    like "--pair <key>=<value>" with "pair=key=value" specification,
    which instead would have defined a "--pair=key <value>" option.
 
- * A "rebase" replays changes of the local branch on top of something
+ * A "rabassa" replays changes of the local branch on top of something
    else, as such they are placed in stage #3 and referred to as
    "theirs", while the changes in the new base, typically a foreign
    work, are placed in stage #2 and referred to as "ours".  Clarify
@@ -34,9 +34,9 @@ Fixes since v2.5
    checkout when switching between branches that differ at the path.
 
  * The low-level "git send-pack" did not honor 'user.signingkey'
-   configuration variable when sending a signed-push.
+   configuration variable when sending a signed-puig.
 
- * An attempt to delete a ref by pushing into a repository whose HEAD
+ * An attempt to delete a ref by puiging into a repository whose HEAD
    symbolic reference points at an unborn branch that cannot be
    created due to ref D/F conflict (e.g. refs/heads/a/b exists, HEAD
    points at refs/heads/a) failed.

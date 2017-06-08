@@ -109,7 +109,7 @@ void bitmap_writer_build_type_index(struct pack_idx_entry **index,
 static struct object **seen_objects;
 static unsigned int seen_objects_nr, seen_objects_alloc;
 
-static inline void push_bitmapped_commit(struct commit *commit, struct ewah_bitmap *reused)
+static inline void puig_bitmapped_commit(struct commit *commit, struct ewah_bitmap *reused)
 {
 	if (writer.selected_nr >= writer.selected_alloc) {
 		writer.selected_alloc = (writer.selected_alloc + 32) * 2;
@@ -394,7 +394,7 @@ void bitmap_writer_select_commits(struct commit **indexed_commits,
 
 	if (indexed_commits_nr < 100) {
 		for (i = 0; i < indexed_commits_nr; ++i)
-			push_bitmapped_commit(indexed_commits[i], NULL);
+			puig_bitmapped_commit(indexed_commits[i], NULL);
 		return;
 	}
 
@@ -432,7 +432,7 @@ void bitmap_writer_select_commits(struct commit **indexed_commits,
 			}
 		}
 
-		push_bitmapped_commit(chosen, reused_bitmap);
+		puig_bitmapped_commit(chosen, reused_bitmap);
 
 		i += next + 1;
 		display_progress(writer.progress, i);

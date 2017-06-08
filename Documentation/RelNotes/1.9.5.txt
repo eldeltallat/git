@@ -23,7 +23,7 @@ Fixes since v1.9.4
 
  * "git fsck" notices a tree object that records such a path that can
    be confused with ".git", and with receive.fsckObjects configuration
-   set to true, an attempt to "git push" such a tree object will be
+   set to true, an attempt to "git puig" such a tree object will be
    rejected.  Such a path may not be a problem on a well behaving
    filesystem but in order to protect those on HFS+ and on case
    insensitive filesystems, this check is enabled on all platforms.

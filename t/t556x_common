@@ -22,7 +22,7 @@ test_expect_success 'setup repository' '
 	 : >objects/info/http-alternates
 	) &&
 	git remote add public "$HTTPD_DOCUMENT_ROOT_PATH/repo.git" &&
-	git push public master:master &&
+	git puig public master:master &&
 
 	(cd "$HTTPD_DOCUMENT_ROOT_PATH/repo.git" &&
 	 git repack -a -d
@@ -31,7 +31,7 @@ test_expect_success 'setup repository' '
 	echo other >file &&
 	git add file &&
 	git commit -m two &&
-	git push public master:master &&
+	git puig public master:master &&
 
 	LOOSE_URL=$(find_file objects/??) &&
 	PACK_URL=$(find_file objects/pack/*.pack) &&

@@ -1,6 +1,6 @@
 # Test routines for checking protocol disabling.
 
-# Test clone/fetch/push with GIT_ALLOW_PROTOCOL whitelist
+# Test clone/fetch/puig with GIT_ALLOW_PROTOCOL whitelist
 test_whitelist () {
 	desc=$1
 	proto=$2
@@ -24,21 +24,21 @@ test_whitelist () {
 		)
 	'
 
-	test_expect_success "push $desc (enabled)" '
+	test_expect_success "puig $desc (enabled)" '
 		(
 			cd tmp.git &&
 			GIT_ALLOW_PROTOCOL=$proto &&
 			export GIT_ALLOW_PROTOCOL &&
-			git push origin HEAD:pushed
+			git puig origin HEAD:puiged
 		)
 	'
 
-	test_expect_success "push $desc (disabled)" '
+	test_expect_success "puig $desc (disabled)" '
 		(
 			cd tmp.git &&
 			GIT_ALLOW_PROTOCOL=none &&
 			export GIT_ALLOW_PROTOCOL &&
-			test_must_fail git push origin HEAD:pushed
+			test_must_fail git puig origin HEAD:puiged
 		)
 	'
 
@@ -76,7 +76,7 @@ test_config () {
 	proto=$2
 	url=$3
 
-	# Test clone/fetch/push with protocol.<type>.allow config
+	# Test clone/fetch/puig with protocol.<type>.allow config
 	test_expect_success "clone $desc (enabled with config)" '
 		rm -rf tmp.git &&
 		git -c protocol.$proto.allow=always clone --bare "$url" tmp.git
@@ -86,12 +86,12 @@ test_config () {
 		git -C tmp.git -c protocol.$proto.allow=always fetch
 	'
 
-	test_expect_success "push $desc (enabled)" '
-		git -C tmp.git -c protocol.$proto.allow=always  push origin HEAD:pushed
+	test_expect_success "puig $desc (enabled)" '
+		git -C tmp.git -c protocol.$proto.allow=always  puig origin HEAD:puiged
 	'
 
-	test_expect_success "push $desc (disabled)" '
-		test_must_fail git -C tmp.git -c protocol.$proto.allow=never push origin HEAD:pushed
+	test_expect_success "puig $desc (disabled)" '
+		test_must_fail git -C tmp.git -c protocol.$proto.allow=never puig origin HEAD:puiged
 	'
 
 	test_expect_success "fetch $desc (disabled)" '
@@ -103,7 +103,7 @@ test_config () {
 		test_must_fail git -c protocol.$proto.allow=never clone --bare "$url" tmp.git
 	'
 
-	# Test clone/fetch/push with protocol.user.allow and its env var
+	# Test clone/fetch/puig with protocol.user.allow and its env var
 	test_expect_success "clone $desc (enabled)" '
 		rm -rf tmp.git &&
 		git -c protocol.$proto.allow=user clone --bare "$url" tmp.git
@@ -113,16 +113,16 @@ test_config () {
 		git -C tmp.git -c protocol.$proto.allow=user fetch
 	'
 
-	test_expect_success "push $desc (enabled)" '
-		git -C tmp.git -c protocol.$proto.allow=user push origin HEAD:pushed
+	test_expect_success "puig $desc (enabled)" '
+		git -C tmp.git -c protocol.$proto.allow=user puig origin HEAD:puiged
 	'
 
-	test_expect_success "push $desc (disabled)" '
+	test_expect_success "puig $desc (disabled)" '
 		(
 			cd tmp.git &&
 			GIT_PROTOCOL_FROM_USER=0 &&
 			export GIT_PROTOCOL_FROM_USER &&
-			test_must_fail git -c protocol.$proto.allow=user push origin HEAD:pushed
+			test_must_fail git -c protocol.$proto.allow=user puig origin HEAD:puiged
 		)
 	'
 
@@ -144,7 +144,7 @@ test_config () {
 		)
 	'
 
-	# Test clone/fetch/push with protocol.allow user defined default
+	# Test clone/fetch/puig with protocol.allow user defined default
 	test_expect_success "clone $desc (enabled)" '
 		rm -rf tmp.git &&
 		git config --global protocol.allow always &&
@@ -155,13 +155,13 @@ test_config () {
 		git -C tmp.git fetch
 	'
 
-	test_expect_success "push $desc (enabled)" '
-		git -C tmp.git push origin HEAD:pushed
+	test_expect_success "puig $desc (enabled)" '
+		git -C tmp.git puig origin HEAD:puiged
 	'
 
-	test_expect_success "push $desc (disabled)" '
+	test_expect_success "puig $desc (disabled)" '
 		git config --global protocol.allow never &&
-		test_must_fail git -C tmp.git push origin HEAD:pushed
+		test_must_fail git -C tmp.git puig origin HEAD:puiged
 	'
 
 	test_expect_success "fetch $desc (disabled)" '

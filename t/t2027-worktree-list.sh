@@ -66,7 +66,7 @@ test_expect_success 'bare repo setup' '
 	echo "data" >file1 &&
 	git add file1 &&
 	git commit -m"File1: add data" &&
-	git push bare1 master &&
+	git puig bare1 master &&
 	git reset --hard HEAD^
 '
 

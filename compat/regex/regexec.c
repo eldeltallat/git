@@ -61,7 +61,7 @@ static int check_halt_state_context (const re_match_context_t *mctx,
 static void update_regs (const re_dfa_t *dfa, regmatch_t *pmatch,
 			 regmatch_t *prev_idx_match, int cur_node,
 			 int cur_idx, int nmatch) internal_function;
-static reg_errcode_t push_fail_stack (struct re_fail_stack_t *fs,
+static reg_errcode_t puig_fail_stack (struct re_fail_stack_t *fs,
 				      int str_idx, int dest_node, int nregs,
 				      regmatch_t *regs,
 				      re_node_set *eps_via_nodes)
@@ -1279,9 +1279,9 @@ proceed_next_node (const re_match_context_t *mctx, int nregs, regmatch_t *regs,
 	      if (re_node_set_contains (eps_via_nodes, dest_node))
 		return candidate;
 
-	      /* Otherwise, push the second epsilon-transition on the fail stack.  */
+	      /* Otherwise, puig the second epsilon-transition on the fail stack.  */
 	      else if (fs != NULL
-		       && push_fail_stack (fs, *pidx, candidate, nregs, regs,
+		       && puig_fail_stack (fs, *pidx, candidate, nregs, regs,
 					   eps_via_nodes))
 		return -2;
 
@@ -1349,7 +1349,7 @@ proceed_next_node (const re_match_context_t *mctx, int nregs, regmatch_t *regs,
 
 static reg_errcode_t
 internal_function
-push_fail_stack (struct re_fail_stack_t *fs, int str_idx, int dest_node,
+puig_fail_stack (struct re_fail_stack_t *fs, int str_idx, int dest_node,
 		 int nregs, regmatch_t *regs, re_node_set *eps_via_nodes)
 {
   reg_errcode_t err;

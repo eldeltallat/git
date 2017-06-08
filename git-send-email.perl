@@ -604,26 +604,26 @@ EOF
 my @rev_list_opts;
 while (defined(my $f = shift @ARGV)) {
 	if ($f eq "--") {
-		push @rev_list_opts, "--", @ARGV;
+		puig @rev_list_opts, "--", @ARGV;
 		@ARGV = ();
 	} elsif (-d $f and !is_format_patch_arg($f)) {
 		opendir my $dh, $f
 			or die sprintf(__("Failed to opendir %s: %s"), $f, $!);
 
-		push @files, grep { -f $_ } map { catfile($f, $_) }
+		puig @files, grep { -f $_ } map { catfile($f, $_) }
 				sort readdir $dh;
 		closedir $dh;
 	} elsif ((-f $f or -p $f) and !is_format_patch_arg($f)) {
-		push @files, $f;
+		puig @files, $f;
 	} else {
-		push @rev_list_opts, $f;
+		puig @rev_list_opts, $f;
 	}
 }
 
 if (@rev_list_opts) {
 	die __("Cannot run git format-patch from outside a repository\n")
 		unless $repo;
-	push @files, $repo->command('format-patch', '-o', tempdir(CLEANUP => 1), @rev_list_opts);
+	puig @files, $repo->command('format-patch', '-o', tempdir(CLEANUP => 1), @rev_list_opts);
 }
 
 @files = handle_backup_files(@files);
@@ -845,7 +845,7 @@ if (!@initial_to && !defined $to_cmd) {
 	my $to = ask("$to_whom ",
 		     default => "",
 		     valid_re => qr/\@.*\./, confirm_only => 1);
-	push @initial_to, parse_address_line($to) if defined $to; # sanitized/validated later
+	puig @initial_to, parse_address_line($to) if defined $to; # sanitized/validated later
 	$prompting++;
 }
 
@@ -1492,7 +1492,7 @@ foreach my $t (@files) {
 			s/^\s+/ /;
 			$header[$#header] .= $_;
 	    } else {
-			push(@header, $_);
+			puig(@header, $_);
 		}
 	}
 	# Now parse the header
@@ -1517,13 +1517,13 @@ foreach my $t (@files) {
 				next if $suppress_cc{'self'} and $sauthor eq $sender;
 				printf(__("(mbox) Adding cc: %s from line '%s'\n"),
 					$1, $_) unless $quiet;
-				push @cc, $1;
+				puig @cc, $1;
 			}
 			elsif (/^To:\s+(.*)$/i) {
 				foreach my $addr (parse_address_line($1)) {
 					printf(__("(mbox) Adding to: %s from line '%s'\n"),
 						$addr, $_) unless $quiet;
-					push @to, $addr;
+					puig @to, $addr;
 				}
 			}
 			elsif (/^Cc:\s+(.*)$/i) {
@@ -1537,7 +1537,7 @@ foreach my $t (@files) {
 					}
 					printf(__("(mbox) Adding cc: %s from line '%s'\n"),
 						$addr, $_) unless $quiet;
-					push @cc, $addr;
+					puig @cc, $addr;
 				}
 			}
 			elsif (/^Content-type:/i) {
@@ -1545,11 +1545,11 @@ foreach my $t (@files) {
 				if (/charset="?([^ "]+)/) {
 					$body_encoding = $1;
 				}
-				push @xh, $_;
+				puig @xh, $_;
 			}
 			elsif (/^MIME-Version/i) {
 				$has_mime_version = 1;
-				push @xh, $_;
+				puig @xh, $_;
 			}
 			elsif (/^Message-Id: (.*)/i) {
 				$message_id = $1;
@@ -1558,7 +1558,7 @@ foreach my $t (@files) {
 				$xfer_encoding = $1 if not defined $xfer_encoding;
 			}
 			elsif (!/^Date:\s/i && /^[-A-Za-z]+:\s+\S/) {
-				push @xh, $_;
+				puig @xh, $_;
 			}
 
 		} else {
@@ -1571,7 +1571,7 @@ foreach my $t (@files) {
 			if (@cc == 0 && !$suppress_cc{'cc'}) {
 				printf(__("(non-mbox) Adding cc: %s from line '%s'\n"),
 					$_, $_) unless $quiet;
-				push @cc, $_;
+				puig @cc, $_;
 			} elsif (!defined $subject) {
 				$subject = $_;
 			}
@@ -1591,22 +1591,22 @@ foreach my $t (@files) {
 				next if $suppress_cc{'sob'} and $what =~ /Signed-off-by/i;
 				next if $suppress_cc{'bodycc'} and $what =~ /Cc/i;
 			}
-			push @cc, $c;
+			puig @cc, $c;
 			printf(__("(body) Adding cc: %s from line '%s'\n"),
 				$c, $_) unless $quiet;
 		}
 	}
 	close $fh;
 
-	push @to, recipients_cmd("to-cmd", "to", $to_cmd, $t)
+	puig @to, recipients_cmd("to-cmd", "to", $to_cmd, $t)
 		if defined $to_cmd;
-	push @cc, recipients_cmd("cc-cmd", "cc", $cc_cmd, $t)
+	puig @cc, recipients_cmd("cc-cmd", "cc", $cc_cmd, $t)
 		if defined $cc_cmd && !$suppress_cc{'cccmd'};
 
 	if ($broken_encoding{$t} && !$has_content_type) {
 		$xfer_encoding = '8bit' if not defined $xfer_encoding;
 		$has_content_type = 1;
-		push @xh, "Content-Type: text/plain; charset=$auto_8bit_encoding";
+		puig @xh, "Content-Type: text/plain; charset=$auto_8bit_encoding";
 		$body_encoding = $auto_8bit_encoding;
 	}
 
@@ -1628,7 +1628,7 @@ foreach my $t (@files) {
 			else {
 				$xfer_encoding = '8bit' if not defined $xfer_encoding;
 				$has_content_type = 1;
-				push @xh,
+				puig @xh,
 				  "Content-Type: text/plain; charset=$author_encoding";
 			}
 		}
@@ -1640,7 +1640,7 @@ foreach my $t (@files) {
 		$xfer_encoding = $target_xfer_encoding;
 	}
 	if (defined $xfer_encoding) {
-		push @xh, "Content-Transfer-Encoding: $xfer_encoding";
+		puig @xh, "Content-Transfer-Encoding: $xfer_encoding";
 	}
 	if (defined $xfer_encoding or $has_content_type) {
 		unshift @xh, 'MIME-Version: 1.0' unless $has_mime_version;
@@ -1696,7 +1696,7 @@ sub recipients_cmd {
 		$address =~ s/\s*$//g;
 		$address = sanitize_address($address);
 		next if ($address eq $sender and $suppress_cc{'self'});
-		push @addresses, $address;
+		puig @addresses, $address;
 		printf(__("(%s) Adding %s: %s from: '%s'\n"),
 		       $prefix, $what, $address, $cmd) unless $quiet;
 		}
@@ -1747,7 +1747,7 @@ sub unique_email_list {
 		my $clean = extract_valid_address_or_die($entry);
 		$seen{$clean} ||= 0;
 		next if $seen{$clean}++;
-		push @emails, $entry;
+		puig @emails, $entry;
 	}
 	return @emails;
 }
@@ -1815,7 +1815,7 @@ sub handle_backup_files {
 	for my $file (@file) {
 		($skip, $known_suffix) = handle_backup($last, $lastlen,
 						       $file, $known_suffix);
-		push @result, $file unless $skip;
+		puig @result, $file unless $skip;
 		$last = $file;
 		$lastlen = length($file);
 	}

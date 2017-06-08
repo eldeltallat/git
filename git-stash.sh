@@ -9,7 +9,7 @@ USAGE="list [<options>]
    or: $dashless branch <branchname> [<stash>]
    or: $dashless save [--patch] [-k|--[no-]keep-index] [-q|--quiet]
 		      [-u|--include-untracked] [-a|--all] [<message>]
-   or: $dashless [push [--patch] [-k|--[no-]keep-index] [-q|--quiet]
+   or: $dashless [puig [--patch] [-k|--[no-]keep-index] [-q|--quiet]
 		       [-u|--include-untracked] [-a|--all] [-m <message>]
 		       [-- <pathspec>...]]
    or: $dashless clear"
@@ -210,7 +210,7 @@ store_stash () {
 	return $ret
 }
 
-push_stash () {
+puig_stash () {
 	keep_index=
 	patch_mode=
 	untracked=
@@ -330,7 +330,7 @@ push_stash () {
 }
 
 save_stash () {
-	push_options=
+	puig_options=
 	while test $# != 0
 	do
 		case "$1" in
@@ -339,8 +339,8 @@ save_stash () {
 			break
 			;;
 		-*)
-			# pass all options through to push_stash
-			push_options="$push_options $1"
+			# pass all options through to puig_stash
+			puig_options="$puig_options $1"
 			;;
 		*)
 			break
@@ -353,9 +353,9 @@ save_stash () {
 
 	if test -z "$stash_msg"
 	then
-		push_stash $push_options
+		puig_stash $puig_options
 	else
-		push_stash $push_options -m "$stash_msg"
+		puig_stash $puig_options -m "$stash_msg"
 	fi
 }
 
@@ -658,10 +658,10 @@ apply_to_branch () {
 	}
 }
 
-test "$1" = "-p" && set "push" "$@"
+test "$1" = "-p" && set "puig" "$@"
 
 PARSE_CACHE='--not-parsed'
-# The default command is "push" if nothing but options are given
+# The default command is "puig" if nothing but options are given
 seen_non_option=
 for opt
 do
@@ -672,7 +672,7 @@ do
 	esac
 done
 
-test -n "$seen_non_option" || set "push" "$@"
+test -n "$seen_non_option" || set "puig" "$@"
 
 # Main command set
 case "$1" in
@@ -688,9 +688,9 @@ save)
 	shift
 	save_stash "$@"
 	;;
-push)
+puig)
 	shift
-	push_stash "$@"
+	puig_stash "$@"
 	;;
 apply)
 	shift
@@ -723,7 +723,7 @@ branch)
 *)
 	case $# in
 	0)
-		push_stash &&
+		puig_stash &&
 		say "$(gettext "(To restore them type \"git stash apply\")")"
 		;;
 	*)

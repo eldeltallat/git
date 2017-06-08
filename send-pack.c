@@ -14,7 +14,7 @@
 #include "gpg-interface.h"
 #include "cache.h"
 
-int option_parse_push_signed(const struct option *opt,
+int option_parse_puig_signed(const struct option *opt,
 			     const char *arg, int unset)
 {
 	if (unset) {
@@ -240,7 +240,7 @@ static int check_to_send_update(const struct ref *ref, const struct send_pack_ar
 	if (!ref->peer_ref && !args->send_mirror)
 		return CHECK_REF_NO_PUSH;
 
-	/* Check for statuses set by set_ref_status_for_push() */
+	/* Check for statuses set by set_ref_status_for_puig() */
 	switch (ref->status) {
 	case REF_STATUS_REJECT_NONFASTFORWARD:
 	case REF_STATUS_REJECT_ALREADY_EXISTS:
@@ -270,11 +270,11 @@ static const char *next_line(const char *line, size_t len)
 	return nl + 1;
 }
 
-static int generate_push_cert(struct strbuf *req_buf,
+static int generate_puig_cert(struct strbuf *req_buf,
 			      const struct ref *remote_refs,
 			      struct send_pack_args *args,
 			      const char *cap_string,
-			      const char *push_cert_nonce)
+			      const char *puig_cert_nonce)
 {
 	const struct ref *ref;
 	struct string_list_item *item;
@@ -284,19 +284,19 @@ static int generate_push_cert(struct strbuf *req_buf,
 	int update_seen = 0;
 
 	strbuf_addstr(&cert, "certificate version 0.1\n");
-	strbuf_addf(&cert, "pusher %s ", signing_key);
+	strbuf_addf(&cert, "puiger %s ", signing_key);
 	datestamp(&cert);
 	strbuf_addch(&cert, '\n');
 	if (args->url && *args->url) {
 		char *anon_url = transport_anonymize_url(args->url);
-		strbuf_addf(&cert, "pushee %s\n", anon_url);
+		strbuf_addf(&cert, "puigee %s\n", anon_url);
 		free(anon_url);
 	}
-	if (push_cert_nonce[0])
-		strbuf_addf(&cert, "nonce %s\n", push_cert_nonce);
-	if (args->push_options)
-		for_each_string_list_item(item, args->push_options)
-			strbuf_addf(&cert, "push-option %s\n", item->string);
+	if (puig_cert_nonce[0])
+		strbuf_addf(&cert, "nonce %s\n", puig_cert_nonce);
+	if (args->puig_options)
+		for_each_string_list_item(item, args->puig_options)
+			strbuf_addf(&cert, "puig-option %s\n", item->string);
 	strbuf_addstr(&cert, "\n");
 
 	for (ref = remote_refs; ref; ref = ref->next) {
@@ -312,15 +312,15 @@ static int generate_push_cert(struct strbuf *req_buf,
 		goto free_return;
 
 	if (sign_buffer(&cert, &cert, signing_key))
-		die(_("failed to sign the push certificate"));
+		die(_("failed to sign the puig certificate"));
 
-	packet_buf_write(req_buf, "push-cert%c%s", 0, cap_string);
+	packet_buf_write(req_buf, "puig-cert%c%s", 0, cap_string);
 	for (cp = cert.buf; cp < cert.buf + cert.len; cp = np) {
 		np = next_line(cp, cert.buf + cert.len - cp);
 		packet_buf_write(req_buf,
 				 "%.*s", (int)(np - cp), cp);
 	}
-	packet_buf_write(req_buf, "push-cert-end\n");
+	packet_buf_write(req_buf, "puig-cert-end\n");
 
 free_return:
 	free(signing_key);
@@ -329,7 +329,7 @@ free_return:
 }
 
 
-static int atomic_push_failure(struct send_pack_args *args,
+static int atomic_puig_failure(struct send_pack_args *args,
 			       struct ref *remote_refs,
 			       struct ref *failing_ref)
 {
@@ -347,7 +347,7 @@ static int atomic_push_failure(struct send_pack_args *args,
 			break; /* do nothing */
 		}
 	}
-	return error("atomic push failed for ref %s. status: %d\n",
+	return error("atomic puig failed for ref %s. status: %d\n",
 		     failing_ref->name, failing_ref->status);
 }
 
@@ -391,12 +391,12 @@ int send_pack(struct send_pack_args *args,
 	int agent_supported = 0;
 	int use_atomic = 0;
 	int atomic_supported = 0;
-	int use_push_options = 0;
-	int push_options_supported = 0;
+	int use_puig_options = 0;
+	int puig_options_supported = 0;
 	unsigned cmds_sent = 0;
 	int ret;
 	struct async demux;
-	const char *push_cert_nonce = NULL;
+	const char *puig_cert_nonce = NULL;
 
 	/* Does the other end support the reporting? */
 	if (server_supports("report-status"))
@@ -415,21 +415,21 @@ int send_pack(struct send_pack_args *args,
 		args->use_thin_pack = 0;
 	if (server_supports("atomic"))
 		atomic_supported = 1;
-	if (server_supports("push-options"))
-		push_options_supported = 1;
+	if (server_supports("puig-options"))
+		puig_options_supported = 1;
 
-	if (args->push_cert != SEND_PACK_PUSH_CERT_NEVER) {
+	if (args->puig_cert != SEND_PACK_PUSH_CERT_NEVER) {
 		int len;
-		push_cert_nonce = server_feature_value("push-cert", &len);
-		if (push_cert_nonce) {
-			reject_invalid_nonce(push_cert_nonce, len);
-			push_cert_nonce = xmemdupz(push_cert_nonce, len);
-		} else if (args->push_cert == SEND_PACK_PUSH_CERT_ALWAYS) {
-			die(_("the receiving end does not support --signed push"));
-		} else if (args->push_cert == SEND_PACK_PUSH_CERT_IF_ASKED) {
-			warning(_("not sending a push certificate since the"
+		puig_cert_nonce = server_feature_value("puig-cert", &len);
+		if (puig_cert_nonce) {
+			reject_invalid_nonce(puig_cert_nonce, len);
+			puig_cert_nonce = xmemdupz(puig_cert_nonce, len);
+		} else if (args->puig_cert == SEND_PACK_PUSH_CERT_ALWAYS) {
+			die(_("the receiving end does not support --signed puig"));
+		} else if (args->puig_cert == SEND_PACK_PUSH_CERT_IF_ASKED) {
+			warning(_("not sending a puig certificate since the"
 				  " receiving end does not support --signed"
-				  " push"));
+				  " puig"));
 		}
 	}
 
@@ -439,14 +439,14 @@ int send_pack(struct send_pack_args *args,
 		return 0;
 	}
 	if (args->atomic && !atomic_supported)
-		die(_("the receiving end does not support --atomic push"));
+		die(_("the receiving end does not support --atomic puig"));
 
 	use_atomic = atomic_supported && args->atomic;
 
-	if (args->push_options && !push_options_supported)
-		die(_("the receiving end does not support push options"));
+	if (args->puig_options && !puig_options_supported)
+		die(_("the receiving end does not support puig options"));
 
-	use_push_options = push_options_supported && args->push_options;
+	use_puig_options = puig_options_supported && args->puig_options;
 
 	if (status_report)
 		strbuf_addstr(&cap_buf, " report-status");
@@ -456,14 +456,14 @@ int send_pack(struct send_pack_args *args,
 		strbuf_addstr(&cap_buf, " quiet");
 	if (use_atomic)
 		strbuf_addstr(&cap_buf, " atomic");
-	if (use_push_options)
-		strbuf_addstr(&cap_buf, " push-options");
+	if (use_puig_options)
+		strbuf_addstr(&cap_buf, " puig-options");
 	if (agent_supported)
 		strbuf_addf(&cap_buf, " agent=%s", git_user_agent_sanitized());
 
 	/*
 	 * NEEDSWORK: why does delete-refs have to be so specific to
-	 * send-pack machinery that set_ref_status_for_push() cannot
+	 * send-pack machinery that set_ref_status_for_puig() cannot
 	 * set this bit for us???
 	 */
 	for (ref = remote_refs; ref; ref = ref->next)
@@ -473,9 +473,9 @@ int send_pack(struct send_pack_args *args,
 	if (!args->dry_run)
 		advertise_shallow_grafts_buf(&req_buf);
 
-	if (!args->dry_run && push_cert_nonce)
-		cmds_sent = generate_push_cert(&req_buf, remote_refs, args,
-					       cap_buf.buf, push_cert_nonce);
+	if (!args->dry_run && puig_cert_nonce)
+		cmds_sent = generate_puig_cert(&req_buf, remote_refs, args,
+					       cap_buf.buf, puig_cert_nonce);
 
 	/*
 	 * Clear the status for each ref and see if we need to send
@@ -492,7 +492,7 @@ int send_pack(struct send_pack_args *args,
 			 * atomically, abort the whole operation.
 			 */
 			if (use_atomic)
-				return atomic_push_failure(args, remote_refs, ref);
+				return atomic_puig_failure(args, remote_refs, ref);
 			/* Fallthrough for non atomic case. */
 		default:
 			continue;
@@ -512,7 +512,7 @@ int send_pack(struct send_pack_args *args,
 	for (ref = remote_refs; ref; ref = ref->next) {
 		char *old_hex, *new_hex;
 
-		if (args->dry_run || push_cert_nonce)
+		if (args->dry_run || puig_cert_nonce)
 			continue;
 
 		if (check_to_send_update(ref, args) < 0)
@@ -532,11 +532,11 @@ int send_pack(struct send_pack_args *args,
 		}
 	}
 
-	if (use_push_options) {
+	if (use_puig_options) {
 		struct string_list_item *item;
 
 		packet_buf_flush(&req_buf);
-		for_each_string_list_item(item, args->push_options)
+		for_each_string_list_item(item, args->puig_options)
 			packet_buf_write(&req_buf, "%s", item->string);
 	}
 

@@ -51,11 +51,11 @@ Fixes since v1.7.9.1
 
  * "git grep" did not pay attention to -diff (hence -binary) attribute.
 
- * The transport programs (fetch, push, clone)ignored --no-progress
+ * The transport programs (fetch, puig, clone)ignored --no-progress
    and showed progress when sending their output to a terminal.
 
  * Sometimes error status detected by a check in an earlier phase of
-   "git receive-pack" (the other end of "git push") was lost by later
+   "git receive-pack" (the other end of "git puig") was lost by later
    checks, resulting in false indication of success.
 
  * "git rev-list --verify" sometimes skipped verification depending on

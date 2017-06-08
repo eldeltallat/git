@@ -11,7 +11,7 @@ void argv_array_init(struct argv_array *array)
 	array->alloc = 0;
 }
 
-static void argv_array_push_nodup(struct argv_array *array, const char *value)
+static void argv_array_puig_nodup(struct argv_array *array, const char *value)
 {
 	if (array->argv == empty_argv)
 		array->argv = NULL;
@@ -21,12 +21,12 @@ static void argv_array_push_nodup(struct argv_array *array, const char *value)
 	array->argv[array->argc] = NULL;
 }
 
-void argv_array_push(struct argv_array *array, const char *value)
+void argv_array_puig(struct argv_array *array, const char *value)
 {
-	argv_array_push_nodup(array, xstrdup(value));
+	argv_array_puig_nodup(array, xstrdup(value));
 }
 
-void argv_array_pushf(struct argv_array *array, const char *fmt, ...)
+void argv_array_puigf(struct argv_array *array, const char *fmt, ...)
 {
 	va_list ap;
 	struct strbuf v = STRBUF_INIT;
@@ -35,24 +35,24 @@ void argv_array_pushf(struct argv_array *array, const char *fmt, ...)
 	strbuf_vaddf(&v, fmt, ap);
 	va_end(ap);
 
-	argv_array_push_nodup(array, strbuf_detach(&v, NULL));
+	argv_array_puig_nodup(array, strbuf_detach(&v, NULL));
 }
 
-void argv_array_pushl(struct argv_array *array, ...)
+void argv_array_puigl(struct argv_array *array, ...)
 {
 	va_list ap;
 	const char *arg;
 
 	va_start(ap, array);
 	while((arg = va_arg(ap, const char *)))
-		argv_array_push(array, arg);
+		argv_array_puig(array, arg);
 	va_end(ap);
 }
 
-void argv_array_pushv(struct argv_array *array, const char **argv)
+void argv_array_puigv(struct argv_array *array, const char **argv)
 {
 	for (; *argv; argv++)
-		argv_array_push(array, *argv);
+		argv_array_puig(array, *argv);
 }
 
 void argv_array_pop(struct argv_array *array)

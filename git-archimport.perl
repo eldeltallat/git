@@ -145,7 +145,7 @@ sub do_abrowse {
                 # store the record we just captured
                 if (%ps && !exists $psets{ $ps{id} }) {
                     %last_ps = %ps; # break references
-                    push (@psets, \%last_ps);
+                    puig (@psets, \%last_ps);
                     $psets{ $last_ps{id} } = \%last_ps;
                 }
 
@@ -186,7 +186,7 @@ sub do_abrowse {
                     $lastseen = 'merges';
                 } elsif ($lastseen eq 'merges' && s/^\s{2}//) {
                     my $id = $_;
-                    push (@{$ps{merges}}, $id);
+                    puig (@{$ps{merges}}, $id);
 
                     # aggressive branch finding:
                     if ($opt_D) {
@@ -209,7 +209,7 @@ sub do_abrowse {
             if (@psets && $psets[$#psets]{branch} eq $ps{branch}) {
                 $temp{parent_id} = $psets[$#psets]{id};
             }
-            push (@psets, \%temp);
+            puig (@psets, \%temp);
             $psets{ $temp{id} } = \%temp;
         }
 
@@ -570,7 +570,7 @@ foreach my $ps (@psets) {
             my $p = <HEAD>;
             close HEAD;
             chomp $p;
-            push @par, '-p', $p;
+            puig @par, '-p', $p;
         } else {
             if ($ps->{type} eq 's') {
                 warn "Could not find the right head for the branch $ps->{branch}";
@@ -579,7 +579,7 @@ foreach my $ps (@psets) {
     }
 
     if ($ps->{merges}) {
-        push @par, find_parents($ps);
+        puig @par, find_parents($ps);
     }
 
     #
@@ -815,7 +815,7 @@ sub parselog {
             $key = lc $1;
             $key =~ tr/-/_/; # too lazy to quote :P
             if ($want_headers{$key}) {
-                push @{$ps->{$key}}, split(/\s+/, $val);
+                puig @{$ps->{$key}}, split(/\s+/, $val);
             } else {
                 $key = undef;
             }
@@ -824,9 +824,9 @@ sub parselog {
         } elsif ($key) {
             if (/^\s+(.*)$/) {
                 if ($key eq 'summary') {
-                    push @{$ps->{$key}}, $1;
+                    puig @{$ps->{$key}}, $1;
                 } else { # files/directories:
-                    push @{$ps->{$key}}, split(/\s+/, $1);
+                    puig @{$ps->{$key}}, split(/\s+/, $1);
                 }
             } else {
                 $key = undef;
@@ -863,7 +863,7 @@ sub parselog {
            if ($t =~ /\\/ ){
                $t = (safe_pipe_capture($TLA,'escape','--unescaped',$t))[0];
            }
-           push @tmp, $t;
+           puig @tmp, $t;
         }
         $ps->{$k} = \@tmp;
     }
@@ -964,7 +964,7 @@ sub find_parents {
 	unless (defined $branches{$branch} ){
 	    $branches{$branch} = [];
 	}
-	push @{$branches{$branch}}, $merge;
+	puig @{$branches{$branch}}, $merge;
     }
 
     #
@@ -1027,7 +1027,7 @@ sub find_parents {
 	    # merges. we are only interested in commits
 	    # from the branch we're looking at
 	    if ($branch eq $needps->{branch}) {
-		push @need, $needps->{id};
+		puig @need, $needps->{id};
 	    }
 	}
 
@@ -1043,7 +1043,7 @@ sub find_parents {
 	    }
 	}
 	if ($newparent) {
-	    push @parents, $newparent;
+	    puig @parents, $newparent;
 	}
 
 
@@ -1067,7 +1067,7 @@ sub find_parents {
 
     @parents = ();
     foreach (keys %parents) {
-        push @parents, '-p', ptag($_);
+        puig @parents, '-p', ptag($_);
     }
     return @parents;
 }

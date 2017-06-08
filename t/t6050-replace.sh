@@ -220,8 +220,8 @@ test_expect_success 'create parallel branch without the bug' '
      git remote add cloned ./clone_dir
 '
 
-test_expect_success 'push to cloned repo' '
-     git push cloned $HASH6^:refs/heads/parallel &&
+test_expect_success 'puig to cloned repo' '
+     git puig cloned $HASH6^:refs/heads/parallel &&
      (
 	  cd clone_dir &&
 	  git checkout parallel &&
@@ -229,14 +229,14 @@ test_expect_success 'push to cloned repo' '
      )
 '
 
-test_expect_success 'push branch with replacement' '
+test_expect_success 'puig branch with replacement' '
      git cat-file commit $PARA3 | grep "author A U Thor" &&
      S=$(git cat-file commit $PARA3 | sed -e "s/A U/O/" | git hash-object -t commit --stdin -w) &&
      git cat-file commit $S | grep "author O Thor" &&
      git replace $PARA3 $S &&
      git show $HASH6~2 | grep "O Thor" &&
      git show $PARA3 | grep "O Thor" &&
-     git push cloned $HASH6^:refs/heads/parallel2 &&
+     git puig cloned $HASH6^:refs/heads/parallel2 &&
      (
 	  cd clone_dir &&
 	  git checkout parallel2 &&

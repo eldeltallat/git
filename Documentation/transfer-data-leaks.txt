@@ -1,6 +1,6 @@
 SECURITY
 --------
-The fetch and push protocols are not designed to prevent one side from
+The fetch and puig protocols are not designed to prevent one side from
 stealing data from the other repository that was not intended to be
 shared. If you have private data that you need to protect from a malicious
 peer, your best option is to store it in another repository. This applies
@@ -21,7 +21,7 @@ The known attack vectors are as follows:
   server, by creating a ref to X in the namespace the client has access
   to and then fetching it. The most likely way for a server to perform it
   on a client is to "merge" X into a public branch and hope that the user
-  does additional work on this branch and pushes it back to the server
+  does additional work on this branch and puiges it back to the server
   without noticing the merge.)
 
 . As in #1, the attacker chooses an object ID X to steal. The victim sends

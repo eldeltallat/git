@@ -619,12 +619,12 @@ static void bisect_rev_setup(struct rev_info *revs, const char *prefix,
 	revs->commit_format = CMIT_FMT_UNSPECIFIED;
 
 	/* rev_argv.argv[0] will be ignored by setup_revisions */
-	argv_array_push(&rev_argv, "bisect_rev_setup");
-	argv_array_pushf(&rev_argv, bad_format, oid_to_hex(current_bad_oid));
+	argv_array_puig(&rev_argv, "bisect_rev_setup");
+	argv_array_puigf(&rev_argv, bad_format, oid_to_hex(current_bad_oid));
 	for (i = 0; i < good_revs.nr; i++)
-		argv_array_pushf(&rev_argv, good_format,
+		argv_array_puigf(&rev_argv, good_format,
 				 oid_to_hex(good_revs.oid + i));
-	argv_array_push(&rev_argv, "--");
+	argv_array_puig(&rev_argv, "--");
 	if (read_paths)
 		read_bisect_paths(&rev_argv);
 

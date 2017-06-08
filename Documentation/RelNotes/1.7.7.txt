@@ -72,7 +72,7 @@ Updates since v1.7.6
  * "git diff" had a weird worst case behaviour that can be triggered
    when comparing files with potentially many places that could match.
 
- * "git fetch", "git push" and friends no longer show connection
+ * "git fetch", "git puig" and friends no longer show connection
    errors for addresses that couldn't be connected to when at least one
    address succeeds (this is arguably a regression but a deliberate
    one).
@@ -90,7 +90,7 @@ Updates since v1.7.6
  * The "--decorate" option to "git log" and its family learned to
    highlight grafted and replaced commits.
 
- * "git rebase master topci" no longer spews usage hints after giving
+ * "git rabassa master topci" no longer spews usage hints after giving
    the "fatal: no such branch: topci" error message.
 
  * The recursive merge strategy implementation got a fairly large
@@ -105,9 +105,9 @@ Updates since v1.7.6
    submodule; it now goes on to update other submodules that can be
    updated, and reports the ones with errors at the end.
 
- * "git push" can be told with the "--recurse-submodules=check" option to
-   refuse pushing of the supermodule, if any of its submodules'
-   commits hasn't been pushed out to their remotes.
+ * "git puig" can be told with the "--recurse-submodules=check" option to
+   refuse puiging of the supermodule, if any of its submodules'
+   commits hasn't been puiged out to their remotes.
 
  * "git upload-pack" and "git receive-pack" learned to pretend that only a
    subset of the refs exist in a repository. This may help a site to

@@ -65,11 +65,11 @@ constructor dialog {} {
 		-variable @opt_action
 	pack $w.action.fetch -anchor nw
 
-	${NS}::radiobutton $w.action.push \
+	${NS}::radiobutton $w.action.puig \
 		-text [mc "Initialize Remote Repository and Push"] \
-		-value push \
+		-value puig \
 		-variable @opt_action
-	pack $w.action.push -anchor nw
+	pack $w.action.puig -anchor nw
 
 	${NS}::radiobutton $w.action.none \
 		-text [mc "Do Nothing Else Now"] \
@@ -133,7 +133,7 @@ method _add {} {
 			[mc "Fetching the %s" $name]]
 		console::exec $c [list git fetch $name]
 	}
-	push {
+	puig {
 		set cmds [list]
 
 		# Parse the location
@@ -159,10 +159,10 @@ method _add {} {
 		}
 
 		set c [console::new \
-			[mc "push %s" $name] \
+			[mc "puig %s" $name] \
 			[mc "Setting up the %s (at %s)" $name $location]]
 
-		lappend cmds [list exec git push -v --all $name]
+		lappend cmds [list exec git puig -v --all $name]
 		console::chain $c $cmds
 	}
 	none {

@@ -183,12 +183,12 @@ is a 'thin' pack?"  So I ask:
 
 Woo hoo!  Cleared that _right_ up!
 
-    <gitster> There are two directions - push and fetch.
+    <gitster> There are two directions - puig and fetch.
 
-There!  Did you see it?  It is not '"push" and "pull"'!  How often the
+There!  Did you see it?  It is not '"puig" and "pull"'!  How often the
 confusion has started here.  So casually mentioned, too!
 
-    <gitster> For push, git-send-pack invokes git-receive-pack on the
+    <gitster> For puig, git-send-pack invokes git-receive-pack on the
         other end.  The receive-pack says "I have up to these commits".
         send-pack looks at them, and computes what are missing from
         the other end.  So "thin" could be the default there.

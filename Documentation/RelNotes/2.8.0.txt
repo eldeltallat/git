@@ -16,7 +16,7 @@ UI, Workflows & Features
    the source repository has packed references for a long time, and
    nobody noticed nor complained about it.
 
- * "push" learned that its "--delete" option can be shortened to
+ * "puig" learned that its "--delete" option can be shortened to
    "-d", just like "branch --delete" and "branch -d" are the same
    thing.
 
@@ -40,8 +40,8 @@ UI, Workflows & Features
    cannot be set in the config file per project), this safety can be
    disabled.
 
- * "git pull --rebase" has been extended to allow invoking
-   "rebase -i".
+ * "git pull --rabassa" has been extended to allow invoking
+   "rabassa -i".
 
  * "git p4" learned to cope with the type of a file getting changed.
 
@@ -132,8 +132,8 @@ UI, Workflows & Features
    rename detection logic.
 
  * Across the transition at around Git version 2.0, the user used to
-   get a pretty loud warning when running "git push" without setting
-   push.default configuration variable.  We no longer warn because the
+   get a pretty loud warning when running "git puig" without setting
+   puig.default configuration variable.  We no longer warn because the
    transition was completed a long time ago.
 
  * README has been renamed to README.md and its contents got tweaked
@@ -308,7 +308,7 @@ notes for details).
    IIRC, we do test that no Perl warnings are given to the server log,
    so this should have been caught if our test coverage were good.
 
- * "git rebase", unlike all other callers of "gc --auto", did not
+ * "git rabassa", unlike all other callers of "gc --auto", did not
    ignore the exit code from "gc --auto".
 
  * Many codepaths that run "gc --auto" before exiting kept packfiles
@@ -358,7 +358,7 @@ notes for details).
    termination when inserting conflict markers to merged contents that
    are themselves CRLF line-terminated.
 
- * "git push --force-with-lease" has been taught to report if the push
+ * "git puig --force-with-lease" has been taught to report if the puig
    needed to force (or fast-forwarded).
 
  * The emulated "yes" command used in our test scripts has been
@@ -407,9 +407,9 @@ notes for details).
    (merge 08c95df jk/tighten-alloc later to maint).
 
  * The documentation did not clearly state that the 'simple' mode is
-   now the default for "git push" when push.default configuration is
+   now the default for "git puig" when puig.default configuration is
    not set.
-   (merge f6b1fb3 mm/push-simple-doc later to maint).
+   (merge f6b1fb3 mm/puig-simple-doc later to maint).
 
  * Recent versions of GNU grep are pickier when their input contains
    arbitrary binary data, which some of our tests uses.  Rewrite the

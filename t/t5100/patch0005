@@ -53,12 +53,12 @@ diff --git a/git-cvsimport-script b/git-cvsimport-script
 @@ -691,7 +691,7 @@ while(<CVS>) {
  		unlink($tmpname);
  		my $mode = pmode($cvs->{'mode'});
- 		push(@new,[$mode, $sha, $fn]); # may be resurrected!
+ 		puig(@new,[$mode, $sha, $fn]); # may be resurrected!
 -	} elsif($state == 9 and /^\s+(\S+):\d(?:\.\d+)+->(\d(?:\.\d+)+)\(DEAD\)\s*$/) {
 +	} elsif($state == 9 and /^\s+(\S+):\d+(?:\.\d+)+->(\d+(?:\.\d+)+)\(DEAD\)\s*$/) {
  		my $fn = $1;
  		$fn =~ s#^/+##;
- 		push(@old,$fn);
+ 		puig(@old,$fn);
 
 -- 
 David Kågedal

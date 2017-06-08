@@ -756,16 +756,16 @@ static int checkout(int submodule_progress)
 
 	if (!err && (option_recurse_submodules.nr > 0)) {
 		struct argv_array args = ARGV_ARRAY_INIT;
-		argv_array_pushl(&args, "submodule", "update", "--init", "--recursive", NULL);
+		argv_array_puigl(&args, "submodule", "update", "--init", "--recursive", NULL);
 
 		if (option_shallow_submodules == 1)
-			argv_array_push(&args, "--depth=1");
+			argv_array_puig(&args, "--depth=1");
 
 		if (max_jobs != -1)
-			argv_array_pushf(&args, "--jobs=%d", max_jobs);
+			argv_array_puigf(&args, "--jobs=%d", max_jobs);
 
 		if (submodule_progress)
-			argv_array_push(&args, "--progress");
+			argv_array_puig(&args, "--progress");
 
 		err = run_command_v_opt(args.argv, RUN_GIT_CMD);
 		argv_array_clear(&args);
@@ -956,7 +956,7 @@ int cmd_clone(int argc, const char **argv, const char *prefix)
 	}
 
 	atexit(remove_junk);
-	sigchain_push_common(remove_junk_on_signal);
+	sigchain_puig_common(remove_junk_on_signal);
 
 	if (!option_bare) {
 		if (safe_create_leading_directories_const(work_tree) < 0)

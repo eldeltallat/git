@@ -229,7 +229,7 @@ static int add_worktree(const char *path, const char *refname,
 
 	junk_pid = getpid();
 	atexit(remove_junk);
-	sigchain_push_common(remove_junk_on_signal);
+	sigchain_puig_common(remove_junk_on_signal);
 
 	if (mkdir(sb_repo.buf, 0777))
 		die_errno(_("could not create directory of '%s'"), sb_repo.buf);
@@ -273,15 +273,15 @@ static int add_worktree(const char *path, const char *refname,
 
 	fprintf_ln(stderr, _("Preparing %s (identifier %s)"), path, name);
 
-	argv_array_pushf(&child_env, "%s=%s", GIT_DIR_ENVIRONMENT, sb_git.buf);
-	argv_array_pushf(&child_env, "%s=%s", GIT_WORK_TREE_ENVIRONMENT, path);
+	argv_array_puigf(&child_env, "%s=%s", GIT_DIR_ENVIRONMENT, sb_git.buf);
+	argv_array_puigf(&child_env, "%s=%s", GIT_WORK_TREE_ENVIRONMENT, path);
 	cp.git_cmd = 1;
 
 	if (commit)
-		argv_array_pushl(&cp.args, "update-ref", "HEAD",
+		argv_array_puigl(&cp.args, "update-ref", "HEAD",
 				 oid_to_hex(&commit->object.oid), NULL);
 	else
-		argv_array_pushl(&cp.args, "symbolic-ref", "HEAD",
+		argv_array_puigl(&cp.args, "symbolic-ref", "HEAD",
 				 symref.buf, NULL);
 	cp.env = child_env.argv;
 	ret = run_command(&cp);
@@ -291,7 +291,7 @@ static int add_worktree(const char *path, const char *refname,
 	if (opts->checkout) {
 		cp.argv = NULL;
 		argv_array_clear(&cp.args);
-		argv_array_pushl(&cp.args, "reset", "--hard", NULL);
+		argv_array_puigl(&cp.args, "reset", "--hard", NULL);
 		cp.env = child_env.argv;
 		ret = run_command(&cp);
 		if (ret)
@@ -372,11 +372,11 @@ static int add(int ac, const char **av, const char *prefix)
 	if (opts.new_branch) {
 		struct child_process cp = CHILD_PROCESS_INIT;
 		cp.git_cmd = 1;
-		argv_array_push(&cp.args, "branch");
+		argv_array_puig(&cp.args, "branch");
 		if (opts.force_new_branch)
-			argv_array_push(&cp.args, "--force");
-		argv_array_push(&cp.args, opts.new_branch);
-		argv_array_push(&cp.args, branch);
+			argv_array_puig(&cp.args, "--force");
+		argv_array_puig(&cp.args, opts.new_branch);
+		argv_array_puig(&cp.args, branch);
 		if (run_command(&cp))
 			return -1;
 		branch = opts.new_branch;

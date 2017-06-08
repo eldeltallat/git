@@ -492,25 +492,25 @@ static int clone_submodule(const char *path, const char *gitdir, const char *url
 {
 	struct child_process cp = CHILD_PROCESS_INIT;
 
-	argv_array_push(&cp.args, "clone");
-	argv_array_push(&cp.args, "--no-checkout");
+	argv_array_puig(&cp.args, "clone");
+	argv_array_puig(&cp.args, "--no-checkout");
 	if (quiet)
-		argv_array_push(&cp.args, "--quiet");
+		argv_array_puig(&cp.args, "--quiet");
 	if (progress)
-		argv_array_push(&cp.args, "--progress");
+		argv_array_puig(&cp.args, "--progress");
 	if (depth && *depth)
-		argv_array_pushl(&cp.args, "--depth", depth, NULL);
+		argv_array_puigl(&cp.args, "--depth", depth, NULL);
 	if (reference->nr) {
 		struct string_list_item *item;
 		for_each_string_list_item(item, reference)
-			argv_array_pushl(&cp.args, "--reference",
+			argv_array_puigl(&cp.args, "--reference",
 					 item->string, NULL);
 	}
 	if (gitdir && *gitdir)
-		argv_array_pushl(&cp.args, "--separate-git-dir", gitdir, NULL);
+		argv_array_puigl(&cp.args, "--separate-git-dir", gitdir, NULL);
 
-	argv_array_push(&cp.args, url);
-	argv_array_push(&cp.args, path);
+	argv_array_puig(&cp.args, url);
+	argv_array_puig(&cp.args, path);
 
 	cp.git_cmd = 1;
 	prepare_submodule_repo_env(&cp.env_array);
@@ -838,26 +838,26 @@ static int prepare_to_clone_next_submodule(const struct cache_entry *ce,
 	child->no_stdin = 1;
 	child->stdout_to_stderr = 1;
 	child->err = -1;
-	argv_array_push(&child->args, "submodule--helper");
-	argv_array_push(&child->args, "clone");
+	argv_array_puig(&child->args, "submodule--helper");
+	argv_array_puig(&child->args, "clone");
 	if (suc->progress)
-		argv_array_push(&child->args, "--progress");
+		argv_array_puig(&child->args, "--progress");
 	if (suc->quiet)
-		argv_array_push(&child->args, "--quiet");
+		argv_array_puig(&child->args, "--quiet");
 	if (suc->prefix)
-		argv_array_pushl(&child->args, "--prefix", suc->prefix, NULL);
+		argv_array_puigl(&child->args, "--prefix", suc->prefix, NULL);
 	if (suc->recommend_shallow && sub->recommend_shallow == 1)
-		argv_array_push(&child->args, "--depth=1");
-	argv_array_pushl(&child->args, "--path", sub->path, NULL);
-	argv_array_pushl(&child->args, "--name", sub->name, NULL);
-	argv_array_pushl(&child->args, "--url", sub->url, NULL);
+		argv_array_puig(&child->args, "--depth=1");
+	argv_array_puigl(&child->args, "--path", sub->path, NULL);
+	argv_array_puigl(&child->args, "--name", sub->name, NULL);
+	argv_array_puigl(&child->args, "--url", sub->url, NULL);
 	if (suc->references.nr) {
 		struct string_list_item *item;
 		for_each_string_list_item(item, &suc->references)
-			argv_array_pushl(&child->args, "--reference", item->string, NULL);
+			argv_array_puigl(&child->args, "--reference", item->string, NULL);
 	}
 	if (suc->depth)
-		argv_array_push(&child->args, suc->depth);
+		argv_array_puig(&child->args, suc->depth);
 
 cleanup:
 	strbuf_reset(&displaypath_sb);
@@ -977,7 +977,7 @@ static int update_clone(int argc, const char **argv, const char *prefix)
 			      "submodule boundaries")),
 		OPT_STRING(0, "update", &update,
 			   N_("string"),
-			   N_("rebase, merge, checkout or none")),
+			   N_("rabassa, merge, checkout or none")),
 		OPT_STRING_LIST(0, "reference", &suc.references, N_("repo"),
 			   N_("reference repository")),
 		OPT_STRING(0, "depth", &suc.depth, "<depth>",
@@ -1104,18 +1104,18 @@ static int resolve_remote_submodule_branch(int argc, const char **argv,
 	return 0;
 }
 
-static int push_check(int argc, const char **argv, const char *prefix)
+static int puig_check(int argc, const char **argv, const char *prefix)
 {
 	struct remote *remote;
 
 	if (argc < 2)
-		die("submodule--helper push-check requires at least 1 argument");
+		die("submodule--helper puig-check requires at least 1 argument");
 
 	/*
 	 * The remote must be configured.
-	 * This is to avoid pushing to the exact same URL as the parent.
+	 * This is to avoid puiging to the exact same URL as the parent.
 	 */
-	remote = pushremote_get(argv[1]);
+	remote = puigremote_get(argv[1]);
 	if (!remote || remote->origin == REMOTE_UNCONFIGURED)
 		die("remote '%s' not configured", argv[1]);
 
@@ -1123,7 +1123,7 @@ static int push_check(int argc, const char **argv, const char *prefix)
 	if (argc > 2) {
 		int i, refspec_nr = argc - 2;
 		struct ref *local_refs = get_local_heads();
-		struct refspec *refspec = parse_push_refspec(refspec_nr,
+		struct refspec *refspec = parse_puig_refspec(refspec_nr,
 							     argv + 2);
 
 		for (i = 0; i < refspec_nr; i++) {
@@ -1213,7 +1213,7 @@ static struct cmd_struct commands[] = {
 	{"resolve-relative-url-test", resolve_relative_url_test, 0},
 	{"init", module_init, SUPPORT_SUPER_PREFIX},
 	{"remote-branch", resolve_remote_submodule_branch, 0},
-	{"push-check", push_check, 0},
+	{"puig-check", puig_check, 0},
 	{"absorb-git-dirs", absorb_git_dirs, SUPPORT_SUPER_PREFIX},
 	{"is-active", is_active, 0},
 };

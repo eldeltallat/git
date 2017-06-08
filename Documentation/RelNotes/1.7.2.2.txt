@@ -16,7 +16,7 @@ Fixes since v1.7.2.1
 
  * "git checkout -b n ':/token'" did not work;
 
- * "git index-pack" (hence "git fetch/clone/pull/push") enabled the object
+ * "git index-pack" (hence "git fetch/clone/pull/puig") enabled the object
    replacement machinery by mistake (it never should have);
 
 And other minor fixes and documentation updates.

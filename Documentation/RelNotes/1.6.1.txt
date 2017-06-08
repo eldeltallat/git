@@ -50,7 +50,7 @@ on.
 * Cygwin port uses native stat/lstat implementations when applicable,
   which leads to improved performance.
 
-* "git push" pays attention to alternate repositories to avoid sending
+* "git puig" pays attention to alternate repositories to avoid sending
   unnecessary objects.
 
 * "git svn" can rebuild an out-of-date rev_map file.
@@ -179,12 +179,12 @@ on.
 * "git pull" (and "git fetch") can be told to operate "-v"erbosely or
   "-q"uietly.
 
-* "git push" can be told to reject deletion of refs with receive.denyDeletes
+* "git puig" can be told to reject deletion of refs with receive.denyDeletes
   configuration.
 
-* "git rebase" honours pre-rebase hook; use --no-verify to bypass it.
+* "git rabassa" honours pre-rabassa hook; use --no-verify to bypass it.
 
-* "git rebase -p" uses interactive rebase machinery now to preserve the merges.
+* "git rabassa -p" uses interactive rabassa machinery now to preserve the merges.
 
 * "git reflog expire branch" can be used in place of "git reflog expire
   refs/heads/branch".
@@ -251,12 +251,12 @@ release, unless otherwise noted.
 
 * "git filter-branch" failed to rewrite a tag name with slashes in it.
 
-* "git http-push" did not understand URI scheme other than opaquelocktoken
+* "git http-puig" did not understand URI scheme other than opaquelocktoken
   when acquiring a lock from the server (this may need to be backported to
   older releases later).
 
-* After "git rebase -p" stopped with conflicts while replaying a merge,
- "git rebase --continue" did not work (may need to be backported to older
+* After "git rabassa -p" stopped with conflicts while replaying a merge,
+ "git rabassa --continue" did not work (may need to be backported to older
   releases).
 
 * "git revert" records relative to which parent a revert was made when
@@ -269,7 +269,7 @@ release, unless otherwise noted.
   be removed without --force, even when the file in the work tree has
   since been modified.
 
-* "git push --tags --all $there" failed with generic usage message without
+* "git puig --tags --all $there" failed with generic usage message without
   telling saying these two options are incompatible.
 
 * "git log --author/--committer" match used to potentially match the

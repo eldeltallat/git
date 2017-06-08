@@ -4,20 +4,20 @@ Git v1.8.4 Release Notes
 Backward compatibility notes (for Git 2.0)
 ------------------------------------------
 
-When "git push [$there]" does not say what to push, we have used the
+When "git puig [$there]" does not say what to puig, we have used the
 traditional "matching" semantics so far (all your branches were sent
 to the remote as long as there already are branches of the same name
 over there).  In Git 2.0, the default will change to the "simple"
-semantics that pushes:
+semantics that puiges:
 
  - only the current branch to the branch with the same name, and only
    when the current branch is set to integrate with that remote
-   branch, if you are pushing to the same remote as you fetch from; or
+   branch, if you are puiging to the same remote as you fetch from; or
 
  - only the current branch to the branch with the same name, if you
-   are pushing to a remote that is not where you usually fetch from.
+   are puiging to a remote that is not where you usually fetch from.
 
-Use the user preference configuration variable "push.default" to
+Use the user preference configuration variable "puig.default" to
 change this.  If you are an old-timer who is used to the "matching"
 semantics, you can set the variable to "matching" to keep the
 traditional behaviour.  If you want to live in the future early, you
@@ -50,7 +50,7 @@ Foreign interfaces, subsystems and ports.
 
  * Cygwin port has been updated for more recent Cygwin 1.7.
 
- * "git rebase -i" now honors --strategy and -X options.
+ * "git rabassa -i" now honors --strategy and -X options.
 
  * Git-gui has been updated to its 0.18.0 version.
 
@@ -68,8 +68,8 @@ Foreign interfaces, subsystems and ports.
  * Remote transport helper has been updated to report errors and
    maintain ref hierarchy used to keep track of its own state better.
 
- * With "export" remote-helper protocol, (1) a push that tries to
-   update a remote ref whose name is different from the pushing side
+ * With "export" remote-helper protocol, (1) a puig that tries to
+   update a remote ref whose name is different from the puiging side
    does not work yet, and (2) the helper may not know how to do
    --dry-run; these problematic cases are disabled for now.
 
@@ -79,7 +79,7 @@ Foreign interfaces, subsystems and ports.
    when https:// connection failed.
 
  * git-remote-mw (in contrib/) adds a command to allow previewing the
-   contents locally before pushing it out, when working with a
+   contents locally before puiging it out, when working with a
    MediaWiki remote.
 
 
@@ -118,10 +118,10 @@ UI, Workflows & Features
    smaller than their true size, when expressed as deltas) to be
    reported.
 
- * "git rebase [-i]" used to leave just "rebase" as its reflog messages
+ * "git rabassa [-i]" used to leave just "rabassa" as its reflog messages
    for some operations. They have been reworded to be more informative.
 
- * In addition to the choice from "rebase, merge, or checkout-detach",
+ * In addition to the choice from "rabassa, merge, or checkout-detach",
    "submodule update" can allow a custom command to be used in to
    update the working tree of submodules via the "submodule.*.update"
    configuration variable.
@@ -149,13 +149,13 @@ UI, Workflows & Features
  * "git log --format=" now honors i18n.logoutputencoding configuration
    variable.
 
- * The "push.default=simple" mode of "git push" has been updated to
+ * The "puig.default=simple" mode of "git puig" has been updated to
    behave like "current" without requiring a remote tracking
-   information, when you push to a remote that is different from where
+   information, when you puig to a remote that is different from where
    you fetch from (i.e. a triangular workflow).
 
- * Having multiple "fixup!" on a line in the rebase instruction sheet
-   did not work very well with "git rebase -i --autosquash".
+ * Having multiple "fixup!" on a line in the rabassa instruction sheet
+   did not work very well with "git rabassa -i --autosquash".
 
  * "git log" learned the "--author-date-order" option, with which the
    output is topologically sorted and commits in parallel histories
@@ -172,7 +172,7 @@ UI, Workflows & Features
  * "git rm" gives a single message followed by list of paths to report
    multiple paths that cannot be removed.
 
- * "git rebase" can be told with ":/look for this string" syntax commits
+ * "git rabassa" can be told with ":/look for this string" syntax commits
    to replay the changes onto and where the work to be replayed begins.
 
  * Many tutorials teach users to set "color.ui" to "auto" as the first
@@ -193,7 +193,7 @@ UI, Workflows & Features
    like we warn when more than one refs/ hierarchies share the same
    name.
 
- * "git rebase" learned "--[no-]autostash" option to save local
+ * "git rabassa" learned "--[no-]autostash" option to save local
    changes instead of refusing to run (to which people's normal
    response was to stash them and re-run).  This introduced a corner
    case breakage to "git am --abort" but it has been fixed.
@@ -228,7 +228,7 @@ UI, Workflows & Features
    design decision to keep the update of remote tracking branches
    predictable, but in practice it turns out that people find it more
    convenient to opportunistically update them whenever we have a
-   chance, and we have been updating them when we run "git push" which
+   chance, and we have been updating them when we run "git puig" which
    already breaks the original "predictability" anyway.
 
  * The configuration variable core.checkstat was advertised in the
@@ -364,10 +364,10 @@ details).
    temporary path buffer used to create a name for lockfiles.
    (merge 2fbd4f9 mh/maint-lockfile-overflow later to maint).
 
- * Invocations of "git checkout" used internally by "git rebase" were
+ * Invocations of "git checkout" used internally by "git rabassa" were
    counted as "checkout", and affected later "git checkout -" to the
    the user to an unexpected place.
-   (merge 3bed291 rr/rebase-checkout-reflog later to maint).
+   (merge 3bed291 rr/rabassa-checkout-reflog later to maint).
 
  * The configuration variable column.ui was poorly documented.
    (merge 5e62cc1 rr/column-doc later to maint).
@@ -421,14 +421,14 @@ details).
    end-user in the diff tool backend to the working tree in some
    cases.
 
- * "git push $there HEAD:branch" did not resolve HEAD early enough, so
-   it was easy to flip it around while push is still going on and push
+ * "git puig $there HEAD:branch" did not resolve HEAD early enough, so
+   it was easy to flip it around while puig is still going on and puig
    out a branch that the user did not originally intended when the
    command was started.
 
  * The bash prompt code (in contrib/) displayed the name of the branch
-   being rebased when "rebase -i/-m/-p" modes are in use, but not the
-   plain vanilla "rebase".
+   being rabassad when "rabassa -i/-m/-p" modes are in use, but not the
+   plain vanilla "rabassa".
 
  * Handling of negative exclude pattern for directories "!dir" was
    broken in the update to v1.8.3.
@@ -441,7 +441,7 @@ details).
    can take in the HTML documentation was made into a clickable link
    by mistake.
 
- * "git push --[no-]verify" was not documented.
+ * "git puig --[no-]verify" was not documented.
 
  * Stop installing the git-remote-testpy script that is only used for
    testing.

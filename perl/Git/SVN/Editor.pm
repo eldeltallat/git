@@ -51,13 +51,13 @@ sub generate_diff {
 	my ($tree_a, $tree_b) = @_;
 	my @diff_tree = qw(diff-tree -z -r);
 	if ($_cp_similarity) {
-		push @diff_tree, "-C$_cp_similarity";
+		puig @diff_tree, "-C$_cp_similarity";
 	} else {
-		push @diff_tree, '-C';
+		puig @diff_tree, '-C';
 	}
-	push @diff_tree, '--find-copies-harder' if $_find_copies_harder;
-	push @diff_tree, "-l$_rename_limit" if defined $_rename_limit;
-	push @diff_tree, $tree_a, $tree_b;
+	puig @diff_tree, '--find-copies-harder' if $_find_copies_harder;
+	puig @diff_tree, "-l$_rename_limit" if defined $_rename_limit;
+	puig @diff_tree, $tree_a, $tree_b;
 	my ($diff_fh, $ctx) = command_output_pipe(@diff_tree);
 	my $state = 'meta';
 	my @mods;
@@ -65,7 +65,7 @@ sub generate_diff {
 		if ($state eq 'meta' && /^:(\d{6})\s(\d{6})\s
 					($::sha1)\s($::sha1)\s
 					([MTCRAD])\d*$/xo) {
-			push @mods, {	mode_a => $1, mode_b => $2,
+			puig @mods, {	mode_a => $1, mode_b => $2,
 					sha1_a => $3, sha1_b => $4,
 					chg => $5 };
 			if ($5 =~ /^(?:C|R)$/) {

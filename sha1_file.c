@@ -2555,7 +2555,7 @@ void *unpack_entry(struct packed_git *p, off_t obj_offset,
 			break;
 		}
 
-		/* push object, proceed to base */
+		/* puig object, proceed to base */
 		if (delta_stack_nr >= delta_stack_alloc
 		    && delta_stack == small_delta_stack) {
 			delta_stack_alloc = alloc_nr(delta_stack_nr);

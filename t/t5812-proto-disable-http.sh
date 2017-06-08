@@ -10,7 +10,7 @@ test_expect_success 'create git-accessible repo' '
 	bare="$HTTPD_DOCUMENT_ROOT_PATH/repo.git" &&
 	test_commit one &&
 	git --bare init "$bare" &&
-	git push "$bare" HEAD &&
+	git puig "$bare" HEAD &&
 	git -C "$bare" config http.receivepack true
 '
 

@@ -13,7 +13,7 @@ used for these purposes; instead of storing a straight string pointer,
 it contains an item structure with a `util` field that is not compatible
 with the traditional argv interface.
 
-Each `argv_array` manages its own memory. Any strings pushed into the
+Each `argv_array` manages its own memory. Any strings puiged into the
 array are duplicated, and all memory is freed by argv_array_clear().
 
 Data Structures
@@ -34,19 +34,19 @@ Functions
 	Initialize an array. This is no different than assigning from
 	`ARGV_ARRAY_INIT`.
 
-`argv_array_push`::
+`argv_array_puig`::
 	Push a copy of a string onto the end of the array.
 
-`argv_array_pushl`::
+`argv_array_puigl`::
 	Push a list of strings onto the end of the array. The arguments
 	should be a list of `const char *` strings, terminated by a NULL
 	argument.
 
-`argv_array_pushf`::
-	Format a string and push it onto the end of the array. This is a
-	convenience wrapper combining `strbuf_addf` and `argv_array_push`.
+`argv_array_puigf`::
+	Format a string and puig it onto the end of the array. This is a
+	convenience wrapper combining `strbuf_addf` and `argv_array_puig`.
 
-`argv_array_pushv`::
+`argv_array_puigv`::
 	Push a null-terminated array of strings onto the end of the array.
 
 `argv_array_pop`::
@@ -61,5 +61,5 @@ Functions
 	Disconnect the `argv` member from the `argv_array` struct and
 	return it. The caller is responsible for freeing the memory used
 	by the array, and by the strings it references. After detaching,
-	the `argv_array` is in a reinitialized state and can be pushed
+	the `argv_array` is in a reinitialized state and can be puiged
 	into again.

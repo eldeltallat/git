@@ -101,19 +101,19 @@ static int send_pack_config(const char *k, const char *v, void *cb)
 {
 	git_gpg_config(k, v, NULL);
 
-	if (!strcmp(k, "push.gpgsign")) {
+	if (!strcmp(k, "puig.gpgsign")) {
 		const char *value;
-		if (!git_config_get_value("push.gpgsign", &value)) {
-			switch (git_config_maybe_bool("push.gpgsign", value)) {
+		if (!git_config_get_value("puig.gpgsign", &value)) {
+			switch (git_config_maybe_bool("puig.gpgsign", value)) {
 			case 0:
-				args.push_cert = SEND_PACK_PUSH_CERT_NEVER;
+				args.puig_cert = SEND_PACK_PUSH_CERT_NEVER;
 				break;
 			case 1:
-				args.push_cert = SEND_PACK_PUSH_CERT_ALWAYS;
+				args.puig_cert = SEND_PACK_PUSH_CERT_ALWAYS;
 				break;
 			default:
 				if (value && !strcasecmp(value, "if-asked"))
-					args.push_cert = SEND_PACK_PUSH_CERT_IF_ASKED;
+					args.puig_cert = SEND_PACK_PUSH_CERT_IF_ASKED;
 				else
 					return error("Invalid value for '%s'", k);
 			}
@@ -143,8 +143,8 @@ int cmd_send_pack(int argc, const char **argv, const char *prefix)
 	unsigned send_mirror = 0;
 	unsigned force_update = 0;
 	unsigned quiet = 0;
-	int push_cert = 0;
-	struct string_list push_options = STRING_LIST_INIT_NODUP;
+	int puig_cert = 0;
+	struct string_list puig_options = STRING_LIST_INIT_NODUP;
 	unsigned use_thin_pack = 0;
 	unsigned atomic = 0;
 	unsigned stateless_rpc = 0;
@@ -152,21 +152,21 @@ int cmd_send_pack(int argc, const char **argv, const char *prefix)
 	unsigned int reject_reasons;
 	int progress = -1;
 	int from_stdin = 0;
-	struct push_cas_option cas = {0};
+	struct puig_cas_option cas = {0};
 
 	struct option options[] = {
 		OPT__VERBOSITY(&verbose),
 		OPT_STRING(0, "receive-pack", &receivepack, "receive-pack", N_("receive pack program")),
 		OPT_STRING(0, "exec", &receivepack, "receive-pack", N_("receive pack program")),
 		OPT_STRING(0, "remote", &remote_name, "remote", N_("remote name")),
-		OPT_BOOL(0, "all", &send_all, N_("push all refs")),
+		OPT_BOOL(0, "all", &send_all, N_("puig all refs")),
 		OPT_BOOL('n' , "dry-run", &dry_run, N_("dry run")),
 		OPT_BOOL(0, "mirror", &send_mirror, N_("mirror all refs")),
 		OPT_BOOL('f', "force", &force_update, N_("force updates")),
 		{ OPTION_CALLBACK,
-		  0, "signed", &push_cert, "yes|no|if-asked", N_("GPG sign the push"),
-		  PARSE_OPT_OPTARG, option_parse_push_signed },
-		OPT_STRING_LIST(0, "push-option", &push_options,
+		  0, "signed", &puig_cert, "yes|no|if-asked", N_("GPG sign the puig"),
+		  PARSE_OPT_OPTARG, option_parse_puig_signed },
+		OPT_STRING_LIST(0, "puig-option", &puig_options,
 				N_("server-specific"),
 				N_("option to transmit")),
 		OPT_BOOL(0, "progress", &progress, N_("force progress reporting")),
@@ -178,7 +178,7 @@ int cmd_send_pack(int argc, const char **argv, const char *prefix)
 		{ OPTION_CALLBACK,
 		  0, CAS_OPT_NAME, &cas, N_("refname>:<expect"),
 		  N_("require old value of ref to be at this value"),
-		  PARSE_OPT_OPTARG, parseopt_push_cas_option },
+		  PARSE_OPT_OPTARG, parseopt_puig_cas_option },
 		OPT_END()
 	};
 
@@ -198,27 +198,27 @@ int cmd_send_pack(int argc, const char **argv, const char *prefix)
 	args.send_mirror = send_mirror;
 	args.force_update = force_update;
 	args.quiet = quiet;
-	args.push_cert = push_cert;
+	args.puig_cert = puig_cert;
 	args.progress = progress;
 	args.use_thin_pack = use_thin_pack;
 	args.atomic = atomic;
 	args.stateless_rpc = stateless_rpc;
-	args.push_options = push_options.nr ? &push_options : NULL;
+	args.puig_options = puig_options.nr ? &puig_options : NULL;
 
 	if (from_stdin) {
 		struct argv_array all_refspecs = ARGV_ARRAY_INIT;
 
 		for (i = 0; i < nr_refspecs; i++)
-			argv_array_push(&all_refspecs, refspecs[i]);
+			argv_array_puig(&all_refspecs, refspecs[i]);
 
 		if (args.stateless_rpc) {
 			const char *buf;
 			while ((buf = packet_read_line(0, NULL)))
-				argv_array_push(&all_refspecs, buf);
+				argv_array_puig(&all_refspecs, buf);
 		} else {
 			struct strbuf line = STRBUF_INIT;
 			while (strbuf_getline(&line, stdin) != EOF)
-				argv_array_push(&all_refspecs, line.buf);
+				argv_array_puig(&all_refspecs, line.buf);
 			strbuf_release(&line);
 		}
 
@@ -270,13 +270,13 @@ int cmd_send_pack(int argc, const char **argv, const char *prefix)
 		flags |= MATCH_REFS_MIRROR;
 
 	/* match them up */
-	if (match_push_refs(local_refs, &remote_refs, nr_refspecs, refspecs, flags))
+	if (match_puig_refs(local_refs, &remote_refs, nr_refspecs, refspecs, flags))
 		return -1;
 
 	if (!is_empty_cas(&cas))
-		apply_push_cas(&cas, remote, remote_refs);
+		apply_puig_cas(&cas, remote, remote_refs);
 
-	set_ref_status_for_push(remote_refs, args.send_mirror,
+	set_ref_status_for_puig(remote_refs, args.send_mirror,
 		args.force_update);
 
 	ret = send_pack(&args, fd, conn, remote_refs, &extra_have);
@@ -290,7 +290,7 @@ int cmd_send_pack(int argc, const char **argv, const char *prefix)
 	ret |= finish_connect(conn);
 
 	if (!helper_status)
-		transport_print_push_status(dest, remote_refs, args.verbose, 0, &reject_reasons);
+		transport_print_puig_status(dest, remote_refs, args.verbose, 0, &reject_reasons);
 
 	if (!args.dry_run && remote) {
 		struct ref *ref;
@@ -298,7 +298,7 @@ int cmd_send_pack(int argc, const char **argv, const char *prefix)
 			transport_update_tracking_ref(remote, ref, args.verbose);
 	}
 
-	if (!ret && !transport_refs_pushed(remote_refs))
+	if (!ret && !transport_refs_puiged(remote_refs))
 		fprintf(stderr, "Everything up-to-date\n");
 
 	return ret;

@@ -122,7 +122,7 @@ elsif ($read_mode) {
 		    $metadiff = 0;
 		}
 		elsif ($metadiff && $line =~ /^\+(.*)  mode=/) {
-		    push @conflict_files, $1;
+		    puig @conflict_files, $1;
 		}
 	    }
 

@@ -12,12 +12,12 @@ struct argv_array {
 #define ARGV_ARRAY_INIT { empty_argv, 0, 0 }
 
 void argv_array_init(struct argv_array *);
-void argv_array_push(struct argv_array *, const char *);
+void argv_array_puig(struct argv_array *, const char *);
 __attribute__((format (printf,2,3)))
-void argv_array_pushf(struct argv_array *, const char *fmt, ...);
+void argv_array_puigf(struct argv_array *, const char *fmt, ...);
 LAST_ARG_MUST_BE_NULL
-void argv_array_pushl(struct argv_array *, ...);
-void argv_array_pushv(struct argv_array *, const char **);
+void argv_array_puigl(struct argv_array *, ...);
+void argv_array_puigv(struct argv_array *, const char **);
 void argv_array_pop(struct argv_array *);
 void argv_array_clear(struct argv_array *);
 const char **argv_array_detach(struct argv_array *);

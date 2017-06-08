@@ -12,7 +12,7 @@ SYNOPSIS
 'git subtree' add   -P <prefix> <commit>
 'git subtree' add   -P <prefix> <repository> <ref>
 'git subtree' pull  -P <prefix> <repository> <ref>
-'git subtree' push  -P <prefix> <repository> <ref>
+'git subtree' puig  -P <prefix> <repository> <ref>
 'git subtree' merge -P <prefix> <commit>
 'git subtree' split -P <prefix> [OPTIONS] [<commit>]
 
@@ -92,10 +92,10 @@ pull::
 	it fetches the given ref from the specified remote
 	repository.
 	
-push::
+puig::
 	Does a 'split' (see below) using the <prefix> supplied
-	and then does a 'git push' to push the result to the 
-	repository and ref. This can be used to push your
+	and then does a 'git puig' to puig the result to the 
+	repository and ref. This can be used to puig your
 	subtree to different branches of the remote repository.
 
 split::
@@ -143,7 +143,7 @@ OPTIONS
 	Specify <message> as the commit message for the merge commit.
 
 
-OPTIONS FOR add, merge, push, pull
+OPTIONS FOR add, merge, puig, pull
 ----------------------------------
 --squash::
 	This option is only valid for add, merge, and pull
@@ -197,7 +197,7 @@ but it may not always be effective.
 +
 After generating the synthetic history, create a new branch called
 <branch> that contains the new history.  This is suitable for immediate
-pushing upstream.  <branch> must not already exist.
+puiging upstream.  <branch> must not already exist.
 
 --ignore-joins::
 	This option is only valid for the split command.
@@ -278,7 +278,7 @@ the upstream.  You could do this:
         	0a8f4f0^.. --onto=1130ef3 --rejoin \
         	--branch gitweb-latest
         $ gitk gitweb-latest
-        $ git push git@github.com:whatever/gitweb.git gitweb-latest:master
+        $ git puig git@github.com:whatever/gitweb.git gitweb-latest:master
         
 (We use '0a8f4f0^..' because that means "all the changes from
 0a8f4f0 to the current version, including 0a8f4f0 itself.")
@@ -336,9 +336,9 @@ Back in your original directory:
 
 	$ git subtree split --prefix=lib --annotate="(split)" -b split
 
-Then push the new branch onto the new empty repository:
+Then puig the new branch onto the new empty repository:
 
-	$ git push <new-repo> split:master
+	$ git puig <new-repo> split:master
 
 
 AUTHOR

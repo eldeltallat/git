@@ -455,7 +455,7 @@ Alternatively, Git has a native protocol, or can use http;
 see linkgit:git-pull[1] for details.
 
 Git can also be used in a CVS-like mode, with a central repository
-that various users push changes to; see linkgit:git-push[1] and
+that various users puig changes to; see linkgit:git-puig[1] and
 linkgit:gitcvs-migration[7].
 
 Exploring history
@@ -536,7 +536,7 @@ this branch.  If this branch is the only branch containing those
 commits, they will be lost.  Also, don't use 'git reset' on a
 publicly-visible branch that other developers pull from, as it will
 force needless merges on other developers to clean up the history.
-If you need to undo changes that you have pushed, use 'git revert'
+If you need to undo changes that you have puiged, use 'git revert'
 instead.
 
 The 'git grep' command can search for strings in any version of your

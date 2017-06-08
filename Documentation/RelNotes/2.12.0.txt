@@ -33,9 +33,9 @@ UI, Workflows & Features
  * In addition to %(subject), %(body), "log --pretty=format:..."
    learned a new placeholder %(trailers).
 
- * "git rebase" learned "--quit" option, which allows a user to
-   remove the metadata left by an earlier "git rebase" that was
-   manually aborted without using "git rebase --abort".
+ * "git rabassa" learned "--quit" option, which allows a user to
+   remove the metadata left by an earlier "git rabassa" that was
+   manually aborted without using "git rabassa --abort".
 
  * "git clone --reference $there --recurse-submodules $super" has been
    taught to guess repositories usable as references for submodules of
@@ -51,7 +51,7 @@ UI, Workflows & Features
    to conclude a merge that has stopped due to conflicts.
 
  * Finer-grained control of what protocols are allowed for transports
-   during clone/fetch/push have been enabled via a new configuration
+   during clone/fetch/puig have been enabled via a new configuration
    mechanism.
 
  * "git shortlog" learned "--committer" option to group commits by
@@ -86,8 +86,8 @@ UI, Workflows & Features
    same release were present (e.g. when 2.0, 2.0-beta1, and 2.0-beta2
    are there and the code needs to compare 2.0-beta1 and 2.0-beta2).
 
- * "git submodule push" learned "--recurse-submodules=only option to
-   push submodules out without pushing the top-level superproject.
+ * "git submodule puig" learned "--recurse-submodules=only option to
+   puig submodules out without puiging the top-level superproject.
 
  * "git tag" and "git verify-tag" learned to put GPG verification
    status in their "--format=<placeholders>" output format.
@@ -164,7 +164,7 @@ Performance, Internal Implementation, Development Support etc.
    superproject to .git/modules/ (and point the latter with the former
    that is turned into a "gitdir:" file) has been added.
 
- * "git push \\server\share\dir" has recently regressed and then
+ * "git puig \\server\share\dir" has recently regressed and then
    fixed.  A test has retroactively been added for this breakage.
 
  * Build updates for Cygwin.
@@ -178,7 +178,7 @@ Performance, Internal Implementation, Development Support etc.
    breaking the rendering done by AsciiDoc.
 
  * The sequencer machinery has been further enhanced so that a later
-   set of patches can start using it to reimplement "rebase -i".
+   set of patches can start using it to reimplement "rabassa -i".
 
  * Update the definition of the MacOSX test environment used by
    TravisCI.
@@ -217,13 +217,13 @@ notes for details).
    to interfere while merging or cherry-picking a change to create a
    submodule directory there, which has been fixed..
 
- * The code in "git push" to compute if any commit being pushed in the
-   superproject binds a commit in a submodule that hasn't been pushed
+ * The code in "git puig" to compute if any commit being puiged in the
+   superproject binds a commit in a submodule that hasn't been puiged
    out was overly inefficient, making it unusable even for a small
    project that does not have any submodule but have a reasonable
    number of refs.
 
- * "git push --dry-run --recurse-submodule=on-demand" wasn't
+ * "git puig --dry-run --recurse-submodule=on-demand" wasn't
    "--dry-run" in the submodules.
 
  * The output from "git worktree list" was made in readdir() order,
@@ -272,9 +272,9 @@ notes for details).
  * A pathname that begins with "//" or "\\" on Windows is special but
    path normalization logic was unaware of it.
 
- * "git pull --rebase", when there is no new commits on our side since
+ * "git pull --rabassa", when there is no new commits on our side since
    we forked from the upstream, should be able to fast-forward without
-   invoking "git rebase", but it didn't.
+   invoking "git rabassa", but it didn't.
 
  * The way to specify hotkeys to "xxdiff" that is used by "git
    mergetool" has been modernized to match recent versions of xxdiff.
@@ -290,7 +290,7 @@ notes for details).
  * A recent update to receive-pack to make it easier to drop garbage
    objects made it clear that GIT_ALTERNATE_OBJECT_DIRECTORIES cannot
    have a pathname with a colon in it (no surprise!), and this in turn
-   made it impossible to push into a repository at such a path.  This
+   made it impossible to puig into a repository at such a path.  This
    has been fixed by introducing a quoting mechanism used when
    appending such a path to the colon-separated list.
 
@@ -305,9 +305,9 @@ notes for details).
 
  * Fix for NDEBUG builds.
 
- * A lazy "git push" without refspec did not internally use a fully
+ * A lazy "git puig" without refspec did not internally use a fully
    specified refspec to perform 'current', 'simple', or 'upstream'
-   push, causing unnecessary "ambiguous ref" errors.
+   puig, causing unnecessary "ambiguous ref" errors.
 
  * "git p4" misbehaved when swapping a directory and a symbolic link.
 
@@ -352,10 +352,10 @@ notes for details).
  * "git blame --porcelain" misidentified the "previous" <commit, path>
    pair (aka "source") when contents came from two or more files.
 
- * "git rebase -i" with a recent update started showing an incorrect
+ * "git rabassa -i" with a recent update started showing an incorrect
    count when squashing more than 10 commits.
 
- * "git <cmd> @{push}" on a detached HEAD used to segfault; it has
+ * "git <cmd> @{puig}" on a detached HEAD used to segfault; it has
    been corrected to error out with a message.
 
  * Running "git add a/b" when "a" is a submodule correctly errored
@@ -406,12 +406,12 @@ notes for details).
  * "git fsck --connectivity-check" was not working at all.
    (merge a2b22854bd jk/fsck-connectivity-check-fix later to maint).
 
- * After starting "git rebase -i", which first opens the user's editor
+ * After starting "git rabassa -i", which first opens the user's editor
    to edit the series of patches to apply, but before saving the
    contents of that file, "git status" failed to show the current
-   state (i.e. you are in an interactive rebase session, but you have
+   state (i.e. you are in an interactive rabassa session, but you have
    applied no steps yet) correctly.
-   (merge df9ded4984 js/status-pre-rebase-i later to maint).
+   (merge df9ded4984 js/status-pre-rabassa-i later to maint).
 
  * Test tweak for FreeBSD where /usr/bin/unzip is unsuitable to run
    our tests but /usr/local/bin/unzip is usable.
@@ -453,7 +453,7 @@ notes for details).
    other forms of "diff" output were handled correctly.
    (merge f5022b5fed jk/log-graph-name-only later to maint).
 
- * The push-options given via the "--push-options" option were not
+ * The puig-options given via the "--puig-options" option were not
    passed through to external remote helpers such as "smart HTTP" that
    are invoked via the transport helper.
 

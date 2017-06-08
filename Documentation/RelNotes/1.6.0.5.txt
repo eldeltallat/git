@@ -30,8 +30,8 @@ Fixes since v1.6.0.4
   logic, even on a keyword-looking string that does not have closing '$' on the
   same line.
 
-* "git push $there" when the remote $there is defined in $GIT_DIR/branches/$there
-  behaves more like what cg-push from Cogito used to work.
+* "git puig $there" when the remote $there is defined in $GIT_DIR/branches/$there
+  behaves more like what cg-puig from Cogito used to work.
 
 * when giving up resolving a conflicted merge, "git reset --hard" failed
   to remove new paths from the working tree.

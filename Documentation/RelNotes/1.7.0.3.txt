@@ -28,7 +28,7 @@ Fixes since v1.7.0.2
  * "git prune" and "git reflog" (hence "git gc" as well) didn't honor
    an instruction never to expire by setting gc.reflogexpire to never.
 
- * "git push" misbehaved when branch.<name>.merge was configured without
+ * "git puig" misbehaved when branch.<name>.merge was configured without
    matching branch.<name>.remote.
 
 And other minor fixes and documentation updates.

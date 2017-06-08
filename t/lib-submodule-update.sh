@@ -92,7 +92,7 @@ create_lib_submodule_repo () {
 			echo "x" >file3 &&
 			git add file2 file3 &&
 			git commit -m "modified file2 and added file3" &&
-			git push origin modifications
+			git puig origin modifications
 		) &&
 		git add sub1 &&
 		git commit -m "Modify sub1" &&
@@ -113,8 +113,8 @@ create_lib_submodule_repo () {
 		git -C sub1 commit -m "update nested sub" &&
 		git add sub1 &&
 		git commit -m "update sub1, that updates nested sub" &&
-		git -C sub1 push origin modify_sub1_recursively &&
-		git -C sub1/sub2 push origin modify_sub1_recursively &&
+		git -C sub1 puig origin modify_sub1_recursively &&
+		git -C sub1/sub2 puig origin modify_sub1_recursively &&
 		git -C sub1 submodule deinit -f --all &&
 
 		git checkout -b replace_sub1_with_directory add_sub1 &&
@@ -482,7 +482,7 @@ test_submodule_switch () {
 			test_submodule_content sub1 origin/add_sub1
 		)
 	'
-	# ... or even destroy unpushed parts of submodule history if that
+	# ... or even destroy unpuiged parts of submodule history if that
 	# still uses a .git directory.
 	test_expect_failure "$command: replace submodule containing a .git directory with a file must fail" '
 		prolog &&
@@ -701,7 +701,7 @@ test_submodule_forced_switch () {
 			test_submodule_content sub1 origin/add_sub1
 		)
 	'
-	# ... or even destroy unpushed parts of submodule history if that
+	# ... or even destroy unpuiged parts of submodule history if that
 	# still uses a .git directory.
 	test_expect_failure "$command: replace submodule containing a .git directory with a file must fail" '
 		prolog &&

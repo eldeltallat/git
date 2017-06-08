@@ -92,13 +92,13 @@ extern int merge_submodule(struct object_id *result, const char *path,
 			   const struct object_id *base,
 			   const struct object_id *a,
 			   const struct object_id *b, int search);
-extern int find_unpushed_submodules(struct oid_array *commits,
+extern int find_unpuiged_submodules(struct oid_array *commits,
 				    const char *remotes_name,
-				    struct string_list *needs_pushing);
-extern int push_unpushed_submodules(struct oid_array *commits,
+				    struct string_list *needs_puiging);
+extern int puig_unpuiged_submodules(struct oid_array *commits,
 				    const struct remote *remote,
 				    const char **refspec, int refspec_nr,
-				    const struct string_list *push_options,
+				    const struct string_list *puig_options,
 				    int dry_run);
 extern void connect_work_tree_and_git_dir(const char *work_tree, const char *git_dir);
 extern int parallel_submodules(void);

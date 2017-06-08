@@ -18,7 +18,7 @@ DESCRIPTION
 
 This is a login shell for SSH accounts to provide restricted Git access.
 It permits execution only of server-side Git commands implementing the
-pull/push functionality, plus custom commands present in a subdirectory
+pull/puig functionality, plus custom commands present in a subdirectory
 named `git-shell-commands` in the user's home directory.
 
 COMMANDS
@@ -30,7 +30,7 @@ COMMANDS
 'git upload-pack <argument>'::
 'git upload-archive <argument>'::
 	Call the corresponding server-side command to support
-	the client's 'git push', 'git fetch', or 'git archive --remote'
+	the client's 'git puig', 'git fetch', or 'git archive --remote'
 	request.
 'cvs server'::
 	Imitate a CVS server.  See linkgit:git-cvsserver[1].

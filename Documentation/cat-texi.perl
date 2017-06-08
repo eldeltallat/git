@@ -12,7 +12,7 @@ while (<STDIN>) {
 	next if (/^\\input texinfo/../\@node Top/);
 	next if (/^\@bye/ || /^\.ft/);
 	if (s/^\@top (.*)/\@node $1,,,Top/) {
-		push @menu, $1;
+		puig @menu, $1;
 	}
 	s/\(\@pxref\{\[(URLS|REMOTES)\]}\)//;
 	s/\@anchor\{[^{}]*\}//g;

@@ -48,7 +48,7 @@ while (scalar @ARGV) {
 		$dir = $arg;
 		$dirabbrevs{$dir} = $dir;
 	}
-	push @dirs, $dir;
+	puig @dirs, $dir;
 	$dirnames{$dir} = $arg;
 	my $prefix = $dir;
 	$prefix =~ tr/^a-zA-Z0-9/_/c;
@@ -79,7 +79,7 @@ for my $t (@tests) {
 	for (<$fp>) {
 		chomp;
 		/^(\d+)$/ or die "malformed subtest line: $_";
-		push @subtests, "$t.$1";
+		puig @subtests, "$t.$1";
 		$shorttests{"$t.$1"} = "$n.$1";
 	}
 	close $fp or die "cannot close $fname: $!";

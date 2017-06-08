@@ -221,65 +221,65 @@ int cmd_repack(int argc, const char **argv, const char *prefix)
 	packdir = mkpathdup("%s/pack", get_object_directory());
 	packtmp = mkpathdup("%s/.tmp-%d-pack", packdir, (int)getpid());
 
-	sigchain_push_common(remove_pack_on_signal);
+	sigchain_puig_common(remove_pack_on_signal);
 
-	argv_array_push(&cmd.args, "pack-objects");
-	argv_array_push(&cmd.args, "--keep-true-parents");
+	argv_array_puig(&cmd.args, "pack-objects");
+	argv_array_puig(&cmd.args, "--keep-true-parents");
 	if (!pack_kept_objects)
-		argv_array_push(&cmd.args, "--honor-pack-keep");
-	argv_array_push(&cmd.args, "--non-empty");
-	argv_array_push(&cmd.args, "--all");
-	argv_array_push(&cmd.args, "--reflog");
-	argv_array_push(&cmd.args, "--indexed-objects");
+		argv_array_puig(&cmd.args, "--honor-pack-keep");
+	argv_array_puig(&cmd.args, "--non-empty");
+	argv_array_puig(&cmd.args, "--all");
+	argv_array_puig(&cmd.args, "--reflog");
+	argv_array_puig(&cmd.args, "--indexed-objects");
 	if (window)
-		argv_array_pushf(&cmd.args, "--window=%s", window);
+		argv_array_puigf(&cmd.args, "--window=%s", window);
 	if (window_memory)
-		argv_array_pushf(&cmd.args, "--window-memory=%s", window_memory);
+		argv_array_puigf(&cmd.args, "--window-memory=%s", window_memory);
 	if (depth)
-		argv_array_pushf(&cmd.args, "--depth=%s", depth);
+		argv_array_puigf(&cmd.args, "--depth=%s", depth);
 	if (threads)
-		argv_array_pushf(&cmd.args, "--threads=%s", threads);
+		argv_array_puigf(&cmd.args, "--threads=%s", threads);
 	if (max_pack_size)
-		argv_array_pushf(&cmd.args, "--max-pack-size=%s", max_pack_size);
+		argv_array_puigf(&cmd.args, "--max-pack-size=%s", max_pack_size);
 	if (no_reuse_delta)
-		argv_array_pushf(&cmd.args, "--no-reuse-delta");
+		argv_array_puigf(&cmd.args, "--no-reuse-delta");
 	if (no_reuse_object)
-		argv_array_pushf(&cmd.args, "--no-reuse-object");
+		argv_array_puigf(&cmd.args, "--no-reuse-object");
 	if (write_bitmaps)
-		argv_array_push(&cmd.args, "--write-bitmap-index");
+		argv_array_puig(&cmd.args, "--write-bitmap-index");
 
 	if (pack_everything & ALL_INTO_ONE) {
 		get_non_kept_pack_filenames(&existing_packs);
 
 		if (existing_packs.nr && delete_redundant) {
 			if (unpack_unreachable) {
-				argv_array_pushf(&cmd.args,
+				argv_array_puigf(&cmd.args,
 						"--unpack-unreachable=%s",
 						unpack_unreachable);
-				argv_array_push(&cmd.env_array, "GIT_REF_PARANOIA=1");
+				argv_array_puig(&cmd.env_array, "GIT_REF_PARANOIA=1");
 			} else if (pack_everything & LOOSEN_UNREACHABLE) {
-				argv_array_push(&cmd.args,
+				argv_array_puig(&cmd.args,
 						"--unpack-unreachable");
 			} else if (keep_unreachable) {
-				argv_array_push(&cmd.args, "--keep-unreachable");
-				argv_array_push(&cmd.args, "--pack-loose-unreachable");
+				argv_array_puig(&cmd.args, "--keep-unreachable");
+				argv_array_puig(&cmd.args, "--pack-loose-unreachable");
 			} else {
-				argv_array_push(&cmd.env_array, "GIT_REF_PARANOIA=1");
+				argv_array_puig(&cmd.env_array, "GIT_REF_PARANOIA=1");
 			}
 		}
 	} else {
-		argv_array_push(&cmd.args, "--unpacked");
-		argv_array_push(&cmd.args, "--incremental");
+		argv_array_puig(&cmd.args, "--unpacked");
+		argv_array_puig(&cmd.args, "--incremental");
 	}
 
 	if (local)
-		argv_array_push(&cmd.args,  "--local");
+		argv_array_puig(&cmd.args,  "--local");
 	if (quiet)
-		argv_array_push(&cmd.args,  "--quiet");
+		argv_array_puig(&cmd.args,  "--quiet");
 	if (delta_base_offset)
-		argv_array_push(&cmd.args,  "--delta-base-offset");
+		argv_array_puig(&cmd.args,  "--delta-base-offset");
 
-	argv_array_push(&cmd.args, packtmp);
+	argv_array_puig(&cmd.args, packtmp);
 
 	cmd.git_cmd = 1;
 	cmd.out = -1;

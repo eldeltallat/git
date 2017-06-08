@@ -42,7 +42,7 @@ Fixes since v1.5.6.2
   was fixed by restructuring the code to report syslog() after the handler
   returns.
 
-* When "git push" tries to remove a remote ref, and corresponding
+* When "git puig" tries to remove a remote ref, and corresponding
   tracking ref is missing, we used to report error (i.e. failure to
   remove something that does not exist).
 

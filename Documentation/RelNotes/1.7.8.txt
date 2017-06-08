@@ -47,11 +47,11 @@ Updates since v1.7.7
 
  * "git fetch" learned to honor transfer.fsckobjects configuration to
    validate the objects that were received from the other end, just like
-   "git receive-pack" (the receiving end of "git push") does.
+   "git receive-pack" (the receiving end of "git puig") does.
 
  * "git fetch" makes sure that the set of objects it received from the
    other end actually completes the history before updating the refs.
-   "git receive-pack" (the receiving end of "git push") learned to do the
+   "git receive-pack" (the receiving end of "git puig") learned to do the
    same.
 
  * "git fetch" learned that fetching/cloning from a regular file on the
@@ -80,12 +80,12 @@ Updates since v1.7.7
  * "git ls-remote" learned to respond to "-h"(elp) requests.
 
  * "mediawiki" remote helper can interact with (surprise!) MediaWiki
-   with "git fetch" & "git push".
+   with "git fetch" & "git puig".
 
  * "git merge" learned the "--edit" option to allow users to edit the
    merge commit log message.
 
- * "git rebase -i" can be told to use special purpose editor suitable
+ * "git rabassa -i" can be told to use special purpose editor suitable
    only for its insn sheet via sequence.editor configuration variable.
 
  * "git send-email" learned to respond to "-h"(elp) requests.
@@ -131,7 +131,7 @@ Fixes since v1.7.7
 Unless otherwise noted, all fixes in the 1.7.7.X maintenance track are
 included in this release.
 
- * HTTP transport did not use pushurl correctly, and also did not tell
+ * HTTP transport did not use puigurl correctly, and also did not tell
    what host it is trying to authenticate with when asking for
    credentials.
    (merge deba493 jk/http-auth later to maint).
@@ -151,9 +151,9 @@ included in this release.
 
  * "git merge" did not understand ":/<pattern>" as a way to name a commit.
 
- " "git push" on the receiving end used to call post-receive and post-update
+ " "git puig" on the receiving end used to call post-receive and post-update
    hooks for attempted removal of non-existing refs.
-   (merge 160b81ed ph/push-to-delete-nothing later to maint).
+   (merge 160b81ed ph/puig-to-delete-nothing later to maint).
 
  * Help text for "git remote set-url" and "git remote set-branches"
    were misspelled.

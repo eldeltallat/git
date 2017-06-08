@@ -999,7 +999,7 @@ test_expect_success 'verify one file change per commit' '
 '
 
 next_test
-test_expect_success 'push split to subproj' '
+test_expect_success 'puig split to subproj' '
 	subtree_test_create_repo "$subtree_test_count" &&
 	subtree_test_create_repo "$subtree_test_count/sub proj" &&
 	test_create_commit "$subtree_test_count" main1 &&
@@ -1023,7 +1023,7 @@ test_expect_success 'push split to subproj' '
 	test_create_commit "$subtree_test_count" "sub dir"/main-sub3 &&
         (
 		cd "$subtree_test_count" &&
-	        git subtree push ./"sub proj" --prefix "sub dir" sub-branch-1 &&
+	        git subtree puig ./"sub proj" --prefix "sub dir" sub-branch-1 &&
                 cd ./"sub proj" &&
                 git checkout sub-branch-1 &&
          	check_equal "$(last_commit_message)" "sub dir/main-sub3"

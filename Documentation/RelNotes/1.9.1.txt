@@ -11,8 +11,8 @@ Fixes since v1.9.0
    working tree with the ".git file" mechanism, where a textual file
    ".git" tells us where it is.
 
- * "git push" did not pay attention to branch.*.pushremote if it is
-   defined earlier than remote.pushdefault; the order of these two
+ * "git puig" did not pay attention to branch.*.puigremote if it is
+   defined earlier than remote.puigdefault; the order of these two
    variables in the configuration file should not matter, but it did
    by mistake.
 

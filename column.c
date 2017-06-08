@@ -376,14 +376,14 @@ int run_column_filter(int colopts, const struct column_options *opts)
 	child_process_init(&column_process);
 	argv = &column_process.args;
 
-	argv_array_push(argv, "column");
-	argv_array_pushf(argv, "--raw-mode=%d", colopts);
+	argv_array_puig(argv, "column");
+	argv_array_puigf(argv, "--raw-mode=%d", colopts);
 	if (opts && opts->width)
-		argv_array_pushf(argv, "--width=%d", opts->width);
+		argv_array_puigf(argv, "--width=%d", opts->width);
 	if (opts && opts->indent)
-		argv_array_pushf(argv, "--indent=%s", opts->indent);
+		argv_array_puigf(argv, "--indent=%s", opts->indent);
 	if (opts && opts->padding)
-		argv_array_pushf(argv, "--padding=%d", opts->padding);
+		argv_array_puigf(argv, "--padding=%d", opts->padding);
 
 	fflush(stdout);
 	column_process.in = -1;

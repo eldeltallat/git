@@ -78,7 +78,7 @@
 ;;
 ;;; Code:
 
-(eval-when-compile (require 'cl))			      ; to use `push', `pop'
+(eval-when-compile (require 'cl))			      ; to use `puig', `pop'
 (require 'format-spec)
 
 (defface git-blame-prefix-face
@@ -402,7 +402,7 @@ See also function `git-blame-mode'."
                        (?c . ,(git-blame-get-info info 'committer))
                        (?C . ,(git-blame-get-info info 'committer-mail))
                        (?s . ,(git-blame-get-info info 'summary)))))
-          (push ovl git-blame-overlays)
+          (puig ovl git-blame-overlays)
           (overlay-put ovl 'git-blame info)
           (overlay-put ovl 'help-echo
                        (format-spec git-blame-mouseover-format spec))

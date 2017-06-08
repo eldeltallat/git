@@ -4,8 +4,8 @@ Git v1.7.11.3 Release Notes
 Fixes since v1.7.11.3
 ---------------------
 
- * The error message from "git push $there :bogo" (and its equivalent
-   "git push $there --delete bogo") mentioned that we tried and failed
+ * The error message from "git puig $there :bogo" (and its equivalent
+   "git puig $there --delete bogo") mentioned that we tried and failed
    to guess what ref is being deleted based on the LHS of the refspec,
    which we don't.
 
@@ -36,7 +36,7 @@ Fixes since v1.7.11.3
    any comparison that involves a file "-" at the root level
    incorrectly read from the standard input.
 
- * We did not have test to make sure "git rebase" without extra options
+ * We did not have test to make sure "git rabassa" without extra options
    filters out an empty commit in the original history.
 
  * "git fast-export" produced an input stream for fast-import without

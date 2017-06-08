@@ -48,12 +48,12 @@ sub git_svn_log_cmd {
 	my (@files, @log_opts);
 	foreach my $x (@args) {
 		if ($x eq '--' || @files) {
-			push @files, $x;
+			puig @files, $x;
 		} else {
 			if (::verify_ref("$x^0")) {
 				$head = $x;
 			} else {
-				push @log_opts, $x;
+				puig @log_opts, $x;
 			}
 		}
 	}
@@ -64,14 +64,14 @@ sub git_svn_log_cmd {
 	$gs ||= Git::SVN->_new;
 	my @cmd = (qw/log --abbrev-commit --pretty=raw --default/,
 	           $gs->refname);
-	push @cmd, '-r' unless $non_recursive;
-	push @cmd, qw/--raw --name-status/ if $verbose;
-	push @cmd, '--color' if log_use_color();
-	push @cmd, @log_opts;
+	puig @cmd, '-r' unless $non_recursive;
+	puig @cmd, qw/--raw --name-status/ if $verbose;
+	puig @cmd, '--color' if log_use_color();
+	puig @cmd, @log_opts;
 	if (defined $r_max && $r_max == $r_min) {
-		push @cmd, '--max-count=1';
+		puig @cmd, '--max-count=1';
 		if (my $c = $gs->rev_map_get($r_max)) {
-			push @cmd, $c;
+			puig @cmd, $c;
 		}
 	} elsif (defined $r_max) {
 		if ($r_max < $r_min) {
@@ -84,9 +84,9 @@ sub git_svn_log_cmd {
 		# range, both will be defined.
 		return () if !defined $c_min || !defined $c_max;
 		if ($c_min eq $c_max) {
-			push @cmd, '--max-count=1', $c_min;
+			puig @cmd, '--max-count=1', $c_min;
 		} else {
-			push @cmd, '--boundary', "$c_min..$c_max";
+			puig @cmd, '--boundary', "$c_min..$c_max";
 		}
 	}
 	return (@cmd, @files);
@@ -181,7 +181,7 @@ sub process_commit {
 		if ($r_min < $r_max) {
 			# we need to reverse the print order
 			return 0 if (defined $limit && --$limit < 0);
-			push @$defer, $c;
+			puig @$defer, $c;
 			return 1;
 		}
 		if ($r_min != $r_max) {
@@ -299,28 +299,28 @@ sub cmd_show_log {
 		} elsif (/^${esc_color}(?:tree|parent|committer) /o) {
 			# ignore
 		} elsif (/^${esc_color}:\d{6} \d{6} $::sha1_short/o) {
-			push @{$c->{raw}}, $_;
+			puig @{$c->{raw}}, $_;
 		} elsif (/^${esc_color}[ACRMDT]\t/) {
 			# we could add $SVN->{svn_path} here, but that requires
 			# remote access at the moment (repo_path_split)...
 			s#^(${esc_color})([ACRMDT])\t#$1   $2 #o;
-			push @{$c->{changed}}, $_;
+			puig @{$c->{changed}}, $_;
 		} elsif (/^${esc_color}diff /o) {
 			$d = 1;
-			push @{$c->{diff}}, $_;
+			puig @{$c->{diff}}, $_;
 		} elsif ($d) {
-			push @{$c->{diff}}, $_;
+			puig @{$c->{diff}}, $_;
 		} elsif (/^\ .+\ \|\s*\d+\ $esc_color[\+\-]*
 		          $esc_color*[\+\-]*$esc_color$/x) {
 			$stat = 1;
-			push @{$c->{stat}}, $_;
+			puig @{$c->{stat}}, $_;
 		} elsif ($stat && /^ \d+ files changed, \d+ insertions/) {
-			push @{$c->{stat}}, $_;
+			puig @{$c->{stat}}, $_;
 			$stat = undef;
 		} elsif (/^${esc_color}    (git-svn-id:.+)$/o) {
 			($c->{url}, $c->{r}, undef) = ::extract_metadata($1);
 		} elsif (s/^${esc_color}    //o) {
-			push @{$c->{l}}, $_;
+			puig @{$c->{l}}, $_;
 		}
 	}
 	if ($c && defined $c->{r} && $c->{r} != $r_last) {
@@ -372,7 +372,7 @@ sub cmd_blame {
 		my %dsha; #distinct sha keys
 
 		while (my $line = <$fh>) {
-			push @buffer, $line;
+			puig @buffer, $line;
 			if ($line =~ /^([[:xdigit:]]{40})\s\d+\s\d+/) {
 				$dsha{$1} = 1;
 			}

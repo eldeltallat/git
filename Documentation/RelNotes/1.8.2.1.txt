@@ -81,8 +81,8 @@ Fixes since v1.8.2
    informational message when the translated version of it was too
    long.
 
- * Clarify in the documentation "what" gets pushed to "where" when the
-   command line to "git push" does not say these explicitly.
+ * Clarify in the documentation "what" gets puiged to "where" when the
+   command line to "git puig" does not say these explicitly.
 
  * In "git reflog expire", REACHABLE bit was not cleared from the
    correct objects.
@@ -90,7 +90,7 @@ Fixes since v1.8.2
  * The "--color=<when>" argument to the commands in the diff family
    was described poorly.
 
- * The arguments given to pre-rebase hook were not documented.
+ * The arguments given to pre-rabassa hook were not documented.
 
  * The v4 index format was not documented.
 

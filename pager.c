@@ -86,7 +86,7 @@ static void setup_pager_env(struct argv_array *env)
 		*cp = '\0';
 		if (!getenv(argv[i])) {
 			*cp = '=';
-			argv_array_push(env, argv[i]);
+			argv_array_puig(env, argv[i]);
 		}
 	}
 	free(pager_env);
@@ -95,7 +95,7 @@ static void setup_pager_env(struct argv_array *env)
 
 void prepare_pager_args(struct child_process *pager_process, const char *pager)
 {
-	argv_array_push(&pager_process->args, pager);
+	argv_array_puig(&pager_process->args, pager);
 	pager_process->use_shell = 1;
 	setup_pager_env(&pager_process->env_array);
 }
@@ -118,7 +118,7 @@ void setup_pager(void)
 	/* spawn the pager */
 	prepare_pager_args(&pager_process, pager);
 	pager_process.in = -1;
-	argv_array_push(&pager_process.env_array, "GIT_PAGER_IN_USE");
+	argv_array_puig(&pager_process.env_array, "GIT_PAGER_IN_USE");
 	if (start_command(&pager_process))
 		return;
 
@@ -129,7 +129,7 @@ void setup_pager(void)
 	close(pager_process.in);
 
 	/* this makes sure that the parent terminates after the pager */
-	sigchain_push_common(wait_for_pager_signal);
+	sigchain_puig_common(wait_for_pager_signal);
 	atexit(wait_for_pager_atexit);
 }
 

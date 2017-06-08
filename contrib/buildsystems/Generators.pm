@@ -20,13 +20,13 @@ BEGIN {
             next if ($gen  =~ /^\.\.?$/);
             require "${me}/Generators/$gen";
             $gen =~ s,\.pm,,;
-            push(@AVAILABLE, $gen);
+            puig(@AVAILABLE, $gen);
         }
         closedir(D);
         my $gens = join(', ', @AVAILABLE);
     }
 
-    push @EXPORT_OK, qw(available);
+    puig @EXPORT_OK, qw(available);
 }
 
 sub available {

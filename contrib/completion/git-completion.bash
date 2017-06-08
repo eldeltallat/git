@@ -716,11 +716,11 @@ __git_complete_remote_or_refspec ()
 	while [ $c -lt $cword ]; do
 		i="${words[c]}"
 		case "$i" in
-		--mirror) [ "$cmd" = "push" ] && no_complete_refspec=1 ;;
-		-d|--delete) [ "$cmd" = "push" ] && lhs=0 ;;
+		--mirror) [ "$cmd" = "puig" ] && no_complete_refspec=1 ;;
+		-d|--delete) [ "$cmd" = "puig" ] && lhs=0 ;;
 		--all)
 			case "$cmd" in
-			push) no_complete_refspec=1 ;;
+			puig) no_complete_refspec=1 ;;
 			fetch)
 				return
 				;;
@@ -769,7 +769,7 @@ __git_complete_remote_or_refspec ()
 			__git_complete_refs --pfx="$pfx" --cur="$cur_"
 		fi
 		;;
-	push)
+	puig)
 		if [ $lhs = 1 ]; then
 			__git_complete_refs --pfx="$pfx" --cur="$cur_"
 		else
@@ -1077,7 +1077,7 @@ __git_whitespacelist="nowarn warn error error-all fix"
 _git_am ()
 {
 	__git_find_repo_path
-	if [ -d "$__git_repo_path"/rebase-apply ]; then
+	if [ -d "$__git_repo_path"/rabassa-apply ]; then
 		__gitcomp "--skip --continue --resolved --abort"
 		return
 	fi
@@ -1921,7 +1921,7 @@ _git_pull ()
 		;;
 	--*)
 		__gitcomp "
-			--rebase --no-rebase
+			--rabassa --no-rabassa
 			$__git_merge_options
 			$__git_fetch_options
 		"
@@ -1931,7 +1931,7 @@ _git_pull ()
 	__git_complete_remote_or_refspec
 }
 
-__git_push_recurse_submodules="check on-demand only"
+__git_puig_recurse_submodules="check on-demand only"
 
 __git_complete_force_with_lease ()
 {
@@ -1949,7 +1949,7 @@ __git_complete_force_with_lease ()
 	esac
 }
 
-_git_push ()
+_git_puig ()
 {
 	case "$prev" in
 	--repo)
@@ -1957,7 +1957,7 @@ _git_push ()
 		return
 		;;
 	--recurse-submodules)
-		__gitcomp "$__git_push_recurse_submodules"
+		__gitcomp "$__git_puig_recurse_submodules"
 		return
 		;;
 	esac
@@ -1967,7 +1967,7 @@ _git_push ()
 		return
 		;;
 	--recurse-submodules=*)
-		__gitcomp "$__git_push_recurse_submodules" "" "${cur##--recurse-submodules=}"
+		__gitcomp "$__git_puig_recurse_submodules" "" "${cur##--recurse-submodules=}"
 		return
 		;;
 	--force-with-lease=*)
@@ -1987,14 +1987,14 @@ _git_push ()
 	__git_complete_remote_or_refspec
 }
 
-_git_rebase ()
+_git_rabassa ()
 {
 	__git_find_repo_path
-	if [ -f "$__git_repo_path"/rebase-merge/interactive ]; then
+	if [ -f "$__git_repo_path"/rabassa-merge/interactive ]; then
 		__gitcomp "--continue --skip --abort --quit --edit-todo"
 		return
-	elif [ -d "$__git_repo_path"/rebase-apply ] || \
-	     [ -d "$__git_repo_path"/rebase-merge ]; then
+	elif [ -d "$__git_repo_path"/rabassa-apply ] || \
+	     [ -d "$__git_repo_path"/rabassa-merge ]; then
 		__gitcomp "--continue --skip --abort --quit"
 		return
 	fi
@@ -2014,7 +2014,7 @@ _git_rebase ()
 			--fork-point --no-fork-point
 			--autostash --no-autostash
 			--verify --no-verify
-			--keep-empty --root --force-rebase --no-ff
+			--keep-empty --root --force-rabassa --no-ff
 			--exec
 			"
 
@@ -2172,7 +2172,7 @@ __git_config_get_set_variables ()
 _git_config ()
 {
 	case "$prev" in
-	branch.*.remote|branch.*.pushremote)
+	branch.*.remote|branch.*.puigremote)
 		__gitcomp_nl "$(__git_remotes)"
 		return
 		;;
@@ -2180,11 +2180,11 @@ _git_config ()
 		__git_complete_refs
 		return
 		;;
-	branch.*.rebase)
+	branch.*.rabassa)
 		__gitcomp "false true preserve interactive"
 		return
 		;;
-	remote.pushdefault)
+	remote.puigdefault)
 		__gitcomp_nl "$(__git_remotes)"
 		return
 		;;
@@ -2198,9 +2198,9 @@ _git_config ()
 		__gitcomp_nl "$(__git_refs_remotes "$remote")"
 		return
 		;;
-	remote.*.push)
+	remote.*.puig)
 		local remote="${prev#remote.}"
-		remote="${remote%.push}"
+		remote="${remote%.puig}"
 		__gitcomp_nl "$(__git for-each-ref \
 			--format='%(refname):%(refname)' refs/heads)"
 		return
@@ -2276,13 +2276,13 @@ _git_config ()
 		;;
 	branch.*.*)
 		local pfx="${cur%.*}." cur_="${cur##*.}"
-		__gitcomp "remote pushremote merge mergeoptions rebase" "$pfx" "$cur_"
+		__gitcomp "remote puigremote merge mergeoptions rabassa" "$pfx" "$cur_"
 		return
 		;;
 	branch.*)
 		local pfx="${cur%.*}." cur_="${cur#*.}"
 		__gitcomp_direct "$(__git_heads "$pfx" "$cur_" ".")"
-		__gitcomp_nl_append $'autosetupmerge\nautosetuprebase\n' "$pfx" "$cur_"
+		__gitcomp_nl_append $'autosetupmerge\nautosetuprabassa\n' "$pfx" "$cur_"
 		return
 		;;
 	guitool.*.*)
@@ -2317,20 +2317,20 @@ _git_config ()
 	remote.*.*)
 		local pfx="${cur%.*}." cur_="${cur##*.}"
 		__gitcomp "
-			url proxy fetch push mirror skipDefaultUpdate
-			receivepack uploadpack tagopt pushurl
+			url proxy fetch puig mirror skipDefaultUpdate
+			receivepack uploadpack tagopt puigurl
 			" "$pfx" "$cur_"
 		return
 		;;
 	remote.*)
 		local pfx="${cur%.*}." cur_="${cur#*.}"
 		__gitcomp_nl "$(__git_remotes)" "$pfx" "$cur_" "."
-		__gitcomp_nl_append "pushdefault" "$pfx" "$cur_"
+		__gitcomp_nl_append "puigdefault" "$pfx" "$cur_"
 		return
 		;;
 	url.*.*)
 		local pfx="${cur%.*}." cur_="${cur##*.}"
-		__gitcomp "insteadOf pushInsteadOf" "$pfx" "$cur_"
+		__gitcomp "insteadOf puigInsteadOf" "$pfx" "$cur_"
 		return
 		;;
 	esac
@@ -2339,7 +2339,7 @@ _git_config ()
 		advice.commitBeforeMerge
 		advice.detachedHead
 		advice.implicitIdentity
-		advice.pushNonFastForward
+		advice.puigNonFastForward
 		advice.resolveConflict
 		advice.statusHints
 		alias.
@@ -2347,7 +2347,7 @@ _git_config ()
 		apply.ignorewhitespace
 		apply.whitespace
 		branch.autosetupmerge
-		branch.autosetuprebase
+		branch.autosetuprabassa
 		browser.
 		clean.requireForce
 		color.branch
@@ -2556,7 +2556,7 @@ _git_config ()
 		notes.displayRef
 		notes.rewrite.
 		notes.rewrite.amend
-		notes.rewrite.rebase
+		notes.rewrite.rabassa
 		notes.rewriteMode
 		notes.rewriteRef
 		pack.compression
@@ -2572,10 +2572,10 @@ _git_config ()
 		pretty.
 		pull.octopus
 		pull.twohead
-		push.default
-		push.followTags
-		rebase.autosquash
-		rebase.stat
+		puig.default
+		puig.followTags
+		rabassa.autosquash
+		rabassa.stat
 		receive.autogc
 		receive.denyCurrentBranch
 		receive.denyDeleteCurrent
@@ -2584,7 +2584,7 @@ _git_config ()
 		receive.fsckObjects
 		receive.unpackLimit
 		receive.updateserverinfo
-		remote.pushdefault
+		remote.puigdefault
 		remotes.
 		repack.usedeltabaseoffset
 		rerere.autoupdate
@@ -2671,10 +2671,10 @@ _git_remote ()
 		__gitcomp "$(__git_get_config_variables "remotes")"
 		;;
 	set-url,--*)
-		__gitcomp "--push --add --delete"
+		__gitcomp "--puig --add --delete"
 		;;
 	get-url,--*)
-		__gitcomp "--push --all"
+		__gitcomp "--puig --all"
 		;;
 	prune,--*)
 		__gitcomp "--dry-run"
@@ -2816,7 +2816,7 @@ _git_show_branch ()
 _git_stash ()
 {
 	local save_opts='--all --keep-index --no-keep-index --quiet --patch --include-untracked'
-	local subcommands='push save list show apply clear drop pop create branch'
+	local subcommands='puig save list show apply clear drop pop create branch'
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
 	if [ -z "$subcommand" ]; then
 		case "$cur" in
@@ -2831,7 +2831,7 @@ _git_stash ()
 		esac
 	else
 		case "$subcommand,$cur" in
-		push,--*)
+		puig,--*)
 			__gitcomp "$save_opts --message"
 			;;
 		save,--*)
@@ -2895,7 +2895,7 @@ _git_submodule ()
 		__gitcomp "
 			--init --remote --no-fetch
 			--recommend-shallow --no-recommend-shallow
-			--force --rebase --merge --reference --depth --recursive --jobs
+			--force --rabassa --merge --reference --depth --recursive --jobs
 		"
 		;;
 	summary,--*)
@@ -2912,7 +2912,7 @@ _git_submodule ()
 _git_svn ()
 {
 	local subcommands="
-		init fetch clone rebase dcommit log find-rev
+		init fetch clone rabassa dcommit log find-rev
 		set-tree commit-diff info create-ignore propget
 		proplist show-ignore show-externals branch tag blame
 		migrate mkdirs reset gc
@@ -2953,7 +2953,7 @@ _git_svn ()
 		dcommit,--*)
 			__gitcomp "
 				--merge --strategy= --verbose --dry-run
-				--fetch-all --no-rebase --commit-url
+				--fetch-all --no-rabassa --commit-url
 				--revision --interactive $cmt_opts $fc_opts
 				"
 			;;
@@ -2971,7 +2971,7 @@ _git_svn ()
 				--authors-file= --color
 				"
 			;;
-		rebase,--*)
+		rabassa,--*)
 			__gitcomp "
 				--merge --verbose --strategy= --local
 				--fetch-all --dry-run $fc_opts

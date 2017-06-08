@@ -77,7 +77,7 @@ EXAMPLES:
 ---------
 This remote helper is transparently used by Git when
 you use commands such as "git fetch <URL>", "git clone <URL>",
-, "git push <URL>" or "git remote add <nick> <URL>", where <URL>
+, "git puig <URL>" or "git remote add <nick> <URL>", where <URL>
 begins with `ext::`.  Examples:
 
 "ext::ssh -i /home/foo/.ssh/somekey user&#64;host.example %S 'foo/repo'"::

@@ -1,4 +1,4 @@
-# git-gui transport (fetch/push) support
+# git-gui transport (fetch/puig) support
 # Copyright (C) 2006, 2007 Shawn Pearce
 
 proc fetch_from {remote} {
@@ -49,47 +49,47 @@ proc prune_from_all {} {
 	console::exec $w $cmd
 }
 
-proc push_to {remote} {
+proc puig_to {remote} {
 	set w [console::new \
-		[mc "push %s" $remote] \
+		[mc "puig %s" $remote] \
 		[mc "Pushing changes to %s" $remote]]
-	set cmd [list git push]
+	set cmd [list git puig]
 	lappend cmd -v
 	lappend cmd $remote
 	console::exec $w $cmd
 }
 
-proc start_push_anywhere_action {w} {
-	global push_urltype push_remote push_url push_thin push_tags
-	global push_force
+proc start_puig_anywhere_action {w} {
+	global puig_urltype puig_remote puig_url puig_thin puig_tags
+	global puig_force
 	global repo_config
 
 	set is_mirror 0
 	set r_url {}
-	switch -- $push_urltype {
+	switch -- $puig_urltype {
 	remote {
-		set r_url $push_remote
-		catch {set is_mirror $repo_config(remote.$push_remote.mirror)}
+		set r_url $puig_remote
+		catch {set is_mirror $repo_config(remote.$puig_remote.mirror)}
 	}
-	url {set r_url $push_url}
+	url {set r_url $puig_url}
 	}
 	if {$r_url eq {}} return
 
-	set cmd [list git push]
+	set cmd [list git puig]
 	lappend cmd -v
-	if {$push_thin} {
+	if {$puig_thin} {
 		lappend cmd --thin
 	}
-	if {$push_force} {
+	if {$puig_force} {
 		lappend cmd --force
 	}
-	if {$push_tags} {
+	if {$puig_tags} {
 		lappend cmd --tags
 	}
 	lappend cmd $r_url
 	if {$is_mirror} {
 		set cons [console::new \
-			[mc "push %s" $r_url] \
+			[mc "puig %s" $r_url] \
 			[mc "Mirroring to %s" $r_url]]
 	} else {
 		set cnt 0
@@ -107,22 +107,22 @@ proc start_push_anywhere_action {w} {
 		}
 
 		set cons [console::new \
-			[mc "push %s" $r_url] \
+			[mc "puig %s" $r_url] \
 			[mc "Pushing %s %s to %s" $cnt $unit $r_url]]
 	}
 	console::exec $cons $cmd
 	destroy $w
 }
 
-trace add variable push_remote write \
-	[list radio_selector push_urltype remote]
+trace add variable puig_remote write \
+	[list radio_selector puig_urltype remote]
 
-proc do_push_anywhere {} {
+proc do_puig_anywhere {} {
 	global all_remotes current_branch
-	global push_urltype push_remote push_url push_thin push_tags
-	global push_force use_ttk NS
+	global puig_urltype puig_remote puig_url puig_thin puig_tags
+	global puig_force use_ttk NS
 
-	set w .push_setup
+	set w .puig_setup
 	toplevel $w
 	catch {wm attributes $w -type dialog}
 	wm withdraw $w
@@ -136,7 +136,7 @@ proc do_push_anywhere {} {
 	${NS}::frame $w.buttons
 	${NS}::button $w.buttons.create -text [mc Push] \
 		-default active \
-		-command [list start_push_anywhere_action $w]
+		-command [list start_puig_anywhere_action $w]
 	pack $w.buttons.create -side right
 	${NS}::button $w.buttons.cancel -text [mc "Cancel"] \
 		-default normal \
@@ -164,37 +164,37 @@ proc do_push_anywhere {} {
 		${NS}::radiobutton $w.dest.remote_r \
 			-text [mc "Remote:"] \
 			-value remote \
-			-variable push_urltype
+			-variable puig_urltype
 		if {$use_ttk} {
 			ttk::combobox $w.dest.remote_m -state readonly \
 				-exportselection false \
-				-textvariable push_remote \
+				-textvariable puig_remote \
 				-values $all_remotes
 		} else {
-			eval tk_optionMenu $w.dest.remote_m push_remote $all_remotes
+			eval tk_optionMenu $w.dest.remote_m puig_remote $all_remotes
 		}
 		grid $w.dest.remote_r $w.dest.remote_m -sticky w
 		if {[lsearch -sorted -exact $all_remotes origin] != -1} {
-			set push_remote origin
+			set puig_remote origin
 		} else {
-			set push_remote [lindex $all_remotes 0]
+			set puig_remote [lindex $all_remotes 0]
 		}
-		set push_urltype remote
+		set puig_urltype remote
 	} else {
-		set push_urltype url
+		set puig_urltype url
 	}
 	${NS}::radiobutton $w.dest.url_r \
 		-text [mc "Arbitrary Location:"] \
 		-value url \
-		-variable push_urltype
+		-variable puig_urltype
 	${NS}::entry $w.dest.url_t \
 		-width 50 \
-		-textvariable push_url \
+		-textvariable puig_url \
 		-validate key \
 		-validatecommand {
 			if {%d == 1 && [regexp {\s} %S]} {return 0}
 			if {%d == 1 && [string length %S] > 0} {
-				set push_urltype url
+				set puig_urltype url
 			}
 			return 1
 		}
@@ -205,27 +205,27 @@ proc do_push_anywhere {} {
 	${NS}::labelframe $w.options -text [mc "Transfer Options"]
 	${NS}::checkbutton $w.options.force \
 		-text [mc "Force overwrite existing branch (may discard changes)"] \
-		-variable push_force
+		-variable puig_force
 	grid $w.options.force -columnspan 2 -sticky w
 	${NS}::checkbutton $w.options.thin \
 		-text [mc "Use thin pack (for slow network connections)"] \
-		-variable push_thin
+		-variable puig_thin
 	grid $w.options.thin -columnspan 2 -sticky w
 	${NS}::checkbutton $w.options.tags \
 		-text [mc "Include tags"] \
-		-variable push_tags
+		-variable puig_tags
 	grid $w.options.tags -columnspan 2 -sticky w
 	grid columnconfigure $w.options 1 -weight 1
 	pack $w.options -anchor nw -fill x -pady 5 -padx 5
 
-	set push_url {}
-	set push_force 0
-	set push_thin 0
-	set push_tags 0
+	set puig_url {}
+	set puig_force 0
+	set puig_thin 0
+	set puig_tags 0
 
 	bind $w <Visibility> "grab $w; focus $w.buttons.create"
 	bind $w <Key-Escape> "destroy $w"
-	bind $w <Key-Return> [list start_push_anywhere_action $w]
+	bind $w <Key-Return> [list start_puig_anywhere_action $w]
 	wm title $w [mc "%s (%s): Push" [appname] [reponame]]
 	wm deiconify $w
 	tkwait window $w

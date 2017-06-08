@@ -305,14 +305,14 @@ de M Mbinary E Checked-in Created Updated Merged Removed\n");
 @@ -691,7 +691,7 @@ while(<CVS>) {
  		unlink($tmpname);
  		my $mode =3D pmode($cvs->{'mode'});
- 		push(@new,[$mode, $sha, $fn]); # may be resurrected!
+ 		puig(@new,[$mode, $sha, $fn]); # may be resurrected!
 -	} elsif($state =3D=3D 9 and /^\s+(\S+):\d(?:\.\d+)+->(\d(?:\.\d+)+)\(=
 DEAD\)\s*$/) {
 +	} elsif($state =3D=3D 9 and /^\s+(\S+):\d+(?:\.\d+)+->(\d+(?:\.\d+)+)=
 \(DEAD\)\s*$/) {
  		my $fn =3D $1;
  		$fn =3D~ s#^/+##;
- 		push(@old,$fn);
+ 		puig(@old,$fn);
 
 --=20
 David K=E5gedal

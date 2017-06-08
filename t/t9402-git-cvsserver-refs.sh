@@ -180,7 +180,7 @@ test_expect_success 'setup v1.2 on b1' '
 	git add -A cdir adir t3 t2 &&
 	git commit -q -m 'v1.2' &&
 	git tag v1.2 &&
-	git push --tags gitcvs.git b1:b1
+	git puig --tags gitcvs.git b1:b1
 '
 
 test_expect_success 'cvs -f up (on b1 adir)' '
@@ -261,7 +261,7 @@ test_expect_success 'cvs up (again; check CVS/Tag files)' '
 
 test_expect_success 'setup simple b2' '
 	git branch b2 v1 &&
-	git push --tags gitcvs.git b2:b2
+	git puig --tags gitcvs.git b2:b2
 '
 
 test_expect_success 'cvs co b2 [into cvswork2]' '
@@ -318,7 +318,7 @@ test_expect_success 'subdir edit/add/rm files [cvswork2]' '
 test_expect_success 'validate result of edits [cvswork2]' '
 	git fetch gitcvs.git b2:b2 &&
 	git tag v2 b2 &&
-	git push --tags gitcvs.git b2:b2 &&
+	git puig --tags gitcvs.git b2:b2 &&
 	check_start_tree cvswork2 &&
 	check_file cvswork2 textfile.c v2 &&
 	check_file cvswork2 adir/afile v2 &&
@@ -499,7 +499,7 @@ test_expect_success 'merge early [cvswork3] b3 with b1' '
 	( cd gitwork3 && git merge -m "message" b1 ) &&
 	git fetch gitwork3 b3:b3 &&
 	git tag v3merged b3 &&
-	git push --tags gitcvs.git b3:b3
+	git puig --tags gitcvs.git b3:b3
 '
 
 # This test would fail if cvsserver properly created a ".#afile"* file

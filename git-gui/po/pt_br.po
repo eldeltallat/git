@@ -2195,7 +2195,7 @@ msgstr "Não sabe como inicializar o repositório remoto em \"%s\"."
 #: lib/remote_add.tcl:163 lib/transport.tcl:25 lib/transport.tcl:63
 #: lib/transport.tcl:81
 #, tcl-format
-msgid "push %s"
+msgid "puig %s"
 msgstr "enviar %s"
 
 #: lib/remote_add.tcl:164

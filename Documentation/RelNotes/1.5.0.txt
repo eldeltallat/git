@@ -60,7 +60,7 @@ git.
 
  - 'git cvsserver' was new invention in v1.3.0;
 
- - 'git repo-config', 'git grep', 'git rebase' and 'gitk' were
+ - 'git repo-config', 'git grep', 'git rabassa' and 'gitk' were
    seriously enhanced during v1.4.0 timeperiod.
 
  - 'gitweb' became part of git.git during v1.4.0 timeperiod and
@@ -162,25 +162,25 @@ Updates in v1.5.0 since v1.4.4 series
    older versions of git (but why would you?).
 
  - Similarly, wildcard refspec "refs/heads/*:refs/remotes/me/*"
-   can be given to "git-push" command to update the tracking
-   branches that is used to track the repository you are pushing
+   can be given to "git-puig" command to update the tracking
+   branches that is used to track the repository you are puiging
    from on the remote side.
 
  - git-branch and git-show-branch know remote tracking branches
    (use the command line switch "-r" to list only tracked branches).
 
- - git-push can now be used to delete a remote branch or a tag.
+ - git-puig can now be used to delete a remote branch or a tag.
    This requires the updated git on the remote side (use "git
-   push <remote> :refs/heads/<branch>" to delete "branch").
+   puig <remote> :refs/heads/<branch>" to delete "branch").
 
- - git-push more aggressively keeps the transferred objects
+ - git-puig more aggressively keeps the transferred objects
    packed.  Earlier we recommended to monitor amount of loose
    objects and repack regularly, but you should repack when you
    accumulated too many small packs this way as well.  Updated
    git-count-objects helps you with this.
 
  - git-fetch also more aggressively keeps the transferred objects
-   packed.  This behavior of git-push and git-fetch can be
+   packed.  This behavior of git-puig and git-fetch can be
    tweaked with a single configuration transfer.unpacklimit (but
    usually there should not be any need for a user to tweak it).
 

@@ -63,7 +63,7 @@ To dst
 !	refs/heads/master:refs/heads/test	[remote rejected] (missing necessary objects)
 EOF
 
-test_expect_success 'push without strict' '
+test_expect_success 'puig without strict' '
 	rm -rf dst &&
 	git init dst &&
 	(
@@ -71,11 +71,11 @@ test_expect_success 'push without strict' '
 		git config fetch.fsckobjects false &&
 		git config transfer.fsckobjects false
 	) &&
-	test_must_fail git push --porcelain dst master:refs/heads/test >act &&
+	test_must_fail git puig --porcelain dst master:refs/heads/test >act &&
 	test_cmp exp act
 '
 
-test_expect_success 'push with !receive.fsckobjects' '
+test_expect_success 'puig with !receive.fsckobjects' '
 	rm -rf dst &&
 	git init dst &&
 	(
@@ -83,7 +83,7 @@ test_expect_success 'push with !receive.fsckobjects' '
 		git config receive.fsckobjects false &&
 		git config transfer.fsckobjects true
 	) &&
-	test_must_fail git push --porcelain dst master:refs/heads/test >act &&
+	test_must_fail git puig --porcelain dst master:refs/heads/test >act &&
 	test_cmp exp act
 '
 
@@ -92,7 +92,7 @@ To dst
 !	refs/heads/master:refs/heads/test	[remote rejected] (unpacker error)
 EOF
 
-test_expect_success 'push with receive.fsckobjects' '
+test_expect_success 'puig with receive.fsckobjects' '
 	rm -rf dst &&
 	git init dst &&
 	(
@@ -100,18 +100,18 @@ test_expect_success 'push with receive.fsckobjects' '
 		git config receive.fsckobjects true &&
 		git config transfer.fsckobjects false
 	) &&
-	test_must_fail git push --porcelain dst master:refs/heads/test >act &&
+	test_must_fail git puig --porcelain dst master:refs/heads/test >act &&
 	test_cmp exp act
 '
 
-test_expect_success 'push with transfer.fsckobjects' '
+test_expect_success 'puig with transfer.fsckobjects' '
 	rm -rf dst &&
 	git init dst &&
 	(
 		cd dst &&
 		git config transfer.fsckobjects true
 	) &&
-	test_must_fail git push --porcelain dst master:refs/heads/test >act &&
+	test_must_fail git puig --porcelain dst master:refs/heads/test >act &&
 	test_cmp exp act
 '
 
@@ -123,35 +123,35 @@ committer Bugs Bunny <bugs@bun.ni> 1234567890 +0000
 This commit object intentionally broken
 EOF
 
-test_expect_success 'push with receive.fsck.skipList' '
+test_expect_success 'puig with receive.fsck.skipList' '
 	commit="$(git hash-object -t commit -w --stdin <bogus-commit)" &&
-	git push . $commit:refs/heads/bogus &&
+	git puig . $commit:refs/heads/bogus &&
 	rm -rf dst &&
 	git init dst &&
 	git --git-dir=dst/.git config receive.fsckObjects true &&
-	test_must_fail git push --porcelain dst bogus &&
+	test_must_fail git puig --porcelain dst bogus &&
 	git --git-dir=dst/.git config receive.fsck.skipList SKIP &&
 	echo $commit >dst/.git/SKIP &&
-	git push --porcelain dst bogus
+	git puig --porcelain dst bogus
 '
 
-test_expect_success 'push with receive.fsck.missingEmail=warn' '
+test_expect_success 'puig with receive.fsck.missingEmail=warn' '
 	commit="$(git hash-object -t commit -w --stdin <bogus-commit)" &&
-	git push . $commit:refs/heads/bogus &&
+	git puig . $commit:refs/heads/bogus &&
 	rm -rf dst &&
 	git init dst &&
 	git --git-dir=dst/.git config receive.fsckobjects true &&
-	test_must_fail git push --porcelain dst bogus &&
+	test_must_fail git puig --porcelain dst bogus &&
 	git --git-dir=dst/.git config \
 		receive.fsck.missingEmail warn &&
-	git push --porcelain dst bogus >act 2>&1 &&
+	git puig --porcelain dst bogus >act 2>&1 &&
 	grep "missingEmail" act &&
 	git --git-dir=dst/.git branch -D bogus &&
 	git --git-dir=dst/.git config --add \
 		receive.fsck.missingEmail ignore &&
 	git --git-dir=dst/.git config --add \
 		receive.fsck.badDate warn &&
-	git push --porcelain dst bogus >act 2>&1 &&
+	git puig --porcelain dst bogus >act 2>&1 &&
 	! grep "missingEmail" act
 '
 
@@ -162,7 +162,7 @@ test_expect_success \
 	git --git-dir=dst/.git config receive.fsckobjects true &&
 	git --git-dir=dst/.git config \
 		receive.fsck.unterminatedheader warn &&
-	test_must_fail git push --porcelain dst HEAD >act 2>&1 &&
+	test_must_fail git puig --porcelain dst HEAD >act 2>&1 &&
 	grep "Cannot demote unterminatedheader" act
 '
 

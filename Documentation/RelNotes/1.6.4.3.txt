@@ -21,7 +21,7 @@ Fixes since v1.6.4.2
 * "git grep" did not like relative pathname to refer outside the current
   directory when run from a subdirectory.
 
-* an error message from "git push" was formatted in a very ugly way.
+* an error message from "git puig" was formatted in a very ugly way.
 
 * "git svn" did not quote the subversion user name correctly when
   running its author-prog helper program.

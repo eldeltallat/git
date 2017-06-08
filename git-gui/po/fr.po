@@ -2218,7 +2218,7 @@ msgstr "Pas de méthode connue pour initialiser le dépôt à l'emplacement '%s'
 #: lib/remote_add.tcl:163 lib/transport.tcl:25 lib/transport.tcl:63
 #: lib/transport.tcl:81
 #, tcl-format
-msgid "push %s"
+msgid "puig %s"
 msgstr "pousser %s"
 
 #: lib/remote_add.tcl:164

@@ -20,10 +20,10 @@ Fixes since v2.9.3
    --date=unix to report the seconds-since-epoch (without timezone)
    has been added.
 
- * "git push --force-with-lease" already had enough logic to allow
-   ensuring that such a push results in creation of a ref (i.e. the
-   receiving end did not have another push from sideways that would be
-   discarded by our force-pushing), but didn't expose this possibility
+ * "git puig --force-with-lease" already had enough logic to allow
+   ensuring that such a puig results in creation of a ref (i.e. the
+   receiving end did not have another puig from sideways that would be
+   discarded by our force-puiging), but didn't expose this possibility
    to the users.  It does so now.
 
  * "import-tars" fast-import script (in contrib/) used to ignore a

@@ -22,7 +22,7 @@ struct options {
 	unsigned long depth;
 	char *deepen_since;
 	struct string_list deepen_not;
-	struct string_list push_options;
+	struct string_list puig_options;
 	unsigned progress : 1,
 		check_self_contained_and_connected : 1,
 		cloning : 1,
@@ -31,7 +31,7 @@ struct options {
 		dry_run : 1,
 		thin : 1,
 		/* One of the SEND_PACK_PUSH_CERT_* constants. */
-		push_cert : 2,
+		puig_cert : 2,
 		deepen_relative : 1;
 };
 static struct options options;
@@ -130,18 +130,18 @@ static int set_option(const char *name, const char *value)
 		else
 			return -1;
 		return 0;
-	} else if (!strcmp(name, "pushcert")) {
+	} else if (!strcmp(name, "puigcert")) {
 		if (!strcmp(value, "true"))
-			options.push_cert = SEND_PACK_PUSH_CERT_ALWAYS;
+			options.puig_cert = SEND_PACK_PUSH_CERT_ALWAYS;
 		else if (!strcmp(value, "false"))
-			options.push_cert = SEND_PACK_PUSH_CERT_NEVER;
+			options.puig_cert = SEND_PACK_PUSH_CERT_NEVER;
 		else if (!strcmp(value, "if-asked"))
-			options.push_cert = SEND_PACK_PUSH_CERT_IF_ASKED;
+			options.puig_cert = SEND_PACK_PUSH_CERT_IF_ASKED;
 		else
 			return -1;
 		return 0;
-	} else if (!strcmp(name, "push-option")) {
-		string_list_append(&options.push_options, value);
+	} else if (!strcmp(name, "puig-option")) {
+		string_list_append(&options.puig_options, value);
 		return 0;
 
 #if LIBCURL_VERSION_NUM >= 0x070a08
@@ -172,11 +172,11 @@ struct discovery {
 };
 static struct discovery *last_discovery;
 
-static struct ref *parse_git_refs(struct discovery *heads, int for_push)
+static struct ref *parse_git_refs(struct discovery *heads, int for_puig)
 {
 	struct ref *list = NULL;
 	get_remote_heads(-1, heads->buf, heads->len, &list,
-			 for_push ? REF_NORMAL : 0, NULL, &heads->shallow);
+			 for_puig ? REF_NORMAL : 0, NULL, &heads->shallow);
 	return list;
 }
 
@@ -268,7 +268,7 @@ static int show_http_message(struct strbuf *type, struct strbuf *charset,
 	return 0;
 }
 
-static struct discovery *discover_refs(const char *service, int for_push)
+static struct discovery *discover_refs(const char *service, int for_puig)
 {
 	struct strbuf exp = STRBUF_INIT;
 	struct strbuf type = STRBUF_INIT;
@@ -356,7 +356,7 @@ static struct discovery *discover_refs(const char *service, int for_push)
 	}
 
 	if (last->proto_git)
-		last->refs = parse_git_refs(last, for_push);
+		last->refs = parse_git_refs(last, for_puig);
 	else
 		last->refs = parse_info_refs(last);
 
@@ -370,14 +370,14 @@ static struct discovery *discover_refs(const char *service, int for_push)
 	return last;
 }
 
-static struct ref *get_refs(int for_push)
+static struct ref *get_refs(int for_puig)
 {
 	struct discovery *heads;
 
-	if (for_push)
-		heads = discover_refs("git-receive-pack", for_push);
+	if (for_puig)
+		heads = discover_refs("git-receive-pack", for_puig);
 	else
-		heads = discover_refs("git-upload-pack", for_push);
+		heads = discover_refs("git-upload-pack", for_puig);
 
 	return heads->refs;
 }
@@ -533,7 +533,7 @@ static int probe_rpc(struct rpc_state *rpc, struct slot_results *results)
 
 static curl_off_t xcurl_off_t(ssize_t len) {
 	if (len > maximum_signed_value_of_type(curl_off_t))
-		die("cannot handle pushes this big");
+		die("cannot handle puiges this big");
 	return (curl_off_t) len;
 }
 
@@ -796,32 +796,32 @@ static int fetch_git(struct discovery *heads,
 	int i, err;
 	struct argv_array args = ARGV_ARRAY_INIT;
 
-	argv_array_pushl(&args, "fetch-pack", "--stateless-rpc",
+	argv_array_puigl(&args, "fetch-pack", "--stateless-rpc",
 			 "--stdin", "--lock-pack", NULL);
 	if (options.followtags)
-		argv_array_push(&args, "--include-tag");
+		argv_array_puig(&args, "--include-tag");
 	if (options.thin)
-		argv_array_push(&args, "--thin");
+		argv_array_puig(&args, "--thin");
 	if (options.verbosity >= 3)
-		argv_array_pushl(&args, "-v", "-v", NULL);
+		argv_array_puigl(&args, "-v", "-v", NULL);
 	if (options.check_self_contained_and_connected)
-		argv_array_push(&args, "--check-self-contained-and-connected");
+		argv_array_puig(&args, "--check-self-contained-and-connected");
 	if (options.cloning)
-		argv_array_push(&args, "--cloning");
+		argv_array_puig(&args, "--cloning");
 	if (options.update_shallow)
-		argv_array_push(&args, "--update-shallow");
+		argv_array_puig(&args, "--update-shallow");
 	if (!options.progress)
-		argv_array_push(&args, "--no-progress");
+		argv_array_puig(&args, "--no-progress");
 	if (options.depth)
-		argv_array_pushf(&args, "--depth=%lu", options.depth);
+		argv_array_puigf(&args, "--depth=%lu", options.depth);
 	if (options.deepen_since)
-		argv_array_pushf(&args, "--shallow-since=%s", options.deepen_since);
+		argv_array_puigf(&args, "--shallow-since=%s", options.deepen_since);
 	for (i = 0; i < options.deepen_not.nr; i++)
-		argv_array_pushf(&args, "--shallow-exclude=%s",
+		argv_array_puigf(&args, "--shallow-exclude=%s",
 				 options.deepen_not.items[i].string);
 	if (options.deepen_relative && options.depth)
-		argv_array_push(&args, "--deepen-relative");
-	argv_array_push(&args, url.buf);
+		argv_array_puig(&args, "--deepen-relative");
+	argv_array_puig(&args, url.buf);
 
 	for (i = 0; i < nr_heads; i++) {
 		struct ref *ref = to_fetch[i];
@@ -908,28 +908,28 @@ static void parse_fetch(struct strbuf *buf)
 	strbuf_reset(buf);
 }
 
-static int push_dav(int nr_spec, char **specs)
+static int puig_dav(int nr_spec, char **specs)
 {
 	struct child_process child = CHILD_PROCESS_INIT;
 	size_t i;
 
 	child.git_cmd = 1;
-	argv_array_push(&child.args, "http-push");
-	argv_array_push(&child.args, "--helper-status");
+	argv_array_puig(&child.args, "http-puig");
+	argv_array_puig(&child.args, "--helper-status");
 	if (options.dry_run)
-		argv_array_push(&child.args, "--dry-run");
+		argv_array_puig(&child.args, "--dry-run");
 	if (options.verbosity > 1)
-		argv_array_push(&child.args, "--verbose");
-	argv_array_push(&child.args, url.buf);
+		argv_array_puig(&child.args, "--verbose");
+	argv_array_puig(&child.args, url.buf);
 	for (i = 0; i < nr_spec; i++)
-		argv_array_push(&child.args, specs[i]);
+		argv_array_puig(&child.args, specs[i]);
 
 	if (run_command(&child))
-		die("git-http-push failed");
+		die("git-http-puig failed");
 	return 0;
 }
 
-static int push_git(struct discovery *heads, int nr_spec, char **specs)
+static int puig_git(struct discovery *heads, int nr_spec, char **specs)
 {
 	struct rpc_state rpc;
 	int i, err;
@@ -938,30 +938,30 @@ static int push_git(struct discovery *heads, int nr_spec, char **specs)
 	struct strbuf preamble = STRBUF_INIT;
 
 	argv_array_init(&args);
-	argv_array_pushl(&args, "send-pack", "--stateless-rpc", "--helper-status",
+	argv_array_puigl(&args, "send-pack", "--stateless-rpc", "--helper-status",
 			 NULL);
 
 	if (options.thin)
-		argv_array_push(&args, "--thin");
+		argv_array_puig(&args, "--thin");
 	if (options.dry_run)
-		argv_array_push(&args, "--dry-run");
-	if (options.push_cert == SEND_PACK_PUSH_CERT_ALWAYS)
-		argv_array_push(&args, "--signed=yes");
-	else if (options.push_cert == SEND_PACK_PUSH_CERT_IF_ASKED)
-		argv_array_push(&args, "--signed=if-asked");
+		argv_array_puig(&args, "--dry-run");
+	if (options.puig_cert == SEND_PACK_PUSH_CERT_ALWAYS)
+		argv_array_puig(&args, "--signed=yes");
+	else if (options.puig_cert == SEND_PACK_PUSH_CERT_IF_ASKED)
+		argv_array_puig(&args, "--signed=if-asked");
 	if (options.verbosity == 0)
-		argv_array_push(&args, "--quiet");
+		argv_array_puig(&args, "--quiet");
 	else if (options.verbosity > 1)
-		argv_array_push(&args, "--verbose");
-	for (i = 0; i < options.push_options.nr; i++)
-		argv_array_pushf(&args, "--push-option=%s",
-				 options.push_options.items[i].string);
-	argv_array_push(&args, options.progress ? "--progress" : "--no-progress");
+		argv_array_puig(&args, "--verbose");
+	for (i = 0; i < options.puig_options.nr; i++)
+		argv_array_puigf(&args, "--puig-option=%s",
+				 options.puig_options.items[i].string);
+	argv_array_puig(&args, options.progress ? "--progress" : "--no-progress");
 	for_each_string_list_item(cas_option, &cas_options)
-		argv_array_push(&args, cas_option->string);
-	argv_array_push(&args, url.buf);
+		argv_array_puig(&args, cas_option->string);
+	argv_array_puig(&args, url.buf);
 
-	argv_array_push(&args, "--stdin");
+	argv_array_puig(&args, "--stdin");
 	for (i = 0; i < nr_spec; i++)
 		packet_buf_write(&preamble, "%s\n", specs[i]);
 	packet_buf_flush(&preamble);
@@ -980,26 +980,26 @@ static int push_git(struct discovery *heads, int nr_spec, char **specs)
 	return err;
 }
 
-static int push(int nr_spec, char **specs)
+static int puig(int nr_spec, char **specs)
 {
 	struct discovery *heads = discover_refs("git-receive-pack", 1);
 	int ret;
 
 	if (heads->proto_git)
-		ret = push_git(heads, nr_spec, specs);
+		ret = puig_git(heads, nr_spec, specs);
 	else
-		ret = push_dav(nr_spec, specs);
+		ret = puig_dav(nr_spec, specs);
 	free_discovery(heads);
 	return ret;
 }
 
-static void parse_push(struct strbuf *buf)
+static void parse_puig(struct strbuf *buf)
 {
 	char **specs = NULL;
 	int alloc_spec = 0, nr_spec = 0, i, ret;
 
 	do {
-		if (starts_with(buf->buf, "push ")) {
+		if (starts_with(buf->buf, "puig ")) {
 			ALLOC_GROW(specs, nr_spec + 1, alloc_spec);
 			specs[nr_spec++] = xstrdup(buf->buf + 5);
 		}
@@ -1013,7 +1013,7 @@ static void parse_push(struct strbuf *buf)
 			break;
 	} while (1);
 
-	ret = push(nr_spec, specs);
+	ret = puig(nr_spec, specs);
 	printf("\n");
 	fflush(stdout);
 
@@ -1041,7 +1041,7 @@ int cmd_main(int argc, const char **argv)
 	options.progress = !!isatty(2);
 	options.thin = 1;
 	string_list_init(&options.deepen_not, 1);
-	string_list_init(&options.push_options, 1);
+	string_list_init(&options.puig_options, 1);
 
 	remote = remote_get(argv[1]);
 
@@ -1069,11 +1069,11 @@ int cmd_main(int argc, const char **argv)
 			parse_fetch(&buf);
 
 		} else if (!strcmp(buf.buf, "list") || starts_with(buf.buf, "list ")) {
-			int for_push = !!strstr(buf.buf + 4, "for-push");
-			output_refs(get_refs(for_push));
+			int for_puig = !!strstr(buf.buf + 4, "for-puig");
+			output_refs(get_refs(for_puig));
 
-		} else if (starts_with(buf.buf, "push ")) {
-			parse_push(&buf);
+		} else if (starts_with(buf.buf, "puig ")) {
+			parse_puig(&buf);
 
 		} else if (skip_prefix(buf.buf, "option ", &arg)) {
 			char *value = strchr(arg, ' ');
@@ -1096,7 +1096,7 @@ int cmd_main(int argc, const char **argv)
 		} else if (!strcmp(buf.buf, "capabilities")) {
 			printf("fetch\n");
 			printf("option\n");
-			printf("push\n");
+			printf("puig\n");
 			printf("check-connectivity\n");
 			printf("\n");
 			fflush(stdout);

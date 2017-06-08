@@ -73,7 +73,7 @@ to the main README file:
 * Better algorithm for detecting new commits.  post-receive-email
   processes one reference change at a time, which causes it to fail to
   describe new commits that were included in multiple branches.  For
-  example, if a single push adds the "*" commits in the diagram below,
+  example, if a single puig adds the "*" commits in the diagram below,
   then post-receive-email would never include the details of the two
   commits that are common to "master" and "branch" in its
   notifications.
@@ -124,9 +124,9 @@ to the main README file:
   requiring full-fledged mailing list software.
 
 * By default, git-multimail sets email "Reply-To" headers to reply to
-  the pusher (for reference updates) and to the author (for commit
-  notifications).  By default, the pusher's email address is
-  constructed by appending "multimailhook.emaildomain" to the pusher's
+  the puiger (for reference updates) and to the author (for commit
+  notifications).  By default, the puiger's email address is
+  constructed by appending "multimailhook.emaildomain" to the puiger's
   username.
 
 * The generated emails contain a configurable footer.  By default, it

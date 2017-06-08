@@ -10,15 +10,15 @@ SYNOPSIS
 --------
 [verse]
 'git remote' [-v | --verbose]
-'git remote add' [-t <branch>] [-m <master>] [-f] [--[no-]tags] [--mirror=<fetch|push>] <name> <url>
+'git remote add' [-t <branch>] [-m <master>] [-f] [--[no-]tags] [--mirror=<fetch|puig>] <name> <url>
 'git remote rename' <old> <new>
 'git remote remove' <name>
 'git remote set-head' <name> (-a | --auto | -d | --delete | <branch>)
 'git remote set-branches' [--add] <name> <branch>...
-'git remote get-url' [--push] [--all] <name>
-'git remote set-url' [--push] <name> <newurl> [<oldurl>]
-'git remote set-url --add' [--push] <name> <newurl>
-'git remote set-url --delete' [--push] <name> <url>
+'git remote get-url' [--puig] [--all] <name>
+'git remote set-url' [--puig] <name> <newurl> [<oldurl>]
+'git remote set-url --add' [--puig] <name> <newurl>
+'git remote set-url --delete' [--puig] <name> <url>
 'git remote' [-v | --verbose] 'show' [-n] <name>...
 'git remote prune' [-n | --dry-run] <name>...
 'git remote' [-v | --verbose] 'update' [-p | --prune] [(<group> | <remote>)...]
@@ -77,7 +77,7 @@ be stored in the 'refs/remotes/' namespace, but rather everything in
 local repository. This option only makes sense in bare repositories,
 because a fetch would overwrite any local commits.
 +
-When a push mirror is created with `--mirror=push`, then `git push`
+When a puig mirror is created with `--mirror=puig`, then `git puig`
 will always behave as if `--mirror` was passed.
 
 'rename'::
@@ -135,9 +135,9 @@ branches, adds to that list.
 'get-url'::
 
 Retrieves the URLs for a remote. Configurations for `insteadOf` and
-`pushInsteadOf` are expanded here. By default, only the first URL is listed.
+`puigInsteadOf` are expanded here. By default, only the first URL is listed.
 +
-With `--push`, push URLs are queried rather than fetch URLs.
+With `--puig`, puig URLs are queried rather than fetch URLs.
 +
 With `--all`, all URLs for the remote will be listed.
 
@@ -147,19 +147,19 @@ Changes URLs for the remote. Sets first URL for remote <name> that matches
 regex <oldurl> (first URL if no <oldurl> is given) to <newurl>. If
 <oldurl> doesn't match any URL, an error occurs and nothing is changed.
 +
-With `--push`, push URLs are manipulated instead of fetch URLs.
+With `--puig`, puig URLs are manipulated instead of fetch URLs.
 +
 With `--add`, instead of changing existing URLs, new URL is added.
 +
 With `--delete`, instead of changing existing URLs, all URLs matching
 regex <url> are deleted for remote <name>.  Trying to delete all
-non-push URLs is an error.
+non-puig URLs is an error.
 +
-Note that the push URL and the fetch URL, even though they can
+Note that the puig URL and the fetch URL, even though they can
 be set differently, must still refer to the same place.  What you
-pushed to the push URL should be what you would see if you
+puiged to the puig URL should be what you would see if you
 immediately fetched from the fetch URL.  If you are trying to
-fetch from one place (e.g. your upstream) and push to another (e.g.
+fetch from one place (e.g. your upstream) and puig to another (e.g.
 your publishing repository), use two separate remotes.
 
 

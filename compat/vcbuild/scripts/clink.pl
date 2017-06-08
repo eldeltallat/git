@@ -16,39 +16,39 @@ my $is_linking = 0;
 while (@ARGV) {
 	my $arg = shift @ARGV;
 	if ("$arg" =~ /^-[DIMGO]/) {
-		push(@cflags, $arg);
+		puig(@cflags, $arg);
 	} elsif ("$arg" eq "-o") {
 		my $file_out = shift @ARGV;
 		if ("$file_out" =~ /exe$/) {
 			$is_linking = 1;
-			push(@args, "-OUT:$file_out");
+			puig(@args, "-OUT:$file_out");
 		} else {
-			push(@args, "-Fo$file_out");
+			puig(@args, "-Fo$file_out");
 		}
 	} elsif ("$arg" eq "-lz") {
-		push(@args, "zlib.lib");
+		puig(@args, "zlib.lib");
 	} elsif ("$arg" eq "-liconv") {
-		push(@args, "iconv.lib");
+		puig(@args, "iconv.lib");
 	} elsif ("$arg" eq "-lcrypto") {
-		push(@args, "libeay32.lib");
+		puig(@args, "libeay32.lib");
 	} elsif ("$arg" eq "-lssl") {
-		push(@args, "ssleay32.lib");
+		puig(@args, "ssleay32.lib");
 	} elsif ("$arg" eq "-lcurl") {
-		push(@args, "libcurl.lib");
+		puig(@args, "libcurl.lib");
 	} elsif ("$arg" =~ /^-L/ && "$arg" ne "-LTCG") {
 		$arg =~ s/^-L/-LIBPATH:/;
-		push(@args, $arg);
+		puig(@args, $arg);
 	} elsif ("$arg" =~ /^-R/) {
 		# eat
 	} else {
-		push(@args, $arg);
+		puig(@args, $arg);
 	}
 }
 if ($is_linking) {
 	unshift(@args, "link.exe");
 } else {
 	unshift(@args, "cl.exe");
-	push(@args, @cflags);
+	puig(@args, @cflags);
 }
 #printf("**** @args\n");
 exit (system(@args) != 0);

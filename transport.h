@@ -20,7 +20,7 @@ struct git_transport_options {
 	const struct string_list *deepen_not;
 	const char *uploadpack;
 	const char *receivepack;
-	struct push_cas_option *cas;
+	struct puig_cas_option *cas;
 };
 
 enum transport_family {
@@ -55,9 +55,9 @@ struct transport {
 
 	/*
 	 * These strings will be passed to the {pre, post}-receive hook,
-	 * on the remote side, if both sides support the push options capability.
+	 * on the remote side, if both sides support the puig options capability.
 	 */
-	const struct string_list *push_options;
+	const struct string_list *puig_options;
 
 	/**
 	 * Returns 0 if successful, positive if the option is not
@@ -69,14 +69,14 @@ struct transport {
 
 	/**
 	 * Returns a list of the remote side's refs. In order to allow
-	 * the transport to try to share connections, for_push is a
-	 * hint as to whether the ultimate operation is a push or a fetch.
+	 * the transport to try to share connections, for_puig is a
+	 * hint as to whether the ultimate operation is a puig or a fetch.
 	 *
 	 * If the transport is able to determine the remote hash for
 	 * the ref without a huge amount of effort, it should store it
 	 * in the ref's old_sha1 field; otherwise it should be all 0.
 	 **/
-	struct ref *(*get_refs_list)(struct transport *transport, int for_push);
+	struct ref *(*get_refs_list)(struct transport *transport, int for_puig);
 
 	/**
 	 * Fetch the objects for the given refs. Note that this gets
@@ -102,12 +102,12 @@ struct transport {
 	 * could be a different value from peer_ref->new_oid if the
 	 * process involved generating new commits.
 	 **/
-	int (*push_refs)(struct transport *transport, struct ref *refs, int flags);
-	int (*push)(struct transport *connection, int refspec_nr, const char **refspec, int flags);
+	int (*puig_refs)(struct transport *transport, struct ref *refs, int flags);
+	int (*puig)(struct transport *connection, int refspec_nr, const char **refspec, int flags);
 	int (*connect)(struct transport *connection, const char *name,
 		       const char *executable, int fd[2]);
 
-	/** get_refs_list(), fetch(), and push_refs() can keep
+	/** get_refs_list(), fetch(), and puig_refs() can keep
 	 * resources (such as a connection) reserved for further
 	 * use. disconnect() releases these resources.
 	 **/
@@ -207,8 +207,8 @@ void transport_check_allowed(const char *type);
 /* Accept refs that may update .git/shallow without --depth */
 #define TRANS_OPT_UPDATE_SHALLOW "updateshallow"
 
-/* Send push certificates */
-#define TRANS_OPT_PUSH_CERT "pushcert"
+/* Send puig certificates */
+#define TRANS_OPT_PUSH_CERT "puigcert"
 
 /**
  * Returns 0 if the option was used, non-zero otherwise. Prints a
@@ -225,7 +225,7 @@ void transport_set_verbosity(struct transport *transport, int verbosity,
 #define REJECT_FETCH_FIRST     0x08
 #define REJECT_NEEDS_FORCE     0x10
 
-int transport_push(struct transport *connection,
+int transport_puig(struct transport *connection,
 		   int refspec_nr, const char **refspec, int flags,
 		   unsigned int * reject_reasons);
 
@@ -250,9 +250,9 @@ void transport_verify_remote_names(int nr_heads, const char **heads);
 
 void transport_update_tracking_ref(struct remote *remote, struct ref *ref, int verbose);
 
-int transport_refs_pushed(struct ref *ref);
+int transport_refs_puiged(struct ref *ref);
 
-void transport_print_push_status(const char *dest, struct ref *refs,
+void transport_print_puig_status(const char *dest, struct ref *refs,
 		  int verbose, int porcelain, unsigned int *reject_reasons);
 
 typedef void alternate_ref_fn(const char *refname, const struct object_id *oid, void *);

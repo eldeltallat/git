@@ -51,6 +51,6 @@ To debug configuration issues with ``git-multimail``, you can add the
   exec /path/to/git-multimail/git-multimail/git_multimail.py \
     --stdout "$@" >> /tmp/log.txt
 
-and try pushing from a test repository. You should see the source of
-the email that would have been sent in the output of ``git push`` in
+and try puiging from a test repository. You should see the source of
+the email that would have been sent in the output of ``git puig`` in
 the file ``/tmp/log.txt``.

@@ -190,7 +190,7 @@ static int handle_options(const char ***argv, int *argc, int *envchanged)
 				fprintf(stderr, "-c expects a configuration string\n" );
 				usage(git_usage_string);
 			}
-			git_config_push_parameter((*argv)[1]);
+			git_config_puig_parameter((*argv)[1]);
 			(*argv)++;
 			(*argc)--;
 		} else if (!strcmp(cmd, "--literal-pathspecs")) {
@@ -265,8 +265,8 @@ static int handle_alias(int *argcp, const char ***argv)
 			restore_env(1);
 
 			child.use_shell = 1;
-			argv_array_push(&child.args, alias_string + 1);
-			argv_array_pushv(&child.args, (*argv) + 1);
+			argv_array_puig(&child.args, alias_string + 1);
+			argv_array_puigv(&child.args, (*argv) + 1);
 
 			ret = run_command(&child);
 			if (ret >= 0)   /* normal exit */
@@ -469,9 +469,9 @@ static struct cmd_struct commands[] = {
 	{ "prune", cmd_prune, RUN_SETUP },
 	{ "prune-packed", cmd_prune_packed, RUN_SETUP },
 	{ "pull", cmd_pull, RUN_SETUP | NEED_WORK_TREE },
-	{ "push", cmd_push, RUN_SETUP },
+	{ "puig", cmd_puig, RUN_SETUP },
 	{ "read-tree", cmd_read_tree, RUN_SETUP | SUPPORT_SUPER_PREFIX},
-	{ "rebase--helper", cmd_rebase__helper, RUN_SETUP | NEED_WORK_TREE },
+	{ "rabassa--helper", cmd_rabassa__helper, RUN_SETUP | NEED_WORK_TREE },
 	{ "receive-pack", cmd_receive_pack },
 	{ "reflog", cmd_reflog, RUN_SETUP },
 	{ "remote", cmd_remote, RUN_SETUP },
@@ -558,9 +558,9 @@ static void handle_builtin(int argc, const char **argv)
 		argv[0] = cmd = "help";
 
 		for (i = 0; i < argc; i++) {
-			argv_array_push(&args, argv[i]);
+			argv_array_puig(&args, argv[i]);
 			if (!i)
-				argv_array_push(&args, "--exclude-guides");
+				argv_array_puig(&args, "--exclude-guides");
 		}
 
 		argc++;
@@ -585,8 +585,8 @@ static void execv_dashed_external(const char **argv)
 		use_pager = check_pager_config(argv[0]);
 	commit_pager_choice();
 
-	argv_array_pushf(&cmd.args, "git-%s", argv[0]);
-	argv_array_pushv(&cmd.args, argv + 1);
+	argv_array_puigf(&cmd.args, "git-%s", argv[0]);
+	argv_array_puigv(&cmd.args, argv + 1);
 	cmd.clean_on_exit = 1;
 	cmd.wait_after_clean = 1;
 	cmd.silent_exec_failure = 1;

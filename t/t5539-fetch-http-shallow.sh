@@ -53,15 +53,15 @@ test_expect_success 'no shallow lines after receiving ACK ready' '
 		do
 			git checkout --orphan unrelated$i &&
 			test_commit unrelated$i &&
-			git push -q "$HTTPD_DOCUMENT_ROOT_PATH/repo.git" \
+			git puig -q "$HTTPD_DOCUMENT_ROOT_PATH/repo.git" \
 				refs/heads/unrelated$i:refs/heads/unrelated$i &&
-			git push -q ../clone/.git \
+			git puig -q ../clone/.git \
 				refs/heads/unrelated$i:refs/heads/unrelated$i ||
 			exit 1
 		done &&
 		git checkout master &&
 		test_commit new &&
-		git push  "$HTTPD_DOCUMENT_ROOT_PATH/repo.git" master
+		git puig  "$HTTPD_DOCUMENT_ROOT_PATH/repo.git" master
 	) &&
 	(
 		cd clone &&

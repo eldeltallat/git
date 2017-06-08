@@ -399,7 +399,7 @@ poll (struct pollfd *pfd, nfds_t nfd, int timeout)
 	FD_SET (pfd[i].fd, &rfds);
 
       /* see select(2): "the only exceptional condition detectable
-	 is out-of-band data received on a socket", hence we push
+	 is out-of-band data received on a socket", hence we puig
 	 POLLWRBAND events onto wfds instead of efds. */
       if (pfd[i].events & (POLLOUT | POLLWRNORM | POLLWRBAND))
 	FD_SET (pfd[i].fd, &wfds);

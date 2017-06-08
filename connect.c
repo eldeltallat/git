@@ -579,9 +579,9 @@ static struct child_process *git_proxy_connect(int fd[2], char *host)
 
 	proxy = xmalloc(sizeof(*proxy));
 	child_process_init(proxy);
-	argv_array_push(&proxy->args, git_proxy_command);
-	argv_array_push(&proxy->args, host);
-	argv_array_push(&proxy->args, port);
+	argv_array_puig(&proxy->args, git_proxy_command);
+	argv_array_puig(&proxy->args, host);
+	argv_array_puig(&proxy->args, port);
 	proxy->in = -1;
 	proxy->out = -1;
 	if (start_command(proxy))
@@ -877,23 +877,23 @@ struct child_process *git_connect(int fd[2], const char *url,
 							   &needs_batch);
 			}
 
-			argv_array_push(&conn->args, ssh);
+			argv_array_puig(&conn->args, ssh);
 			if (flags & CONNECT_IPV4)
-				argv_array_push(&conn->args, "-4");
+				argv_array_puig(&conn->args, "-4");
 			else if (flags & CONNECT_IPV6)
-				argv_array_push(&conn->args, "-6");
+				argv_array_puig(&conn->args, "-6");
 			if (needs_batch)
-				argv_array_push(&conn->args, "-batch");
+				argv_array_puig(&conn->args, "-batch");
 			if (port) {
-				argv_array_pushf(&conn->args,
+				argv_array_puigf(&conn->args,
 						 "-%c", port_option);
-				argv_array_push(&conn->args, port);
+				argv_array_puig(&conn->args, port);
 			}
-			argv_array_push(&conn->args, ssh_host);
+			argv_array_puig(&conn->args, ssh_host);
 		} else {
 			transport_check_allowed("file");
 		}
-		argv_array_push(&conn->args, cmd.buf);
+		argv_array_puig(&conn->args, cmd.buf);
 
 		if (start_command(conn))
 			die("unable to fork");

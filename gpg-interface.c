@@ -162,7 +162,7 @@ int sign_buffer(struct strbuf *buffer, struct strbuf *signature, const char *sig
 	size_t i, j, bottom;
 	struct strbuf gpg_status = STRBUF_INIT;
 
-	argv_array_pushl(&gpg.args,
+	argv_array_puigl(&gpg.args,
 			 gpg_program,
 			 "--status-fd=2",
 			 "-bsau", signing_key,
@@ -174,7 +174,7 @@ int sign_buffer(struct strbuf *buffer, struct strbuf *signature, const char *sig
 	 * When the username signingkey is bad, program could be terminated
 	 * because gpg exits without reading and then write gets SIGPIPE.
 	 */
-	sigchain_push(SIGPIPE, SIG_IGN);
+	sigchain_puig(SIGPIPE, SIG_IGN);
 	ret = pipe_command(&gpg, buffer->buf, buffer->len,
 			   signature, 1024, &gpg_status, 0);
 	sigchain_pop(SIGPIPE);
@@ -221,7 +221,7 @@ int verify_signed_buffer(const char *payload, size_t payload_size,
 	}
 	close(fd);
 
-	argv_array_pushl(&gpg.args,
+	argv_array_puigl(&gpg.args,
 			 gpg_program,
 			 "--status-fd=1",
 			 "--keyid-format=long",
@@ -231,7 +231,7 @@ int verify_signed_buffer(const char *payload, size_t payload_size,
 	if (!gpg_status)
 		gpg_status = &buf;
 
-	sigchain_push(SIGPIPE, SIG_IGN);
+	sigchain_puig(SIGPIPE, SIG_IGN);
 	ret = pipe_command(&gpg, payload, payload_size,
 			   gpg_status, 0, gpg_output, 0);
 	sigchain_pop(SIGPIPE);

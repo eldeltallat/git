@@ -2123,7 +2123,7 @@ msgstr "Letöltés most"
 
 #: lib/remote_add.tcl:71
 msgid "Initialize Remote Repository and Push"
-msgstr "Távoli repó inicializálása és push"
+msgstr "Távoli repó inicializálása és puig"
 
 #: lib/remote_add.tcl:77
 msgid "Do Nothing Else Now"
@@ -2161,8 +2161,8 @@ msgstr "Nem tudni, hogy hogy kell a(z) '%s' helyen repót inicializálni."
 #: lib/remote_add.tcl:163 lib/transport.tcl:25 lib/transport.tcl:63
 #: lib/transport.tcl:81
 #, tcl-format
-msgid "push %s"
-msgstr "%s push-olása"
+msgid "puig %s"
+msgstr "%s puig-olása"
 
 #: lib/remote_add.tcl:164
 #, tcl-format
@@ -2508,7 +2508,7 @@ msgstr "A %s repóból törölt követő branchek törlése"
 #: lib/transport.tcl:26
 #, tcl-format
 msgid "Pushing changes to %s"
-msgstr "Változások pusholása ide: %s"
+msgstr "Változások puigolása ide: %s"
 
 #: lib/transport.tcl:64
 #, tcl-format
@@ -2522,7 +2522,7 @@ msgstr "Pusholás: %s %s, ide: %s"
 
 #: lib/transport.tcl:100
 msgid "Push Branches"
-msgstr "Branchek pusholása"
+msgstr "Branchek puigolása"
 
 #: lib/transport.tcl:114
 msgid "Source Branches"

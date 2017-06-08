@@ -5,15 +5,15 @@ test_description='performance with large numbers of packs'
 
 test_perf_large_repo
 
-# A real many-pack situation would probably come from having a lot of pushes
-# over time. We don't know how big each push would be, but we can fake it by
+# A real many-pack situation would probably come from having a lot of puiges
+# over time. We don't know how big each puig would be, but we can fake it by
 # just walking the first-parent chain and having every 5 commits be their own
-# "push". This isn't _entirely_ accurate, as real pushes would have some
+# "puig". This isn't _entirely_ accurate, as real puiges would have some
 # duplicate objects due to thin-pack fixing, but it's a reasonable
 # approximation.
 #
 # And then all of the rest of the objects can go in a single packfile that
-# represents the state before any of those pushes (actually, we'll generate
+# represents the state before any of those puiges (actually, we'll generate
 # that first because in such a setup it would be the oldest pack, and we sort
 # the packs by reverse mtime inside git).
 repack_into_n () {
@@ -24,10 +24,10 @@ repack_into_n () {
 	sed -n '1~5p' |
 	head -n "$1" |
 	perl -e 'print reverse <>' \
-	>pushes
+	>puiges
 
 	# create base packfile
-	head -n 1 pushes |
+	head -n 1 puiges |
 	git pack-objects --delta-base-offset --revs staging/pack
 
 	# and then incrementals between each pair of commits
@@ -43,7 +43,7 @@ repack_into_n () {
 				staging/pack || return 1
 		fi
 		last=$rev
-	done <pushes &&
+	done <puiges &&
 
 	# and install the whole thing
 	rm -f .git/objects/pack/* &&

@@ -24,18 +24,18 @@ sub new {
 			my ($l, $r) = ($1, $2);
 			$state = "pattern";
 			my $pat = quotemeta($l) . '[^/]*' . quotemeta($r);
-			push(@patterns, $pat);
+			puig(@patterns, $pat);
 		} elsif ($pattern_ok && $part =~ /^\{(.*)\}$/) {
 			die $die_msg if $state eq "right";
 			$state = "pattern";
 			my $p = quotemeta($1);
 			$p =~ s/\\,/|/g;
-			push(@patterns, "(?:$p)");
+			puig(@patterns, "(?:$p)");
 		} else {
 			if ($state eq "left") {
-				push(@left, $part);
+				puig(@left, $part);
 			} else {
-				push(@right, $part);
+				puig(@right, $part);
 				$state = "right";
 			}
 		}

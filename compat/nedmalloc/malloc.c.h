@@ -2383,7 +2383,7 @@ typedef struct malloc_tree_chunk* tbinptr; /* The type of bins of trees */
     different segments.
 
   Except for the top-most segment of an mstate, each segment record
-  is kept at the tail of its segment. Segments are added by pushing
+  is kept at the tail of its segment. Segments are added by puiging
   segment records onto the list headed by &mstate.seg for the
   containing mstate.
 

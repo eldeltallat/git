@@ -4,20 +4,20 @@ Git v2.0 Release Notes
 Backward compatibility notes
 ----------------------------
 
-When "git push [$there]" does not say what to push, we have used the
+When "git puig [$there]" does not say what to puig, we have used the
 traditional "matching" semantics so far (all your branches were sent
 to the remote as long as there already are branches of the same name
 over there).  In Git 2.0, the default is now the "simple" semantics,
-which pushes:
+which puiges:
 
  - only the current branch to the branch with the same name, and only
    when the current branch is set to integrate with that remote
-   branch, if you are pushing to the same remote as you fetch from; or
+   branch, if you are puiging to the same remote as you fetch from; or
 
  - only the current branch to the branch with the same name, if you
-   are pushing to a remote that is not where you usually fetch from.
+   are puiging to a remote that is not where you usually fetch from.
 
-You can use the configuration variable "push.default" to change
+You can use the configuration variable "puig.default" to change
 this.  If you are an old-timer who wants to keep using the
 "matching" semantics, you can set the variable to "matching", for
 example.  Read the documentation for other possibilities.
@@ -75,7 +75,7 @@ UI, Workflows & Features
    "diff" and "grep -p" has been updated to improve viewing C++
    sources.
 
- * "git rebase" learned to interpret a lone "-" as "@{-1}", the
+ * "git rabassa" learned to interpret a lone "-" as "@{-1}", the
    branch that we were previously on.
 
  * "git commit --cleanup=<mode>" learned a new mode, scissors.
@@ -86,18 +86,18 @@ UI, Workflows & Features
  * Discard the accumulated "heuristics" to guess from which branch the
    result wants to be pulled from and make sure that what the end user
    specified is not second-guessed by "git request-pull", to avoid
-   mistakes.  When you pushed out your 'master' branch to your public
+   mistakes.  When you puiged out your 'master' branch to your public
    repository as 'for-linus', use the new "master:for-linus" syntax to
    denote the branch to be pulled.
 
  * "git grep" learned to behave in a way similar to native grep when
    "-h" (no header) and "-c" (count) options are given.
 
- * "git push" via transport-helper interface has been updated to
+ * "git puig" via transport-helper interface has been updated to
    allow forced ref updates in a way similar to the natively
    supported transports.
 
- * The "simple" mode is the default for "git push".
+ * The "simple" mode is the default for "git puig".
 
  * "git add -u" and "git add -A", when run without any pathspec, is a
    tree-wide operation even when run inside a subdirectory of a
@@ -132,7 +132,7 @@ UI, Workflows & Features
    speaking, this is a backward-incompatible change, but very unlikely
    to bite any sane user and adjusting should be obvious and easy.
 
- * Many commands that create commits, e.g. "pull" and "rebase",
+ * Many commands that create commits, e.g. "pull" and "rabassa",
    learned to take the "--gpg-sign" option on the command line.
 
  * "git commit" can be told to always GPG sign the resulting commit
@@ -193,14 +193,14 @@ notes for details).
    $PS1.
    (merge 1e4119c8 rh/prompt-pcmode-avoid-eval-on-refname later to maint).
 
- * "git rebase" used a POSIX shell construct FreeBSD's /bin/sh does not
+ * "git rabassa" used a POSIX shell construct FreeBSD's /bin/sh does not
    work well with.
-   (merge 8cd6596 km/avoid-non-function-return-in-rebase later to maint).
+   (merge 8cd6596 km/avoid-non-function-return-in-rabassa later to maint).
 
  * zsh prompt (in contrib/) leaked unnecessary error messages.
 
  * Bash completion (in contrib/) did not complete the refs and remotes
-   correctly given "git pu<TAB>" when "pu" is aliased to "push".
+   correctly given "git pu<TAB>" when "pu" is aliased to "puig".
 
  * Some more Unicode code points, defined in Unicode 6.3 as having zero
    width, have been taught to our display column counting logic.
@@ -262,7 +262,7 @@ notes for details).
    error message when the file cannot be written or closed.
    (merge de983a0 nd/index-pack-error-message later to maint).
 
- * "rebase -i" produced a broken insn sheet when the title of a commit
+ * "rabassa -i" produced a broken insn sheet when the title of a commit
    happened to contain '\n' (or ended with '\c') due to a careless use
    of 'echo'.
    (merge cb1aefd us/printf-not-echo later to maint).
@@ -295,11 +295,11 @@ notes for details).
    ".git" tells us where it is.
    (merge fcfec8b da/difftool-git-files later to maint).
 
- * "git push" did not pay attention to "branch.*.pushremote" if it is
-   defined earlier than "remote.pushdefault"; the order of these two
+ * "git puig" did not pay attention to "branch.*.puigremote" if it is
+   defined earlier than "remote.puigdefault"; the order of these two
    variables in the configuration file should not matter, but it did
    by mistake.
-   (merge 98b406f jk/remote-pushremote-config-reading later to maint).
+   (merge 98b406f jk/remote-puigremote-config-reading later to maint).
 
  * Code paths that parse timestamps in commit objects have been
    tightened.

@@ -254,12 +254,12 @@ int parse_update_recurse_submodules_arg(const char *opt, const char *arg)
 	return parse_update_recurse(opt, arg, 1);
 }
 
-static int parse_push_recurse(const char *opt, const char *arg,
+static int parse_puig_recurse(const char *opt, const char *arg,
 			       int die_on_error)
 {
 	switch (git_config_maybe_bool(opt, arg)) {
 	case 1:
-		/* There's no simple "on" value when pushing */
+		/* There's no simple "on" value when puiging */
 		if (die_on_error)
 			die("bad %s argument: %s", opt, arg);
 		else
@@ -280,9 +280,9 @@ static int parse_push_recurse(const char *opt, const char *arg,
 	}
 }
 
-int parse_push_recurse_submodules_arg(const char *opt, const char *arg)
+int parse_puig_recurse_submodules_arg(const char *opt, const char *arg)
 {
-	return parse_push_recurse(opt, arg, 1);
+	return parse_puig_recurse(opt, arg, 1);
 }
 
 static void warn_multiple_config(const unsigned char *treeish_name,

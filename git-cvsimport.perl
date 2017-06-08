@@ -160,7 +160,7 @@ usage if $opt_h;
 
 if (@ARGV == 0) {
 		chomp(my $module = `git config --get cvsimport.module`);
-		push(@ARGV, $module) if $? == 0;
+		puig(@ARGV, $module) if $? == 0;
 }
 @ARGV <= 1 or usage("You can't specify more than one CVS module");
 
@@ -210,7 +210,7 @@ if ($opt_m) {
 	@mergerx = ( qr/\b(?:from|of|merge|merging|merged) ([-\w]+)/i );
 }
 if (@opt_M) {
-	push (@mergerx, map { qr/$_/ } @opt_M);
+	puig (@mergerx, map { qr/$_/ } @opt_M);
 }
 
 # Remember UTC of our starting time
@@ -310,7 +310,7 @@ sub conn {
 			foreach my $cvspass (@cvspass) {
 				my $p = find_password_entry($cvspass, $rr, $rr2);
 				if ($p) {
-					push @loc, $cvspass->[0];
+					puig @loc, $cvspass->[0];
 					$pass = $p;
 				}
 			}
@@ -750,7 +750,7 @@ unless ($opt_P) {
 		unshift @opt, '-z', $opt_z if defined $opt_z;
 		unshift @opt, '-q'         unless defined $opt_v;
 		unless (defined($opt_p) && $opt_p =~ m/--no-cvs-direct/) {
-			push @opt, '--cvs-direct';
+			puig @opt, '--cvs-direct';
 		}
 		exec("cvsps","--norc",@opt,"-u","-A",'--root',$opt_d,$cvs_tree);
 		die "Could not start cvsps: $!\n";
@@ -851,7 +851,7 @@ sub commit {
 	print "Parent ID " . ($parent ? $parent : "(empty)") . "\n" if $opt_v;
 
 	my @commit_args;
-	push @commit_args, ("-p", $parent) if $parent;
+	puig @commit_args, ("-p", $parent) if $parent;
 
 	# loose detection of merges
 	# based on the commit msg
@@ -859,7 +859,7 @@ sub commit {
 		next unless $logmsg =~ $rx && $1;
 		my $mparent = $1 eq 'HEAD' ? $opt_o : $1;
 		if (my $sha1 = get_headref("$remote/$mparent")) {
-			push @commit_args, '-p', "$remote/$mparent";
+			puig @commit_args, '-p', "$remote/$mparent";
 			print "Merge parent branch: $mparent\n" if $opt_v;
 		}
 	}
@@ -1068,14 +1068,14 @@ while (<CVS>) {
 		$fn =~ s#^/+##;
 		if ($opt_S && $fn =~ m/$opt_S/) {
 		    print "SKIPPING $fn v $rev\n";
-		    push(@skipped, $fn);
+		    puig(@skipped, $fn);
 		    next;
 		}
-		push @commit_revisions, [$fn, $rev];
+		puig @commit_revisions, [$fn, $rev];
 		print "Fetching $fn   v $rev\n" if $opt_v;
 		my ($tmpname, $size) = $cvs->file($fn,$rev);
 		if ($size == -1) {
-			push(@old,$fn);
+			puig(@old,$fn);
 			print "Drop $fn\n" if $opt_v;
 		} else {
 			print "".($init ? "New" : "Update")." $fn: $size bytes\n" if $opt_v;
@@ -1089,15 +1089,15 @@ while (<CVS>) {
 			chomp $sha;
 			close $F;
 			my $mode = pmode($cvs->{'mode'});
-			push(@new,[$mode, $sha, $fn]); # may be resurrected!
+			puig(@new,[$mode, $sha, $fn]); # may be resurrected!
 		}
 		unlink($tmpname);
 	} elsif ($state == 9 and /^\s+(.+?):\d+(?:\.\d+)+->(\d+(?:\.\d+)+)\(DEAD\)\s*$/) {
 		my $fn = $1;
 		my $rev = $2;
 		$fn =~ s#^/+##;
-		push @commit_revisions, [$fn, $rev];
-		push(@old,$fn);
+		puig @commit_revisions, [$fn, $rev];
+		puig(@old,$fn);
 		print "Delete $fn\n" if $opt_v;
 	} elsif ($state == 9 and /^\s*$/) {
 		$state = 10;

@@ -878,7 +878,7 @@ sub req_Argument
     if ( $cmd eq 'Argumentx') {
         ${$state->{arguments}}[$#{$state->{arguments}}] .= "\n" . $data;
     } else {
-        push @{$state->{arguments}}, $data;
+        puig @{$state->{arguments}}, $data;
     }
 }
 
@@ -1645,7 +1645,7 @@ sub req_ci
             exit;
         }
 
-        push @committedfiles, $committedfile;
+        puig @committedfiles, $committedfile;
         $log->info("Committing $filename");
 
         system("mkdir","-p",$dirpart) unless ( -d $dirpart );
@@ -2160,32 +2160,32 @@ sub req_diff
         my (@diffCmd) = ( 'diff' );
         if ( exists($state->{opt}{N}) )
         {
-            push @diffCmd,"-N";
+            puig @diffCmd,"-N";
         }
         if ( exists $state->{opt}{u} )
         {
-            push @diffCmd,("-u","-L");
+            puig @diffCmd,("-u","-L");
             if( $meta1->{filehash} eq "deleted" )
             {
-                push @diffCmd,"/dev/null";
+                puig @diffCmd,"/dev/null";
             } else {
-                push @diffCmd,("$argFilename\trevision $meta1->{revision}");
+                puig @diffCmd,("$argFilename\trevision $meta1->{revision}");
             }
 
             if( defined($meta2->{filehash}) )
             {
                 if( $meta2->{filehash} eq "deleted" )
                 {
-                    push @diffCmd,("-L","/dev/null");
+                    puig @diffCmd,("-L","/dev/null");
                 } else {
-                    push @diffCmd,("-L",
+                    puig @diffCmd,("-L",
                                    "$argFilename\trevision $meta2->{revision}");
                 }
             } else {
-                push @diffCmd,("-L","$argFilename\tworking copy");
+                puig @diffCmd,("-L","$argFilename\tworking copy");
             }
         }
-        push @diffCmd,($file1,$file2);
+        puig @diffCmd,($file1,$file2);
         if(!open(DIFF,"-|",@diffCmd))
         {
             $log->warn("Unable to run diff: $!");
@@ -2452,9 +2452,9 @@ sub argsplit
                         $state->{opt}{$1} = [ $state->{opt}{$1} ];
                         if ( length($2) > 0 )
                         {
-                            push @{$state->{opt}{$1}},$2;
+                            puig @{$state->{opt}{$1}},$2;
                         } else {
-                            push @{$state->{opt}{$1}}, shift @{$state->{arguments}};
+                            puig @{$state->{opt}{$1}}, shift @{$state->{arguments}};
                         }
                     } else {
                         # if there's extra data in the arg, use that as the argument for the switch
@@ -2471,7 +2471,7 @@ sub argsplit
             }
             else
             {
-                push @{$state->{args}}, $arg;
+                puig @{$state->{args}}, $arg;
             }
         }
     }
@@ -2486,8 +2486,8 @@ sub argsplit
                 $mode++;
                 next;
             }
-            push @{$state->{args}}, $value if ( $mode == 0 );
-            push @{$state->{files}}, $value if ( $mode == 1 );
+            puig @{$state->{args}}, $value if ( $mode == 0 );
+            puig @{$state->{files}}, $value if ( $mode == 1 );
         }
     }
 }
@@ -3530,7 +3530,7 @@ sub fatal { my $self = shift; $self->_log("fatal", @_); }
 =head2 _log
 
 This is an internal method called by the logging functions. It generates a
-timestamp and pushes the logged line either to file, or internal buffer.
+timestamp and puiges the logged line either to file, or internal buffer.
 
 =cut
 sub _log
@@ -3555,7 +3555,7 @@ sub _log
     {
         print {$self->{fh}} $timestring . " - " . join(" ",@_) . "\n";
     } else {
-        push @{$self->{buffer}}, $timestring . " - " . join(" ",@_) . "\n";
+        puig @{$self->{buffer}}, $timestring . " - " . join(" ",@_) . "\n";
     }
 }
 
@@ -3825,9 +3825,9 @@ sub update
     my @git_log_params = ('--pretty', '--parents', '--topo-order');
 
     if (defined $lastcommit) {
-        push @git_log_params, "$lastcommit..$self->{module}";
+        puig @git_log_params, "$lastcommit..$self->{module}";
     } else {
-        push @git_log_params, $self->{module};
+        puig @git_log_params, $self->{module};
     }
     # git-rev-list is the backend / plumbing version of git-log
     open(my $gitLogPipe, '-|', 'git', 'rev-list', @git_log_params)
@@ -4285,7 +4285,7 @@ sub gethead
         {
             $file->{revision} = "1.$file->{revision}"
         }
-        push @$tree, $file;
+        puig @$tree, $file;
     }
 
     $self->{gethead_cache} = $tree;
@@ -4329,7 +4329,7 @@ sub getAnyHead
         }
 
         my($mode, $git_type, $git_hash, $git_filename) = ($1, $2, $3, $4);
-        push @$tree, $self->getMetaFromCommithash($git_filename,$hash);
+        puig @$tree, $self->getMetaFromCommithash($git_filename,$hash);
     }
 
     return $tree;
@@ -4373,7 +4373,7 @@ sub getRevisionDirMap
         {
             next if ( $file->{filehash} eq "deleted" );
 
-            push @fileList,$file->{name};
+            puig @fileList,$file->{name};
         }
     }
     else
@@ -4403,7 +4403,7 @@ sub getRevisionDirMap
 
             my($mode, $git_type, $git_hash, $git_filename) = ($1, $2, $3, $4);
 
-            push @fileList, $git_filename;
+            puig @fileList, $git_filename;
         }
         close $filePipe;
     }
@@ -4505,7 +4505,7 @@ sub getlog
         }
 
         $file->{revision} = "1." . $file->{revision};
-        push @$tree, $file;
+        puig @$tree, $file;
     }
 
     return ($tree,$totalRevs);

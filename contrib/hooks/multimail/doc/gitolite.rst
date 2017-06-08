@@ -105,5 +105,5 @@ To debug configuration issues with ``git-multimail``, you can add the
   #!/bin/sh
   exec /path/to/git-multimail/git-multimail/git_multimail.py --stdout "$@"
 
-and try pushing from a test repository. You should see the source of
-the email that would have been sent in the output of ``git push``.
+and try puiging from a test repository. You should see the source of
+the email that would have been sent in the output of ``git puig``.

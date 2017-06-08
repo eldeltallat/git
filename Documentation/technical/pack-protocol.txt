@@ -2,14 +2,14 @@ Packfile transfer protocols
 ===========================
 
 Git supports transferring data in packfiles over the ssh://, git://, http:// and
-file:// transports.  There exist two sets of protocols, one for pushing
+file:// transports.  There exist two sets of protocols, one for puiging
 data from a client to a server and another for fetching data from a
 server to a client.  The three transports (ssh, git, file) use the same
 protocol to transfer data. http is documented in http-protocol.txt.
 
 The processes invoked in the canonical Git implementation are 'upload-pack'
 on the server side and 'fetch-pack' on the client side for fetching data;
-then 'receive-pack' on the server and 'send-pack' on the client for pushing
+then 'receive-pack' on the server and 'send-pack' on the client for puiging
 data.  The protocol functions to have a server tell a client what is
 currently on the server, then for the two to negotiate the smallest amount
 of data to send in order to fully update one or the other.
@@ -85,7 +85,7 @@ It is basically equivalent to running this:
 
    $ ssh git.example.com "git-upload-pack '/project.git'"
 
-For a server to support Git pushing and pulling for a given user over
+For a server to support Git puiging and pulling for a given user over
 SSH, that user needs to be able to execute one or both of those
 commands via the SSH shell that they are provided on login.  On some
 systems, that shell access is limited to only being able to run those
@@ -462,7 +462,7 @@ fetching protocol. Each reference obj-id and name on the server is sent
 in packet-line format to the client, followed by a flush-pkt.  The only
 real difference is that the capability listing is different - the only
 possible values are 'report-status', 'delete-refs', 'ofs-delta' and
-'push-options'.
+'puig-options'.
 
 Reference Update Request and Packfile Transfer
 ----------------------------------------------
@@ -476,7 +476,7 @@ of the reference.
 This list is followed by a flush-pkt.
 
 ----
-  update-requests   =  *shallow ( command-list | push-cert )
+  update-requests   =  *shallow ( command-list | puig-cert )
 
   shallow           =  PKT-LINE("shallow" SP obj-id)
 
@@ -492,32 +492,32 @@ This list is followed by a flush-pkt.
   old-id            =  obj-id
   new-id            =  obj-id
 
-  push-cert         = PKT-LINE("push-cert" NUL capability-list LF)
+  puig-cert         = PKT-LINE("puig-cert" NUL capability-list LF)
 		      PKT-LINE("certificate version 0.1" LF)
-		      PKT-LINE("pusher" SP ident LF)
-		      PKT-LINE("pushee" SP url LF)
+		      PKT-LINE("puiger" SP ident LF)
+		      PKT-LINE("puigee" SP url LF)
 		      PKT-LINE("nonce" SP nonce LF)
-		      *PKT-LINE("push-option" SP push-option LF)
+		      *PKT-LINE("puig-option" SP puig-option LF)
 		      PKT-LINE(LF)
 		      *PKT-LINE(command LF)
 		      *PKT-LINE(gpg-signature-lines LF)
-		      PKT-LINE("push-cert-end" LF)
+		      PKT-LINE("puig-cert-end" LF)
 
-  push-option       =  1*( VCHAR | SP )
+  puig-option       =  1*( VCHAR | SP )
 ----
 
-If the server has advertised the 'push-options' capability and the client has
-specified 'push-options' as part of the capability list above, the client then
-sends its push options followed by a flush-pkt.
+If the server has advertised the 'puig-options' capability and the client has
+specified 'puig-options' as part of the capability list above, the client then
+sends its puig options followed by a flush-pkt.
 
 ----
-  push-options      =  *PKT-LINE(push-option) flush-pkt
+  puig-options      =  *PKT-LINE(puig-option) flush-pkt
 ----
 
-For backwards compatibility with older Git servers, if the client sends a push
-cert and push options, it MUST send its push options both embedded within the
-push cert and after the push cert. (Note that the push options within the cert
-are prefixed, but the push options after the cert are not.) Both these lists
+For backwards compatibility with older Git servers, if the client sends a puig
+cert and puig options, it MUST send its puig options both embedded within the
+puig cert and after the puig cert. (Note that the puig options within the cert
+are prefixed, but the puig options after the cert are not.) Both these lists
 MUST be the same, modulo the prefix.
 
 After that the packfile that
@@ -531,10 +531,10 @@ references will be sent.
 If the receiving end does not support delete-refs, the sending end MUST
 NOT ask for delete command.
 
-If the receiving end does not support push-cert, the sending end
-MUST NOT send a push-cert command.  When a push-cert command is
+If the receiving end does not support puig-cert, the sending end
+MUST NOT send a puig-cert command.  When a puig-cert command is
 sent, command-list MUST NOT be sent; the commands recorded in the
-push certificate is used instead.
+puig certificate is used instead.
 
 The packfile MUST NOT be sent if the only command used is 'delete'.
 
@@ -553,31 +553,31 @@ If all of that is fine, the server will then update the references.
 Push Certificate
 ----------------
 
-A push certificate begins with a set of header lines.  After the
+A puig certificate begins with a set of header lines.  After the
 header and an empty line, the protocol commands follow, one per
-line. Note that the trailing LF in push-cert PKT-LINEs is _not_
+line. Note that the trailing LF in puig-cert PKT-LINEs is _not_
 optional; it must be present.
 
 Currently, the following header fields are defined:
 
-`pusher` ident::
+`puiger` ident::
 	Identify the GPG key in "Human Readable Name <email@address>"
 	format.
 
-`pushee` url::
+`puigee` url::
 	The repository URL (anonymized, if the URL contains
-	authentication material) the user who ran `git push`
-	intended to push into.
+	authentication material) the user who ran `git puig`
+	intended to puig into.
 
 `nonce` nonce::
 	The 'nonce' string the receiving repository asked the
-	pushing user to include in the certificate, to prevent
+	puiging user to include in the certificate, to prevent
 	replay attacks.
 
 The GPG signature lines are a detached signature for the contents
-recorded in the push certificate before the signature block begins.
+recorded in the puig certificate before the signature block begins.
 The detached signature is used to certify that the commands were
-given by the pusher, who must be the signer.
+given by the puiger, who must be the signer.
 
 Report Status
 -------------
@@ -607,7 +607,7 @@ update was successful, or 'ng [refname] [error]' if the update was not.
 
 Updates can be unsuccessful for a number of reasons.  The reference can have
 changed since the reference discovery phase was originally sent, meaning
-someone pushed in the meantime.  The reference being pushed could be a
+someone puiged in the meantime.  The reference being puiged could be a
 non-fast-forward reference and the update hooks or configuration could be
 set to not allow that, etc.  Also, some references can be updated while others
 can be rejected.

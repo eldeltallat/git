@@ -295,7 +295,7 @@ For C programs:
    existing styles in the neighbourhood.
 
  - There are two schools of thought when it comes to splitting a long
-   logical line into multiple lines.  Some people push the second and
+   logical line into multiple lines.  Some people puig the second and
    subsequent lines far enough to the right with tabs and align them:
 
         if (the_beginning_of_a_very_long_expression_that_has_to ||
@@ -558,7 +558,7 @@ Writing Documentation:
  typeset in monospace (i.e. wrapped with backticks):
    `--pretty=oneline`
    `git rev-list`
-   `remote.pushDefault`
+   `remote.puigDefault`
    `GIT_DIR`
    `HEAD`
 

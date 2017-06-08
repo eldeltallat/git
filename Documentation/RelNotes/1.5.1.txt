@@ -170,7 +170,7 @@ Updates since v1.5.0
   - send-email learned configurable bcc and chain-reply-to.
 
   - "git remote show $remote" also talks about branches that
-    would be pushed if you run "git push remote".
+    would be puiged if you run "git puig remote".
 
   - Using objects from packs is now seriously optimized by clever
     use of a cache.  This should be most noticeable in git-log
@@ -203,7 +203,7 @@ These are all in v1.5.0.x series.
 
   - The main documentation did not link to git-remote documentation.
 
-  - Clarified introductory text of git-rebase documentation.
+  - Clarified introductory text of git-rabassa documentation.
 
   - Converted remaining mentions of update-index on Porcelain
     documents to git-add/git-rm.
@@ -306,7 +306,7 @@ These are all in v1.5.0.x series.
   - 'blameview' in contrib/ correctly digs deeper when a line is
     clicked.
 
-  - 'http-push' correctly makes sure the remote side has leading
+  - 'http-puig' correctly makes sure the remote side has leading
     path.  Earlier it started in the middle of the path, and
     incorrectly.
 
@@ -337,7 +337,7 @@ These are all in v1.5.0.x series.
   - 'git index-pack' did not protect itself from getting a short
     read out of pread(2).
 
-  - 'git http-push' had a few buffer overruns.
+  - 'git http-puig' had a few buffer overruns.
 
   - Build dependency fixes to rebuild fetch.o when other headers
     change.

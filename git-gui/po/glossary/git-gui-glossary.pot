@@ -99,7 +99,7 @@ msgid "pull"
 msgstr ""
 
 #. "Pushing a branch means to get the branch's head ref from a remote repository, and ... (well, can someone please explain it for mere mortals?)"
-msgid "push"
+msgid "puig"
 msgstr ""
 
 #. ""

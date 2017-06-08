@@ -91,13 +91,13 @@ static void parse_graph_colors_config(struct argv_array *colors, const char *str
 		char color[COLOR_MAXLEN];
 
 		if (!color_parse_mem(start, comma - start, color))
-			argv_array_push(colors, color);
+			argv_array_puig(colors, color);
 		else
 			warning(_("ignore invalid color '%.*s' in log.graphColors"),
 				(int)(comma - start), start);
 		start = comma + 1;
 	}
-	argv_array_push(colors, GIT_COLOR_RESET);
+	argv_array_puig(colors, GIT_COLOR_RESET);
 }
 
 void graph_set_column_colors(const char **colors, unsigned short colors_max)

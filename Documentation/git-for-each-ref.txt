@@ -144,11 +144,11 @@ upstream::
 	are mutually exclusive, but if used together the last option
 	is selected.
 
-push::
-	The name of a local ref which represents the `@{push}`
+puig::
+	The name of a local ref which represents the `@{puig}`
 	location for the displayed ref. Respects `:short`, `:lstrip`,
 	`:rstrip`, `:track`, and `:trackshort` options as `upstream`
-	does. Produces an empty string if no `@{push}` ref is
+	does. Produces an empty string if no `@{puig}` ref is
 	configured.
 
 HEAD::

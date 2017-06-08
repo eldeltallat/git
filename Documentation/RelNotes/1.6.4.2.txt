@@ -20,7 +20,7 @@ Fixes since v1.6.4.1
 * "git clean -d -f" happily descended into a subdirectory that is managed by a
   separate git repository.  It now requires two -f options for safety.
 
-* "git fetch/push" over http transports had two rather grave bugs.
+* "git fetch/puig" over http transports had two rather grave bugs.
 
 * "git format-patch --cover-letter" did not prepare the cover letter file
   for use with non-ASCII strings when there are the series contributors with

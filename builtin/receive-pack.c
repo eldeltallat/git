@@ -45,14 +45,14 @@ static int transfer_fsck_objects = -1;
 static struct strbuf fsck_msg_types = STRBUF_INIT;
 static int receive_unpack_limit = -1;
 static int transfer_unpack_limit = -1;
-static int advertise_atomic_push = 1;
-static int advertise_push_options;
+static int advertise_atomic_puig = 1;
+static int advertise_puig_options;
 static int unpack_limit = 100;
 static off_t max_input_size;
 static int report_status;
 static int use_sideband;
 static int use_atomic;
-static int use_push_options;
+static int use_puig_options;
 static int quiet;
 static int prefer_ofs_delta = 1;
 static int auto_update_server_info;
@@ -65,10 +65,10 @@ static void *head_name_to_free;
 static int sent_capabilities;
 static int shallow_update;
 static const char *alt_shallow_file;
-static struct strbuf push_cert = STRBUF_INIT;
-static unsigned char push_cert_sha1[20];
+static struct strbuf puig_cert = STRBUF_INIT;
+static unsigned char puig_cert_sha1[20];
 static struct signature_check sigcheck;
-static const char *push_cert_nonce;
+static const char *puig_cert_nonce;
 static const char *cert_nonce_seed;
 
 static const char *NONCE_UNSOLICITED = "UNSOLICITED";
@@ -203,12 +203,12 @@ static int receive_pack_config(const char *var, const char *value, void *cb)
 	}
 
 	if (strcmp(var, "receive.advertiseatomic") == 0) {
-		advertise_atomic_push = git_config_bool(var, value);
+		advertise_atomic_puig = git_config_bool(var, value);
 		return 0;
 	}
 
-	if (strcmp(var, "receive.advertisepushoptions") == 0) {
-		advertise_push_options = git_config_bool(var, value);
+	if (strcmp(var, "receive.advertisepuigoptions") == 0) {
+		advertise_puig_options = git_config_bool(var, value);
 		return 0;
 	}
 
@@ -234,14 +234,14 @@ static void show_ref(const char *path, const struct object_id *oid)
 
 		strbuf_addstr(&cap,
 			      "report-status delete-refs side-band-64k quiet");
-		if (advertise_atomic_push)
+		if (advertise_atomic_puig)
 			strbuf_addstr(&cap, " atomic");
 		if (prefer_ofs_delta)
 			strbuf_addstr(&cap, " ofs-delta");
-		if (push_cert_nonce)
-			strbuf_addf(&cap, " push-cert=%s", push_cert_nonce);
-		if (advertise_push_options)
-			strbuf_addstr(&cap, " push-options");
+		if (puig_cert_nonce)
+			strbuf_addf(&cap, " puig-cert=%s", puig_cert_nonce);
+		if (advertise_puig_options)
+			strbuf_addstr(&cap, " puig-options");
 		strbuf_addf(&cap, " agent=%s", git_user_agent_sanitized());
 		packet_write_fmt(1, "%s %s%c%s\n",
 			     oid_to_hex(oid), path, 0, cap.buf);
@@ -454,7 +454,7 @@ static void hmac_sha1(unsigned char *out,
 	git_SHA1_Final(out, &ctx);
 }
 
-static char *prepare_push_cert_nonce(const char *path, timestamp_t stamp)
+static char *prepare_puig_cert_nonce(const char *path, timestamp_t stamp)
 {
 	struct strbuf buf = STRBUF_INIT;
 	unsigned char sha1[20];
@@ -506,10 +506,10 @@ static const char *check_nonce(const char *buf, size_t len)
 	if (!nonce) {
 		retval = NONCE_MISSING;
 		goto leave;
-	} else if (!push_cert_nonce) {
+	} else if (!puig_cert_nonce) {
 		retval = NONCE_UNSOLICITED;
 		goto leave;
-	} else if (!strcmp(push_cert_nonce, nonce)) {
+	} else if (!strcmp(puig_cert_nonce, nonce)) {
 		retval = NONCE_OK;
 		goto leave;
 	}
@@ -543,7 +543,7 @@ static const char *check_nonce(const char *buf, size_t len)
 		goto leave;
 	}
 
-	expect = prepare_push_cert_nonce(service_dir, stamp);
+	expect = prepare_puig_cert_nonce(service_dir, stamp);
 	if (strcmp(expect, nonce)) {
 		/* Not what we would have signed earlier */
 		retval = NONCE_BAD;
@@ -555,7 +555,7 @@ static const char *check_nonce(const char *buf, size_t len)
 	 * would mean it was issued by another server with its clock
 	 * skewed in the future.
 	 */
-	ostamp = parse_timestamp(push_cert_nonce, NULL, 10);
+	ostamp = parse_timestamp(puig_cert_nonce, NULL, 10);
 	nonce_stamp_slop = (long)ostamp - (long)stamp;
 
 	if (nonce_stamp_slop_limit &&
@@ -565,8 +565,8 @@ static const char *check_nonce(const char *buf, size_t len)
 		 * HMAC check, so it is not a forged by third-party)
 		 * is what we issued.
 		 */
-		free((void *)push_cert_nonce);
-		push_cert_nonce = xstrdup(nonce);
+		free((void *)puig_cert_nonce);
+		puig_cert_nonce = xstrdup(nonce);
 		retval = NONCE_OK;
 	} else {
 		retval = NONCE_SLOP;
@@ -579,13 +579,13 @@ leave:
 }
 
 /*
- * Return 1 if there is no push_cert or if the push options in push_cert are
+ * Return 1 if there is no puig_cert or if the puig options in puig_cert are
  * the same as those in the argument; 0 otherwise.
  */
-static int check_cert_push_options(const struct string_list *push_options)
+static int check_cert_puig_options(const struct string_list *puig_options)
 {
-	const char *buf = push_cert.buf;
-	int len = push_cert.len;
+	const char *buf = puig_cert.buf;
+	int len = puig_cert.len;
 
 	char *option;
 	const char *next_line;
@@ -596,20 +596,20 @@ static int check_cert_push_options(const struct string_list *push_options)
 	if (!len)
 		return 1;
 
-	while ((option = find_header(buf, len, "push-option", &next_line))) {
+	while ((option = find_header(buf, len, "puig-option", &next_line))) {
 		len -= (next_line - buf);
 		buf = next_line;
 		options_seen++;
-		if (options_seen > push_options->nr
+		if (options_seen > puig_options->nr
 		    || strcmp(option,
-			      push_options->items[options_seen - 1].string)) {
+			      puig_options->items[options_seen - 1].string)) {
 			retval = 0;
 			goto leave;
 		}
 		free(option);
 	}
 
-	if (options_seen != push_options->nr)
+	if (options_seen != puig_options->nr)
 		retval = 0;
 
 leave:
@@ -617,11 +617,11 @@ leave:
 	return retval;
 }
 
-static void prepare_push_cert_sha1(struct child_process *proc)
+static void prepare_puig_cert_sha1(struct child_process *proc)
 {
 	static int already_done;
 
-	if (!push_cert.len)
+	if (!puig_cert.len)
 		return;
 
 	if (!already_done) {
@@ -630,19 +630,19 @@ static void prepare_push_cert_sha1(struct child_process *proc)
 		int bogs /* beginning_of_gpg_sig */;
 
 		already_done = 1;
-		if (write_sha1_file(push_cert.buf, push_cert.len, "blob", push_cert_sha1))
-			hashclr(push_cert_sha1);
+		if (write_sha1_file(puig_cert.buf, puig_cert.len, "blob", puig_cert_sha1))
+			hashclr(puig_cert_sha1);
 
 		memset(&sigcheck, '\0', sizeof(sigcheck));
 		sigcheck.result = 'N';
 
-		bogs = parse_signature(push_cert.buf, push_cert.len);
-		if (verify_signed_buffer(push_cert.buf, bogs,
-					 push_cert.buf + bogs, push_cert.len - bogs,
+		bogs = parse_signature(puig_cert.buf, puig_cert.len);
+		if (verify_signed_buffer(puig_cert.buf, bogs,
+					 puig_cert.buf + bogs, puig_cert.len - bogs,
 					 &gpg_output, &gpg_status) < 0) {
 			; /* error running gpg */
 		} else {
-			sigcheck.payload = push_cert.buf;
+			sigcheck.payload = puig_cert.buf;
 			sigcheck.gpg_output = gpg_output.buf;
 			sigcheck.gpg_status = gpg_status.buf;
 			parse_gpg_output(&sigcheck);
@@ -650,26 +650,26 @@ static void prepare_push_cert_sha1(struct child_process *proc)
 
 		strbuf_release(&gpg_output);
 		strbuf_release(&gpg_status);
-		nonce_status = check_nonce(push_cert.buf, bogs);
+		nonce_status = check_nonce(puig_cert.buf, bogs);
 	}
-	if (!is_null_sha1(push_cert_sha1)) {
-		argv_array_pushf(&proc->env_array, "GIT_PUSH_CERT=%s",
-				 sha1_to_hex(push_cert_sha1));
-		argv_array_pushf(&proc->env_array, "GIT_PUSH_CERT_SIGNER=%s",
+	if (!is_null_sha1(puig_cert_sha1)) {
+		argv_array_puigf(&proc->env_array, "GIT_PUSH_CERT=%s",
+				 sha1_to_hex(puig_cert_sha1));
+		argv_array_puigf(&proc->env_array, "GIT_PUSH_CERT_SIGNER=%s",
 				 sigcheck.signer ? sigcheck.signer : "");
-		argv_array_pushf(&proc->env_array, "GIT_PUSH_CERT_KEY=%s",
+		argv_array_puigf(&proc->env_array, "GIT_PUSH_CERT_KEY=%s",
 				 sigcheck.key ? sigcheck.key : "");
-		argv_array_pushf(&proc->env_array, "GIT_PUSH_CERT_STATUS=%c",
+		argv_array_puigf(&proc->env_array, "GIT_PUSH_CERT_STATUS=%c",
 				 sigcheck.result);
-		if (push_cert_nonce) {
-			argv_array_pushf(&proc->env_array,
+		if (puig_cert_nonce) {
+			argv_array_puigf(&proc->env_array,
 					 "GIT_PUSH_CERT_NONCE=%s",
-					 push_cert_nonce);
-			argv_array_pushf(&proc->env_array,
+					 puig_cert_nonce);
+			argv_array_puigf(&proc->env_array,
 					 "GIT_PUSH_CERT_NONCE_STATUS=%s",
 					 nonce_status);
 			if (nonce_status == NONCE_SLOP)
-				argv_array_pushf(&proc->env_array,
+				argv_array_puigf(&proc->env_array,
 						 "GIT_PUSH_CERT_NONCE_SLOP=%ld",
 						 nonce_stamp_slop);
 		}
@@ -680,7 +680,7 @@ struct receive_hook_feed_state {
 	struct command *cmd;
 	int skip_broken;
 	struct strbuf buf;
-	const struct string_list *push_options;
+	const struct string_list *puig_options;
 };
 
 typedef int (*feed_fn)(void *, const char **, size_t *);
@@ -701,19 +701,19 @@ static int run_and_feed_hook(const char *hook_name, feed_fn feed,
 	proc.argv = argv;
 	proc.in = -1;
 	proc.stdout_to_stderr = 1;
-	if (feed_state->push_options) {
+	if (feed_state->puig_options) {
 		int i;
-		for (i = 0; i < feed_state->push_options->nr; i++)
-			argv_array_pushf(&proc.env_array,
+		for (i = 0; i < feed_state->puig_options->nr; i++)
+			argv_array_puigf(&proc.env_array,
 				"GIT_PUSH_OPTION_%d=%s", i,
-				feed_state->push_options->items[i].string);
-		argv_array_pushf(&proc.env_array, "GIT_PUSH_OPTION_COUNT=%d",
-				 feed_state->push_options->nr);
+				feed_state->puig_options->items[i].string);
+		argv_array_puigf(&proc.env_array, "GIT_PUSH_OPTION_COUNT=%d",
+				 feed_state->puig_options->nr);
 	} else
-		argv_array_pushf(&proc.env_array, "GIT_PUSH_OPTION_COUNT");
+		argv_array_puigf(&proc.env_array, "GIT_PUSH_OPTION_COUNT");
 
 	if (tmp_objdir)
-		argv_array_pushv(&proc.env_array, tmp_objdir_env(tmp_objdir));
+		argv_array_puigv(&proc.env_array, tmp_objdir_env(tmp_objdir));
 
 	if (use_sideband) {
 		memset(&muxer, 0, sizeof(muxer));
@@ -725,7 +725,7 @@ static int run_and_feed_hook(const char *hook_name, feed_fn feed,
 		proc.err = muxer.in;
 	}
 
-	prepare_push_cert_sha1(&proc);
+	prepare_puig_cert_sha1(&proc);
 
 	code = start_command(&proc);
 	if (code) {
@@ -734,7 +734,7 @@ static int run_and_feed_hook(const char *hook_name, feed_fn feed,
 		return code;
 	}
 
-	sigchain_push(SIGPIPE, SIG_IGN);
+	sigchain_puig(SIGPIPE, SIG_IGN);
 
 	while (1) {
 		const char *buf;
@@ -778,7 +778,7 @@ static int feed_receive_hook(void *state_, const char **bufp, size_t *sizep)
 static int run_receive_hook(struct command *commands,
 			    const char *hook_name,
 			    int skip_broken,
-			    const struct string_list *push_options)
+			    const struct string_list *puig_options)
 {
 	struct receive_hook_feed_state state;
 	int status;
@@ -789,7 +789,7 @@ static int run_receive_hook(struct command *commands,
 	if (feed_receive_hook(&state, NULL, NULL))
 		return 0;
 	state.cmd = commands;
-	state.push_options = push_options;
+	state.puig_options = puig_options;
 	status = run_and_feed_hook(hook_name, feed_receive_hook, &state);
 	strbuf_release(&state.buf);
 	return status;
@@ -836,13 +836,13 @@ static int is_ref_checked_out(const char *ref)
 static char *refuse_unconfigured_deny_msg =
 	N_("By default, updating the current branch in a non-bare repository\n"
 	   "is denied, because it will make the index and work tree inconsistent\n"
-	   "with what you pushed, and will require 'git reset --hard' to match\n"
+	   "with what you puiged, and will require 'git reset --hard' to match\n"
 	   "the work tree to HEAD.\n"
 	   "\n"
 	   "You can set the 'receive.denyCurrentBranch' configuration variable\n"
-	   "to 'ignore' or 'warn' in the remote repository to allow pushing into\n"
+	   "to 'ignore' or 'warn' in the remote repository to allow puiging into\n"
 	   "its current branch; however, this is not recommended unless you\n"
-	   "arranged to update its work tree to match what you pushed in some\n"
+	   "arranged to update its work tree to match what you puiged in some\n"
 	   "other way.\n"
 	   "\n"
 	   "To squelch this message and still keep the default behaviour, set\n"
@@ -913,7 +913,7 @@ static int update_shallow_ref(struct command *cmd, struct shallow_info *si)
  * robust. !get_sha1() based check used here and elsewhere would not
  * allow us to tell an unborn branch from corrupt ref, for example.
  * For the purpose of fixing "deploy-to-update does not work when
- * pushing into an empty repository" issue, this should suffice for
+ * puiging into an empty repository" issue, this should suffice for
  * now.
  */
 static int head_has_history(void)
@@ -923,7 +923,7 @@ static int head_has_history(void)
 	return !get_sha1("HEAD", sha1);
 }
 
-static const char *push_to_deploy(unsigned char *sha1,
+static const char *puig_to_deploy(unsigned char *sha1,
 				  struct argv_array *env,
 				  const char *work_tree)
 {
@@ -990,16 +990,16 @@ static const char *push_to_deploy(unsigned char *sha1,
 	return NULL;
 }
 
-static const char *push_to_checkout_hook = "push-to-checkout";
+static const char *puig_to_checkout_hook = "puig-to-checkout";
 
-static const char *push_to_checkout(unsigned char *sha1,
+static const char *puig_to_checkout(unsigned char *sha1,
 				    struct argv_array *env,
 				    const char *work_tree)
 {
-	argv_array_pushf(env, "GIT_WORK_TREE=%s", absolute_path(work_tree));
-	if (run_hook_le(env->argv, push_to_checkout_hook,
+	argv_array_puigf(env, "GIT_WORK_TREE=%s", absolute_path(work_tree));
+	if (run_hook_le(env->argv, puig_to_checkout_hook,
 			sha1_to_hex(sha1), NULL))
-		return "push-to-checkout hook declined";
+		return "puig-to-checkout hook declined";
 	else
 		return NULL;
 }
@@ -1013,12 +1013,12 @@ static const char *update_worktree(unsigned char *sha1)
 	if (is_bare_repository())
 		return "denyCurrentBranch = updateInstead needs a worktree";
 
-	argv_array_pushf(&env, "GIT_DIR=%s", absolute_path(get_git_dir()));
+	argv_array_puigf(&env, "GIT_DIR=%s", absolute_path(get_git_dir()));
 
-	if (!find_hook(push_to_checkout_hook))
-		retval = push_to_deploy(sha1, &env, work_tree);
+	if (!find_hook(puig_to_checkout_hook))
+		retval = puig_to_deploy(sha1, &env, work_tree);
 	else
-		retval = push_to_checkout(sha1, &env, work_tree);
+		retval = puig_to_checkout(sha1, &env, work_tree);
 
 	argv_array_clear(&env);
 	return retval;
@@ -1138,7 +1138,7 @@ static const char *update(struct command *cmd, struct shallow_info *si)
 		if (ref_transaction_delete(transaction,
 					   namespaced_name,
 					   old_oid->hash,
-					   0, "push", &err)) {
+					   0, "puig", &err)) {
 			rp_error("%s", err.buf);
 			strbuf_release(&err);
 			return "failed to delete";
@@ -1155,7 +1155,7 @@ static const char *update(struct command *cmd, struct shallow_info *si)
 		if (ref_transaction_update(transaction,
 					   namespaced_name,
 					   new_oid->hash, old_oid->hash,
-					   0, "push",
+					   0, "puig",
 					   &err)) {
 			rp_error("%s", err.buf);
 			strbuf_release(&err);
@@ -1182,8 +1182,8 @@ static void run_update_post_hook(struct command *commands)
 		if (cmd->error_string || cmd->did_not_exist)
 			continue;
 		if (!proc.args.argc)
-			argv_array_push(&proc.args, hook);
-		argv_array_push(&proc.args, cmd->ref_name);
+			argv_array_puig(&proc.args, hook);
+		argv_array_puig(&proc.args, cmd->ref_name);
 	}
 	if (!proc.args.argc)
 		return;
@@ -1413,7 +1413,7 @@ static void execute_commands_atomic(struct command *commands,
 {
 	struct command *cmd;
 	struct strbuf err = STRBUF_INIT;
-	const char *reported_error = "atomic push failure";
+	const char *reported_error = "atomic puig failure";
 
 	transaction = ref_transaction_begin(&err);
 	if (!transaction) {
@@ -1453,7 +1453,7 @@ cleanup:
 static void execute_commands(struct command *commands,
 			     const char *unpacker_error,
 			     struct shallow_info *si,
-			     const struct string_list *push_options)
+			     const struct string_list *puig_options)
 {
 	struct check_connected_options opt = CHECK_CONNECTED_INIT;
 	struct command *cmd;
@@ -1490,7 +1490,7 @@ static void execute_commands(struct command *commands,
 
 	reject_updates_to_hidden(commands);
 
-	if (run_receive_hook(commands, "pre-receive", 0, push_options)) {
+	if (run_receive_hook(commands, "pre-receive", 0, puig_options)) {
 		for (cmd = commands; cmd; cmd = cmd->next) {
 			if (!cmd->error_string)
 				cmd->error_string = "pre-receive hook declined";
@@ -1551,19 +1551,19 @@ static struct command **queue_command(struct command **tail,
 }
 
 static void queue_commands_from_cert(struct command **tail,
-				     struct strbuf *push_cert)
+				     struct strbuf *puig_cert)
 {
 	const char *boc, *eoc;
 
 	if (*tail)
-		die("protocol error: got both push certificate and unsigned commands");
+		die("protocol error: got both puig certificate and unsigned commands");
 
-	boc = strstr(push_cert->buf, "\n\n");
+	boc = strstr(puig_cert->buf, "\n\n");
 	if (!boc)
-		die("malformed push certificate %.*s", 100, push_cert->buf);
+		die("malformed puig certificate %.*s", 100, puig_cert->buf);
 	else
 		boc += 2;
-	eoc = push_cert->buf + parse_signature(push_cert->buf, push_cert->len);
+	eoc = puig_cert->buf + parse_signature(puig_cert->buf, puig_cert->len);
 
 	while (boc < eoc) {
 		const char *eol = memchr(boc, '\n', eoc - boc);
@@ -1602,15 +1602,15 @@ static struct command *read_head_info(struct oid_array *shallow)
 				use_sideband = LARGE_PACKET_MAX;
 			if (parse_feature_request(feature_list, "quiet"))
 				quiet = 1;
-			if (advertise_atomic_push
+			if (advertise_atomic_puig
 			    && parse_feature_request(feature_list, "atomic"))
 				use_atomic = 1;
-			if (advertise_push_options
-			    && parse_feature_request(feature_list, "push-options"))
-				use_push_options = 1;
+			if (advertise_puig_options
+			    && parse_feature_request(feature_list, "puig-options"))
+				use_puig_options = 1;
 		}
 
-		if (!strcmp(line, "push-cert")) {
+		if (!strcmp(line, "puig-cert")) {
 			int true_flush = 0;
 			char certbuf[1024];
 
@@ -1621,9 +1621,9 @@ static struct command *read_head_info(struct oid_array *shallow)
 					true_flush = 1;
 					break;
 				}
-				if (!strcmp(certbuf, "push-cert-end\n"))
+				if (!strcmp(certbuf, "puig-cert-end\n"))
 					break; /* end of cert */
-				strbuf_addstr(&push_cert, certbuf);
+				strbuf_addstr(&puig_cert, certbuf);
 			}
 
 			if (true_flush)
@@ -1634,13 +1634,13 @@ static struct command *read_head_info(struct oid_array *shallow)
 		p = queue_command(p, line, linelen);
 	}
 
-	if (push_cert.len)
-		queue_commands_from_cert(p, &push_cert);
+	if (puig_cert.len)
+		queue_commands_from_cert(p, &puig_cert);
 
 	return commands;
 }
 
-static void read_push_options(struct string_list *options)
+static void read_puig_options(struct string_list *options)
 {
 	while (1) {
 		char *line;
@@ -1677,9 +1677,9 @@ static const char *parse_pack_header(struct pack_header *hdr)
 
 static const char *pack_lockfile;
 
-static void push_header_arg(struct argv_array *args, struct pack_header *hdr)
+static void puig_header_arg(struct argv_array *args, struct pack_header *hdr)
 {
-	argv_array_pushf(args, "--pack_header=%"PRIu32",%"PRIu32,
+	argv_array_puigf(args, "--pack_header=%"PRIu32",%"PRIu32,
 			ntohl(hdr->hdr_version), ntohl(hdr->hdr_entries));
 }
 
@@ -1704,8 +1704,8 @@ static const char *unpack(int err_fd, struct shallow_info *si)
 
 	if (si->nr_ours || si->nr_theirs) {
 		alt_shallow_file = setup_temporary_shallow(si->shallow);
-		argv_array_push(&child.args, "--shallow-file");
-		argv_array_push(&child.args, alt_shallow_file);
+		argv_array_puig(&child.args, "--shallow-file");
+		argv_array_puig(&child.args, alt_shallow_file);
 	}
 
 	tmp_objdir = tmp_objdir_create();
@@ -1724,15 +1724,15 @@ static const char *unpack(int err_fd, struct shallow_info *si)
 	tmp_objdir_add_as_alternate(tmp_objdir);
 
 	if (ntohl(hdr.hdr_entries) < unpack_limit) {
-		argv_array_push(&child.args, "unpack-objects");
-		push_header_arg(&child.args, &hdr);
+		argv_array_puig(&child.args, "unpack-objects");
+		puig_header_arg(&child.args, &hdr);
 		if (quiet)
-			argv_array_push(&child.args, "-q");
+			argv_array_puig(&child.args, "-q");
 		if (fsck_objects)
-			argv_array_pushf(&child.args, "--strict%s",
+			argv_array_puigf(&child.args, "--strict%s",
 				fsck_msg_types.buf);
 		if (max_input_size)
-			argv_array_pushf(&child.args, "--max-input-size=%"PRIuMAX,
+			argv_array_puigf(&child.args, "--max-input-size=%"PRIuMAX,
 				(uintmax_t)max_input_size);
 		child.no_stdout = 1;
 		child.err = err_fd;
@@ -1743,27 +1743,27 @@ static const char *unpack(int err_fd, struct shallow_info *si)
 	} else {
 		char hostname[HOST_NAME_MAX + 1];
 
-		argv_array_pushl(&child.args, "index-pack", "--stdin", NULL);
-		push_header_arg(&child.args, &hdr);
+		argv_array_puigl(&child.args, "index-pack", "--stdin", NULL);
+		puig_header_arg(&child.args, &hdr);
 
 		if (xgethostname(hostname, sizeof(hostname)))
 			xsnprintf(hostname, sizeof(hostname), "localhost");
-		argv_array_pushf(&child.args,
+		argv_array_puigf(&child.args,
 				 "--keep=receive-pack %"PRIuMAX" on %s",
 				 (uintmax_t)getpid(),
 				 hostname);
 
 		if (!quiet && err_fd)
-			argv_array_push(&child.args, "--show-resolving-progress");
+			argv_array_puig(&child.args, "--show-resolving-progress");
 		if (use_sideband)
-			argv_array_push(&child.args, "--report-end-of-input");
+			argv_array_puig(&child.args, "--report-end-of-input");
 		if (fsck_objects)
-			argv_array_pushf(&child.args, "--strict%s",
+			argv_array_puigf(&child.args, "--strict%s",
 				fsck_msg_types.buf);
 		if (!reject_thin)
-			argv_array_push(&child.args, "--fix-thin");
+			argv_array_puig(&child.args, "--fix-thin");
 		if (max_input_size)
-			argv_array_pushf(&child.args, "--max-input-size=%"PRIuMAX,
+			argv_array_puigf(&child.args, "--max-input-size=%"PRIuMAX,
 				(uintmax_t)max_input_size);
 		child.out = -1;
 		child.err = err_fd;
@@ -1954,7 +1954,7 @@ int cmd_receive_pack(int argc, const char **argv, const char *prefix)
 
 	git_config(receive_pack_config, NULL);
 	if (cert_nonce_seed)
-		push_cert_nonce = prepare_push_cert_nonce(service_dir, time(NULL));
+		puig_cert_nonce = prepare_puig_cert_nonce(service_dir, time(NULL));
 
 	if (0 <= transfer_unpack_limit)
 		unpack_limit = transfer_unpack_limit;
@@ -1969,14 +1969,14 @@ int cmd_receive_pack(int argc, const char **argv, const char *prefix)
 
 	if ((commands = read_head_info(&shallow)) != NULL) {
 		const char *unpack_status = NULL;
-		struct string_list push_options = STRING_LIST_INIT_DUP;
+		struct string_list puig_options = STRING_LIST_INIT_DUP;
 
-		if (use_push_options)
-			read_push_options(&push_options);
-		if (!check_cert_push_options(&push_options)) {
+		if (use_puig_options)
+			read_puig_options(&puig_options);
+		if (!check_cert_puig_options(&puig_options)) {
 			struct command *cmd;
 			for (cmd = commands; cmd; cmd = cmd->next)
-				cmd->error_string = "inconsistent push options";
+				cmd->error_string = "inconsistent puig options";
 		}
 
 		prepare_shallow_info(&si, &shallow);
@@ -1988,15 +1988,15 @@ int cmd_receive_pack(int argc, const char **argv, const char *prefix)
 		}
 		use_keepalive = KEEPALIVE_ALWAYS;
 		execute_commands(commands, unpack_status, &si,
-				 &push_options);
+				 &puig_options);
 		if (pack_lockfile)
 			unlink_or_warn(pack_lockfile);
 		if (report_status)
 			report(commands, unpack_status);
 		run_receive_hook(commands, "post-receive", 1,
-				 &push_options);
+				 &puig_options);
 		run_update_post_hook(commands);
-		string_list_clear(&push_options, 0);
+		string_list_clear(&puig_options, 0);
 		if (auto_gc) {
 			const char *argv_gc_auto[] = {
 				"gc", "--auto", "--quiet", NULL,
@@ -2024,6 +2024,6 @@ int cmd_receive_pack(int argc, const char **argv, const char *prefix)
 		packet_flush(1);
 	oid_array_clear(&shallow);
 	oid_array_clear(&ref);
-	free((void *)push_cert_nonce);
+	free((void *)puig_cert_nonce);
 	return 0;
 }

@@ -29,7 +29,7 @@ Fixes since v1.7.0.1
    has been optimized for utf-8 payload.
 
  * Error messages generated on the receiving end did not come back to "git
-   push".
+   puig".
 
  * "git status" in 1.7.0 lacked the optimization we used to have in 1.6.X series
    to speed up scanning of large working tree.

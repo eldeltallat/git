@@ -15,7 +15,7 @@ DESCRIPTION
 A Tcl/Tk based graphical user interface to Git.  'git gui' focuses
 on allowing users to make changes to their repository by making
 new commits, amending existing ones, creating branches, performing
-local merges, and fetching/pushing to remote repositories.
+local merges, and fetching/puiging to remote repositories.
 
 Unlike 'gitk', 'git gui' focuses on commit generation
 and single file annotation and does not show project history.

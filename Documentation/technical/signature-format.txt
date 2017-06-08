@@ -4,7 +4,7 @@ Git signature format
 == Overview
 
 Git uses cryptographic signatures in various places, currently objects (tags,
-commits, mergetags) and transactions (pushes). In every case, the command which
+commits, mergetags) and transactions (puiges). In every case, the command which
 is about to create an object or transaction determines a payload from that,
 calls gpg to obtain a detached signature for the payload (`gpg -bsa`) and
 embeds the signature into the object or transaction.

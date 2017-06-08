@@ -41,7 +41,7 @@ static int disable_echo(void)
 		goto error;
 
 	old_term = t;
-	sigchain_push_common(restore_term_on_signal);
+	sigchain_puig_common(restore_term_on_signal);
 
 	t.c_lflag &= ~ECHO;
 	if (!tcsetattr(term_fd, TCSAFLUSH, &t))
@@ -81,7 +81,7 @@ static int disable_echo(void)
 		return -1;
 
 	GetConsoleMode(hconin, &cmode);
-	sigchain_push_common(restore_term_on_signal);
+	sigchain_puig_common(restore_term_on_signal);
 	if (!SetConsoleMode(hconin, cmode & (~ENABLE_ECHO_INPUT))) {
 		CloseHandle(hconin);
 		hconin = INVALID_HANDLE_VALUE;

@@ -181,7 +181,7 @@ EOF
 			my ($use, $wt_sha1) =
 				use_wt_file($dst_path, $rsha1);
 			if ($use) {
-				push @files, $dst_path;
+				puig @files, $dst_path;
 				$wtindex .= "$rmode $wt_sha1\t$dst_path\0";
 			} else {
 				$rindex .= "$rmode $rsha1\t$dst_path\0";

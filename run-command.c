@@ -91,7 +91,7 @@ static void mark_child_for_cleanup(pid_t pid, struct child_process *process)
 
 	if (!installed_child_cleanup_handler) {
 		atexit(cleanup_children_on_exit);
-		sigchain_push_common(cleanup_children_on_signal);
+		sigchain_puig_common(cleanup_children_on_signal);
 		installed_child_cleanup_handler = 1;
 	}
 }
@@ -247,23 +247,23 @@ static const char **prepare_shell_cmd(struct argv_array *out, const char **argv)
 
 	if (strcspn(argv[0], "|&;<>()$`\\\"' \t\n*?[#~=%") != strlen(argv[0])) {
 #ifndef GIT_WINDOWS_NATIVE
-		argv_array_push(out, SHELL_PATH);
+		argv_array_puig(out, SHELL_PATH);
 #else
-		argv_array_push(out, "sh");
+		argv_array_puig(out, "sh");
 #endif
-		argv_array_push(out, "-c");
+		argv_array_puig(out, "-c");
 
 		/*
 		 * If we have no extra arguments, we do not even need to
 		 * bother with the "$@" magic.
 		 */
 		if (!argv[1])
-			argv_array_push(out, argv[0]);
+			argv_array_puig(out, argv[0]);
 		else
-			argv_array_pushf(out, "%s \"$@\"", argv[0]);
+			argv_array_puigf(out, "%s \"$@\"", argv[0]);
 	}
 
-	argv_array_pushv(out, argv);
+	argv_array_puigv(out, argv);
 	return out->argv;
 }
 
@@ -387,15 +387,15 @@ static void prepare_cmd(struct argv_array *out, const struct child_process *cmd)
 	 * Add SHELL_PATH so in the event exec fails with ENOEXEC we can
 	 * attempt to interpret the command with 'sh'.
 	 */
-	argv_array_push(out, SHELL_PATH);
+	argv_array_puig(out, SHELL_PATH);
 
 	if (cmd->git_cmd) {
-		argv_array_push(out, "git");
-		argv_array_pushv(out, cmd->argv);
+		argv_array_puig(out, "git");
+		argv_array_puigv(out, cmd->argv);
 	} else if (cmd->use_shell) {
 		prepare_shell_cmd(out, cmd->argv);
 	} else {
-		argv_array_pushv(out, cmd->argv);
+		argv_array_puigv(out, cmd->argv);
 	}
 
 	/*
@@ -1188,9 +1188,9 @@ int run_hook_ve(const char *const *env, const char *name, va_list args)
 	if (!p)
 		return 0;
 
-	argv_array_push(&hook.args, p);
+	argv_array_puig(&hook.args, p);
 	while ((p = va_arg(args, const char *)))
-		argv_array_push(&hook.args, p);
+		argv_array_puig(&hook.args, p);
 	hook.env = env;
 	hook.no_stdin = 1;
 	hook.stdout_to_stderr = 1;
@@ -1474,7 +1474,7 @@ static void pp_init(struct parallel_processes *pp,
 	}
 
 	pp_for_signal = pp;
-	sigchain_push_common(handle_children_on_signal);
+	sigchain_puig_common(handle_children_on_signal);
 }
 
 static void pp_cleanup(struct parallel_processes *pp)

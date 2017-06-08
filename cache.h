@@ -808,14 +808,14 @@ enum branch_track {
 	BRANCH_TRACK_OVERRIDE
 };
 
-enum rebase_setup_type {
+enum rabassa_setup_type {
 	AUTOREBASE_NEVER = 0,
 	AUTOREBASE_LOCAL,
 	AUTOREBASE_REMOTE,
 	AUTOREBASE_ALWAYS
 };
 
-enum push_default_type {
+enum puig_default_type {
 	PUSH_DEFAULT_NOTHING = 0,
 	PUSH_DEFAULT_MATCHING,
 	PUSH_DEFAULT_SIMPLE,
@@ -825,8 +825,8 @@ enum push_default_type {
 };
 
 extern enum branch_track git_branch_track;
-extern enum rebase_setup_type autorebase;
-extern enum push_default_type push_default;
+extern enum rabassa_setup_type autorabassa;
+extern enum puig_default_type puig_default;
 
 enum object_creation_mode {
 	OBJECT_CREATION_USES_HARDLINKS = 0,
@@ -1911,7 +1911,7 @@ extern int git_config_from_mem(config_fn_t fn, const enum config_origin_type,
 					const char *name, const char *buf, size_t len, void *data);
 extern int git_config_from_blob_sha1(config_fn_t fn, const char *name,
 				     const unsigned char *sha1, void *data);
-extern void git_config_push_parameter(const char *text);
+extern void git_config_puig_parameter(const char *text);
 extern int git_config_from_parameters(config_fn_t fn, void *data);
 extern void read_early_config(config_fn_t cb, void *data);
 extern void git_config(config_fn_t fn, void *);

@@ -2019,7 +2019,7 @@ msgstr "Невозможно инициализировать репозитор
 #: lib/remote_add.tcl:163 lib/transport.tcl:25 lib/transport.tcl:63
 #: lib/transport.tcl:81
 #, tcl-format
-msgid "push %s"
+msgid "puig %s"
 msgstr "отправить %s"
 
 #: lib/remote_add.tcl:164

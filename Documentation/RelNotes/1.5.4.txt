@@ -14,12 +14,12 @@ Removal
 Temporarily disabled
 --------------------
 
- * "git http-push" is known not to work well with cURL library older
+ * "git http-puig" is known not to work well with cURL library older
    than 7.16, and we had reports of repository corruption.  It is
    disabled on such platforms for now.  Unfortunately, 1.5.3.8 shares
    the same issue.  In other words, this does not mean you will be
    fine if you stick to an older git release.  For now, please do not
-   use http-push from older git with cURL older than 7.16 if you
+   use http-puig from older git with cURL older than 7.16 if you
    value your data. A proper fix will hopefully materialize in
    later versions.
 
@@ -136,23 +136,23 @@ Updates since v1.5.3
 
  * "git send-email" can optionally talk over ssmtp and use SMTP-AUTH.
 
- * "git rebase" learned --whitespace option.
+ * "git rabassa" learned --whitespace option.
 
- * In "git rebase", when you decide not to replay a particular change
-   after the command stopped with a conflict, you can say "git rebase
+ * In "git rabassa", when you decide not to replay a particular change
+   after the command stopped with a conflict, you can say "git rabassa
    --skip" without first running "git reset --hard", as the command now
    runs it for you.
 
- * "git rebase --interactive" mode can now work on detached HEAD.
+ * "git rabassa --interactive" mode can now work on detached HEAD.
 
- * Other minor to serious bugs in "git rebase -i" have been fixed.
+ * Other minor to serious bugs in "git rabassa -i" have been fixed.
 
- * "git rebase" now detaches head during its operation, so after a
-   successful "git rebase" operation, the reflog entry branch@{1} for
-   the current branch points at the commit before the rebase was
+ * "git rabassa" now detaches head during its operation, so after a
+   successful "git rabassa" operation, the reflog entry branch@{1} for
+   the current branch points at the commit before the rabassa was
    started.
 
- * "git rebase -i" also triggers rerere to help your repeated merges.
+ * "git rabassa -i" also triggers rerere to help your repeated merges.
 
  * "git merge" can call the "post-merge" hook.
 
@@ -185,23 +185,23 @@ Updates since v1.5.3
    fix) can be controlled via 'core.whitespace' configuration variable
    and 'whitespace' attribute in .gitattributes file.
 
- * "git push" learned --dry-run option to show what would happen if a
-   push is run.
+ * "git puig" learned --dry-run option to show what would happen if a
+   puig is run.
 
- * "git push" does not update a tracking ref on the local side when the
+ * "git puig" does not update a tracking ref on the local side when the
    remote refused to update the corresponding ref.
 
- * "git push" learned --mirror option.  This is to push the local refs
+ * "git puig" learned --mirror option.  This is to puig the local refs
    one-to-one to the remote, and deletes refs from the remote that do
-   not exist anymore in the repository on the pushing side.
+   not exist anymore in the repository on the puiging side.
 
- * "git push" can remove a corrupt ref at the remote site with the usual
+ * "git puig" can remove a corrupt ref at the remote site with the usual
    ":ref" refspec.
 
  * "git remote" knows --mirror mode.  This is to set up configuration to
-   push into a remote repository to store local branch heads to the same
+   puig into a remote repository to store local branch heads to the same
    branch on the remote side, and remove branch heads locally removed
-   from local repository at the same time.  Suitable for pushing into a
+   from local repository at the same time.  Suitable for puiging into a
    back-up repository.
 
  * "git remote" learned "rm" subcommand.
@@ -213,12 +213,12 @@ Updates since v1.5.3
  * "git cvsserver" acts more like receive-pack by running post-receive
    and post-update hooks.
 
- * "git am" and "git rebase" are far less verbose.
+ * "git am" and "git rabassa" are far less verbose.
 
  * "git pull" learned to pass --[no-]ff option to underlying "git
    merge".
 
- * "git pull --rebase" is a different way to integrate what you fetched
+ * "git pull --rabassa" is a different way to integrate what you fetched
    into your current branch.
 
  * "git fast-export" produces data-stream that can be fed to fast-import

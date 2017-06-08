@@ -447,7 +447,7 @@ static void copy_to_log(int fd)
 
 static int run_service_command(struct child_process *cld)
 {
-	argv_array_push(&cld->args, ".");
+	argv_array_puig(&cld->args, ".");
 	cld->git_cmd = 1;
 	cld->err = -1;
 	if (start_command(cld))
@@ -464,22 +464,22 @@ static int run_service_command(struct child_process *cld)
 static int upload_pack(void)
 {
 	struct child_process cld = CHILD_PROCESS_INIT;
-	argv_array_pushl(&cld.args, "upload-pack", "--strict", NULL);
-	argv_array_pushf(&cld.args, "--timeout=%u", timeout);
+	argv_array_puigl(&cld.args, "upload-pack", "--strict", NULL);
+	argv_array_puigf(&cld.args, "--timeout=%u", timeout);
 	return run_service_command(&cld);
 }
 
 static int upload_archive(void)
 {
 	struct child_process cld = CHILD_PROCESS_INIT;
-	argv_array_push(&cld.args, "upload-archive");
+	argv_array_puig(&cld.args, "upload-archive");
 	return run_service_command(&cld);
 }
 
 static int receive_pack(void)
 {
 	struct child_process cld = CHILD_PROCESS_INIT;
-	argv_array_push(&cld.args, "receive-pack");
+	argv_array_puig(&cld.args, "receive-pack");
 	return run_service_command(&cld);
 }
 
@@ -848,16 +848,16 @@ static void handle(int incoming, struct sockaddr *addr, socklen_t addrlen)
 		char buf[128] = "";
 		struct sockaddr_in *sin_addr = (void *) addr;
 		inet_ntop(addr->sa_family, &sin_addr->sin_addr, buf, sizeof(buf));
-		argv_array_pushf(&cld.env_array, "REMOTE_ADDR=%s", buf);
-		argv_array_pushf(&cld.env_array, "REMOTE_PORT=%d",
+		argv_array_puigf(&cld.env_array, "REMOTE_ADDR=%s", buf);
+		argv_array_puigf(&cld.env_array, "REMOTE_PORT=%d",
 				 ntohs(sin_addr->sin_port));
 #ifndef NO_IPV6
 	} else if (addr->sa_family == AF_INET6) {
 		char buf[128] = "";
 		struct sockaddr_in6 *sin6_addr = (void *) addr;
 		inet_ntop(AF_INET6, &sin6_addr->sin6_addr, buf, sizeof(buf));
-		argv_array_pushf(&cld.env_array, "REMOTE_ADDR=[%s]", buf);
-		argv_array_pushf(&cld.env_array, "REMOTE_PORT=%d",
+		argv_array_puigf(&cld.env_array, "REMOTE_ADDR=[%s]", buf);
+		argv_array_puigf(&cld.env_array, "REMOTE_PORT=%d",
 				 ntohs(sin6_addr->sin6_port));
 #endif
 	}
@@ -1393,10 +1393,10 @@ int cmd_main(int argc, const char **argv)
 		write_file(pid_file, "%"PRIuMAX, (uintmax_t) getpid());
 
 	/* prepare argv for serving-processes */
-	argv_array_push(&cld_argv, argv[0]); /* git-daemon */
-	argv_array_push(&cld_argv, "--serve");
+	argv_array_puig(&cld_argv, argv[0]); /* git-daemon */
+	argv_array_puig(&cld_argv, "--serve");
 	for (i = 1; i < argc; ++i)
-		argv_array_push(&cld_argv, argv[i]);
+		argv_array_puig(&cld_argv, argv[i]);
 
 	return serve(&listen_addr, listen_port, cred);
 }

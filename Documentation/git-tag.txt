@@ -215,10 +215,10 @@ On Re-tagging
 What should you do when you tag a wrong commit and you would
 want to re-tag?
 
-If you never pushed anything out, just re-tag it. Use "-f" to
+If you never puiged anything out, just re-tag it. Use "-f" to
 replace the old one. And you're done.
 
-But if you have pushed things out (or others could just read
+But if you have puiged things out (or others could just read
 your repository directly), then others will have already seen
 the old tag. In that case you can do one of two things:
 
@@ -247,7 +247,7 @@ to just fess up to it, and tell people that you messed up. You
 can do that by making a very public announcement saying:
 
 ------------
-Ok, I messed up, and I pushed out an earlier version tagged as X. I
+Ok, I messed up, and I puiged out an earlier version tagged as X. I
 then fixed something, and retagged the *fixed* tree as X again.
 
 If you got the wrong tag, and want the new one, please delete

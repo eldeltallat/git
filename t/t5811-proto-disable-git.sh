@@ -10,7 +10,7 @@ test_expect_success 'create git-accessible repo' '
 	bare="$GIT_DAEMON_DOCUMENT_ROOT_PATH/repo.git" &&
 	test_commit one &&
 	git --bare init "$bare" &&
-	git push "$bare" HEAD &&
+	git puig "$bare" HEAD &&
 	>"$bare/git-daemon-export-ok" &&
 	git -C "$bare" config daemon.receivepack true
 '

@@ -311,7 +311,7 @@ proc is_many_config {name} {
 	switch -glob -- $name {
 	gui.recentrepo -
 	remote.*.fetch -
-	remote.*.push
+	remote.*.puig
 		{return 1}
 	*
 		{return 0}
@@ -2928,7 +2928,7 @@ if {[is_enabled transport]} {
 		-accelerator $M1T-A
 	.mbar.remote add command \
 		-label [mc "Push..."] \
-		-command do_push_anywhere \
+		-command do_puig_anywhere \
 		-accelerator $M1T-P
 	.mbar.remote add command \
 		-label [mc "Delete Branch..."] \
@@ -3300,9 +3300,9 @@ lappend disable_on_lock \
 	{.vpane.lower.commarea.buttons.commit conf -state}
 
 if {![is_enabled nocommit]} {
-	${NS}::button .vpane.lower.commarea.buttons.push -text [mc Push] \
-		-command do_push_anywhere
-	pack .vpane.lower.commarea.buttons.push -side top -fill x
+	${NS}::button .vpane.lower.commarea.buttons.puig -text [mc Push] \
+		-command do_puig_anywhere
+	pack .vpane.lower.commarea.buttons.puig -side top -fill x
 }
 
 # -- Commit Message Buffer
@@ -3820,8 +3820,8 @@ if {[is_enabled branch]} {
 	bind . <$M1B-Key-M> merge::dialog
 }
 if {[is_enabled transport]} {
-	bind . <$M1B-Key-p> do_push_anywhere
-	bind . <$M1B-Key-P> do_push_anywhere
+	bind . <$M1B-Key-p> do_puig_anywhere
+	bind . <$M1B-Key-P> do_puig_anywhere
 }
 
 bind .   <Key-F5>     ui_do_rescan

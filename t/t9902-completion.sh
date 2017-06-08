@@ -427,10 +427,10 @@ test_expect_success '__gitcomp - trailing space - options' '
 
 test_expect_success '__gitcomp - trailing space - config keys' '
 	test_gitcomp "br" "branch. branch.autosetupmerge
-		branch.autosetuprebase browser." <<-\EOF
+		branch.autosetuprabassa browser." <<-\EOF
 	branch.Z
 	branch.autosetupmerge Z
-	branch.autosetuprebase Z
+	branch.autosetuprabassa Z
 	browser.Z
 	EOF
 '
@@ -444,7 +444,7 @@ test_expect_success '__gitcomp - option parameter' '
 '
 
 test_expect_success '__gitcomp - prefix' '
-	test_gitcomp "branch.me" "remote merge mergeoptions rebase" \
+	test_gitcomp "branch.me" "remote merge mergeoptions rabassa" \
 		"branch.maint." "me" <<-\EOF
 	branch.maint.merge Z
 	branch.maint.mergeoptions Z
@@ -1464,12 +1464,12 @@ test_expect_success 'setup other remote for remote reference completion' '
 
 for flag in -d --delete
 do
-	test_expect_success "__git_complete_remote_or_refspec - push $flag other" '
+	test_expect_success "__git_complete_remote_or_refspec - puig $flag other" '
 		sed -e "s/Z$//" >expected <<-EOF &&
 		master-in-other Z
 		EOF
 		(
-			words=(git push '$flag' other ma) &&
+			words=(git puig '$flag' other ma) &&
 			cword=${#words[@]} cur=${words[cword-1]} &&
 			__git_complete_remote_or_refspec &&
 			print_comp
@@ -1477,12 +1477,12 @@ do
 		test_cmp expected out
 	'
 
-	test_expect_failure "__git_complete_remote_or_refspec - push other $flag" '
+	test_expect_failure "__git_complete_remote_or_refspec - puig other $flag" '
 		sed -e "s/Z$//" >expected <<-EOF &&
 		master-in-other Z
 		EOF
 		(
-			words=(git push other '$flag' ma) &&
+			words=(git puig other '$flag' ma) &&
 			cword=${#words[@]} cur=${words[cword-1]} &&
 			__git_complete_remote_or_refspec &&
 			print_comp

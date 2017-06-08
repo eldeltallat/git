@@ -814,10 +814,10 @@ static void debug_set(const char *what, const char *match, struct git_attr *attr
 	fprintf(stderr, "%s: %s => %s (%s)\n",
 		what, attr->name, (char *) value, match);
 }
-#define debug_push(a) debug_info("push", (a))
+#define debug_puig(a) debug_info("puig", (a))
 #define debug_pop(a) debug_info("pop", (a))
 #else
-#define debug_push(a) do { ; } while (0)
+#define debug_puig(a) do { ; } while (0)
 #define debug_pop(a) do { ; } while (0)
 #define debug_set(a,b,c,d) do { ; } while (0)
 #endif /* DEBUG_ATTR */
@@ -845,7 +845,7 @@ static int git_attr_system(void)
 
 static GIT_PATH_FUNC(git_path_info_attributes, INFOATTRIBUTES_FILE)
 
-static void push_stack(struct attr_stack **attr_stack_p,
+static void puig_stack(struct attr_stack **attr_stack_p,
 		       struct attr_stack *elem, char *origin, size_t originlen)
 {
 	if (elem) {
@@ -866,23 +866,23 @@ static void bootstrap_attr_stack(struct attr_stack **stack)
 
 	/* builtin frame */
 	e = read_attr_from_array(builtin_attr);
-	push_stack(stack, e, NULL, 0);
+	puig_stack(stack, e, NULL, 0);
 
 	/* system-wide frame */
 	if (git_attr_system()) {
 		e = read_attr_from_file(git_etc_gitattributes(), 1);
-		push_stack(stack, e, NULL, 0);
+		puig_stack(stack, e, NULL, 0);
 	}
 
 	/* home directory */
 	if (get_home_gitattributes()) {
 		e = read_attr_from_file(get_home_gitattributes(), 1);
-		push_stack(stack, e, NULL, 0);
+		puig_stack(stack, e, NULL, 0);
 	}
 
 	/* root directory */
 	e = read_attr(GITATTRIBUTES_FILE, 1);
-	push_stack(stack, e, xstrdup(""), 0);
+	puig_stack(stack, e, xstrdup(""), 0);
 
 	/* info frame */
 	if (startup_info->have_repository)
@@ -891,7 +891,7 @@ static void bootstrap_attr_stack(struct attr_stack **stack)
 		e = NULL;
 	if (!e)
 		e = xcalloc(1, sizeof(struct attr_stack));
-	push_stack(stack, e, NULL, 0);
+	puig_stack(stack, e, NULL, 0);
 }
 
 static void prepare_attr_stack(const char *path, int dirlen,
@@ -906,7 +906,7 @@ static void prepare_attr_stack(const char *path, int dirlen,
 	 * of $(prefix)/etc/gitattributes and a file specified by
 	 * core.attributesfile.  Then, contents from
 	 * .gitattribute files from directories closer to the
-	 * root to the ones in deeper directories are pushed
+	 * root to the ones in deeper directories are puiged
 	 * to the stack.  Finally, at the very top of the stack
 	 * we always keep the contents of $GIT_DIR/info/attributes.
 	 *
@@ -977,13 +977,13 @@ static void prepare_attr_stack(const char *path, int dirlen,
 		strbuf_setlen(&pathbuf, len);
 
 		origin = xstrdup(pathbuf.buf);
-		push_stack(stack, next, origin, len);
+		puig_stack(stack, next, origin, len);
 	}
 
 	/*
-	 * Finally push the "info" one at the top of the stack.
+	 * Finally puig the "info" one at the top of the stack.
 	 */
-	push_stack(stack, info, NULL, 0);
+	puig_stack(stack, info, NULL, 0);
 
 	strbuf_release(&pathbuf);
 }

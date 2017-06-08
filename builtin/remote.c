@@ -10,7 +10,7 @@
 
 static const char * const builtin_remote_usage[] = {
 	N_("git remote [-v | --verbose]"),
-	N_("git remote add [-t <branch>] [-m <master>] [-f] [--tags | --no-tags] [--mirror=<fetch|push>] <name> <url>"),
+	N_("git remote add [-t <branch>] [-m <master>] [-f] [--tags | --no-tags] [--mirror=<fetch|puig>] <name> <url>"),
 	N_("git remote rename <old> <new>"),
 	N_("git remote remove <name>"),
 	N_("git remote set-head <name> (-a | --auto | -d | --delete | <branch>)"),
@@ -18,8 +18,8 @@ static const char * const builtin_remote_usage[] = {
 	N_("git remote prune [-n | --dry-run] <name>"),
 	N_("git remote [-v | --verbose] update [-p | --prune] [(<group> | <remote>)...]"),
 	N_("git remote set-branches [--add] <name> <branch>..."),
-	N_("git remote get-url [--push] [--all] <name>"),
-	N_("git remote set-url [--push] <name> <newurl> [<oldurl>]"),
+	N_("git remote get-url [--puig] [--all] <name>"),
+	N_("git remote set-url [--puig] <name> <newurl> [<oldurl>]"),
 	N_("git remote set-url --add <name> <newurl>"),
 	N_("git remote set-url --delete <name> <url>"),
 	NULL
@@ -67,12 +67,12 @@ static const char * const builtin_remote_update_usage[] = {
 };
 
 static const char * const builtin_remote_geturl_usage[] = {
-	N_("git remote get-url [--push] [--all] <name>"),
+	N_("git remote get-url [--puig] [--all] <name>"),
 	NULL
 };
 
 static const char * const builtin_remote_seturl_usage[] = {
-	N_("git remote set-url [--push] <name> <newurl> [<oldurl>]"),
+	N_("git remote set-url [--puig] <name> <newurl> [<oldurl>]"),
 	N_("git remote set-url --add <name> <newurl>"),
 	N_("git remote set-url --delete <name> <url>"),
 	NULL
@@ -124,7 +124,7 @@ static void add_branch(const char *key, const char *branchname,
 
 static const char mirror_advice[] =
 N_("--mirror is dangerous and deprecated; please\n"
-   "\t use --mirror=fetch or --mirror=push instead");
+   "\t use --mirror=fetch or --mirror=puig instead");
 
 static int parse_mirror_opt(const struct option *opt, const char *arg, int not)
 {
@@ -137,7 +137,7 @@ static int parse_mirror_opt(const struct option *opt, const char *arg, int not)
 	}
 	else if (!strcmp(arg, "fetch"))
 		*mirror = MIRROR_FETCH;
-	else if (!strcmp(arg, "push"))
+	else if (!strcmp(arg, "puig"))
 		*mirror = MIRROR_PUSH;
 	else
 		return error(_("unknown mirror argument: %s"), arg);
@@ -165,8 +165,8 @@ static int add(int argc, const char **argv)
 		OPT_STRING_LIST('t', "track", &track, N_("branch"),
 				N_("branch(es) to track")),
 		OPT_STRING('m', "master", &master, N_("branch"), N_("master branch")),
-		{ OPTION_CALLBACK, 0, "mirror", &mirror, N_("push|fetch"),
-			N_("set up remote as a mirror to push to or fetch from"),
+		{ OPTION_CALLBACK, 0, "mirror", &mirror, N_("puig|fetch"),
+			N_("set up remote as a mirror to puig to or fetch from"),
 			PARSE_OPT_OPTARG, parse_mirror_opt },
 		OPT_END()
 	};
@@ -244,7 +244,7 @@ static int add(int argc, const char **argv)
 struct branch_info {
 	char *remote_name;
 	struct string_list merge;
-	enum { NO_REBASE, NORMAL_REBASE, INTERACTIVE_REBASE } rebase;
+	enum { NO_REBASE, NORMAL_REBASE, INTERACTIVE_REBASE } rabassa;
 };
 
 static struct string_list branch_list = STRING_LIST_INIT_NODUP;
@@ -273,7 +273,7 @@ static int config_read_branches(const char *key, const char *value, void *cb)
 		} else if (strip_suffix(key, ".merge", &key_len)) {
 			name = xmemdupz(key, key_len);
 			type = MERGE;
-		} else if (strip_suffix(key, ".rebase", &key_len)) {
+		} else if (strip_suffix(key, ".rabassa", &key_len)) {
 			name = xmemdupz(key, key_len);
 			type = REBASE;
 		} else
@@ -302,11 +302,11 @@ static int config_read_branches(const char *key, const char *value, void *cb)
 		} else {
 			int v = git_config_maybe_bool(orig_key, value);
 			if (v >= 0)
-				info->rebase = v;
+				info->rabassa = v;
 			else if (!strcmp(value, "preserve"))
-				info->rebase = NORMAL_REBASE;
+				info->rabassa = NORMAL_REBASE;
 			else if (!strcmp(value, "interactive"))
-				info->rebase = INTERACTIVE_REBASE;
+				info->rabassa = INTERACTIVE_REBASE;
 		}
 	}
 	return 0;
@@ -321,7 +321,7 @@ static void read_branches(void)
 
 struct ref_states {
 	struct remote *remote;
-	struct string_list new, stale, tracked, heads, push;
+	struct string_list new, stale, tracked, heads, puig;
 	int queried;
 };
 
@@ -362,7 +362,7 @@ static int get_ref_states(const struct ref *remote_refs, struct ref_states *stat
 	return 0;
 }
 
-struct push_info {
+struct puig_info {
 	char *dest;
 	int forced;
 	enum {
@@ -375,32 +375,32 @@ struct push_info {
 	} status;
 };
 
-static int get_push_ref_states(const struct ref *remote_refs,
+static int get_puig_ref_states(const struct ref *remote_refs,
 	struct ref_states *states)
 {
 	struct remote *remote = states->remote;
-	struct ref *ref, *local_refs, *push_map;
+	struct ref *ref, *local_refs, *puig_map;
 	if (remote->mirror)
 		return 0;
 
 	local_refs = get_local_heads();
-	push_map = copy_ref_list(remote_refs);
+	puig_map = copy_ref_list(remote_refs);
 
-	match_push_refs(local_refs, &push_map, remote->push_refspec_nr,
-			remote->push_refspec, MATCH_REFS_NONE);
+	match_puig_refs(local_refs, &puig_map, remote->puig_refspec_nr,
+			remote->puig_refspec, MATCH_REFS_NONE);
 
-	states->push.strdup_strings = 1;
-	for (ref = push_map; ref; ref = ref->next) {
+	states->puig.strdup_strings = 1;
+	for (ref = puig_map; ref; ref = ref->next) {
 		struct string_list_item *item;
-		struct push_info *info;
+		struct puig_info *info;
 
 		if (!ref->peer_ref)
 			continue;
 		oidcpy(&ref->new_oid, &ref->peer_ref->new_oid);
 
-		item = string_list_append(&states->push,
+		item = string_list_append(&states->puig,
 					  abbrev_branch(ref->peer_ref->name));
-		item->util = xcalloc(1, sizeof(struct push_info));
+		item->util = xcalloc(1, sizeof(struct puig_info));
 		info = item->util;
 		info->forced = ref->force;
 		info->dest = xstrdup(abbrev_branch(ref->name));
@@ -418,37 +418,37 @@ static int get_push_ref_states(const struct ref *remote_refs,
 			info->status = PUSH_STATUS_OUTOFDATE;
 	}
 	free_refs(local_refs);
-	free_refs(push_map);
+	free_refs(puig_map);
 	return 0;
 }
 
-static int get_push_ref_states_noquery(struct ref_states *states)
+static int get_puig_ref_states_noquery(struct ref_states *states)
 {
 	int i;
 	struct remote *remote = states->remote;
 	struct string_list_item *item;
-	struct push_info *info;
+	struct puig_info *info;
 
 	if (remote->mirror)
 		return 0;
 
-	states->push.strdup_strings = 1;
-	if (!remote->push_refspec_nr) {
-		item = string_list_append(&states->push, _("(matching)"));
-		info = item->util = xcalloc(1, sizeof(struct push_info));
+	states->puig.strdup_strings = 1;
+	if (!remote->puig_refspec_nr) {
+		item = string_list_append(&states->puig, _("(matching)"));
+		info = item->util = xcalloc(1, sizeof(struct puig_info));
 		info->status = PUSH_STATUS_NOTQUERIED;
 		info->dest = xstrdup(item->string);
 	}
-	for (i = 0; i < remote->push_refspec_nr; i++) {
-		struct refspec *spec = remote->push + i;
+	for (i = 0; i < remote->puig_refspec_nr; i++) {
+		struct refspec *spec = remote->puig + i;
 		if (spec->matching)
-			item = string_list_append(&states->push, _("(matching)"));
+			item = string_list_append(&states->puig, _("(matching)"));
 		else if (strlen(spec->src))
-			item = string_list_append(&states->push, spec->src);
+			item = string_list_append(&states->puig, spec->src);
 		else
-			item = string_list_append(&states->push, _("(delete)"));
+			item = string_list_append(&states->puig, _("(delete)"));
 
-		info = item->util = xcalloc(1, sizeof(struct push_info));
+		info = item->util = xcalloc(1, sizeof(struct puig_info));
 		info->forced = spec->force;
 		info->status = PUSH_STATUS_NOTQUERIED;
 		info->dest = xstrdup(spec->dst ? spec->dst : item->string);
@@ -583,9 +583,9 @@ static int migrate_file(struct remote *remote)
 	for (i = 0; i < remote->url_nr; i++)
 		git_config_set_multivar(buf.buf, remote->url[i], "^$", 0);
 	strbuf_reset(&buf);
-	strbuf_addf(&buf, "remote.%s.push", remote->name);
-	for (i = 0; i < remote->push_refspec_nr; i++)
-		git_config_set_multivar(buf.buf, remote->push_refspec[i], "^$", 0);
+	strbuf_addf(&buf, "remote.%s.puig", remote->name);
+	for (i = 0; i < remote->puig_refspec_nr; i++)
+		git_config_set_multivar(buf.buf, remote->puig_refspec[i], "^$", 0);
 	strbuf_reset(&buf);
 	strbuf_addf(&buf, "remote.%s.fetch", remote->name);
 	for (i = 0; i < remote->fetch_refspec_nr; i++)
@@ -811,9 +811,9 @@ static int rm(int argc, const char **argv)
 	return result;
 }
 
-static void clear_push_info(void *util, const char *string)
+static void clear_puig_info(void *util, const char *string)
 {
-	struct push_info *info = util;
+	struct puig_info *info = util;
 	free(info->dest);
 	free(info);
 }
@@ -824,7 +824,7 @@ static void free_remote_ref_states(struct ref_states *states)
 	string_list_clear(&states->stale, 1);
 	string_list_clear(&states->tracked, 0);
 	string_list_clear(&states->heads, 0);
-	string_list_clear_func(&states->push, clear_push_info);
+	string_list_clear_func(&states->puig, clear_puig_info);
 }
 
 static int append_ref_to_tracked_list(const char *refname,
@@ -869,11 +869,11 @@ static int get_remote_ref_states(const char *name,
 		if (query & GET_HEAD_NAMES)
 			get_head_names(remote_refs, states);
 		if (query & GET_PUSH_REF_STATES)
-			get_push_ref_states(remote_refs, states);
+			get_puig_ref_states(remote_refs, states);
 	} else {
 		for_each_ref(append_ref_to_tracked_list, states);
 		string_list_sort(&states->tracked);
-		get_push_ref_states_noquery(states);
+		get_puig_ref_states_noquery(states);
 	}
 
 	return 0;
@@ -883,7 +883,7 @@ struct show_info {
 	struct string_list *list;
 	struct ref_states *states;
 	int width, width2;
-	int any_rebase;
+	int any_rabassa;
 };
 
 static int add_remote_to_show_info(struct string_list_item *item, void *cb_data)
@@ -936,8 +936,8 @@ static int add_local_to_show_info(struct string_list_item *branch_item, void *cb
 		return 0;
 	if ((n = strlen(branch_item->string)) > show_info->width)
 		show_info->width = n;
-	if (branch_info->rebase)
-		show_info->any_rebase = 1;
+	if (branch_info->rabassa)
+		show_info->any_rabassa = 1;
 
 	item = string_list_insert(show_info->list, branch_item->string);
 	item->util = branch_info;
@@ -953,19 +953,19 @@ static int show_local_info_item(struct string_list_item *item, void *cb_data)
 	int width = show_info->width + 4;
 	int i;
 
-	if (branch_info->rebase && branch_info->merge.nr > 1) {
-		error(_("invalid branch.%s.merge; cannot rebase onto > 1 branch"),
+	if (branch_info->rabassa && branch_info->merge.nr > 1) {
+		error(_("invalid branch.%s.merge; cannot rabassa onto > 1 branch"),
 			item->string);
 		return 0;
 	}
 
 	printf("    %-*s ", show_info->width, item->string);
-	if (branch_info->rebase) {
-		printf_ln(branch_info->rebase == INTERACTIVE_REBASE
-			  ? _("rebases interactively onto remote %s")
-			  : _("rebases onto remote %s"), merge->items[0].string);
+	if (branch_info->rabassa) {
+		printf_ln(branch_info->rabassa == INTERACTIVE_REBASE
+			  ? _("rabassas interactively onto remote %s")
+			  : _("rabassas onto remote %s"), merge->items[0].string);
 		return 0;
-	} else if (show_info->any_rebase) {
+	} else if (show_info->any_rabassa) {
 		printf_ln(_(" merges with remote %s"), merge->items[0].string);
 		width++;
 	} else {
@@ -978,42 +978,42 @@ static int show_local_info_item(struct string_list_item *item, void *cb_data)
 	return 0;
 }
 
-static int add_push_to_show_info(struct string_list_item *push_item, void *cb_data)
+static int add_puig_to_show_info(struct string_list_item *puig_item, void *cb_data)
 {
 	struct show_info *show_info = cb_data;
-	struct push_info *push_info = push_item->util;
+	struct puig_info *puig_info = puig_item->util;
 	struct string_list_item *item;
 	int n;
-	if ((n = strlen(push_item->string)) > show_info->width)
+	if ((n = strlen(puig_item->string)) > show_info->width)
 		show_info->width = n;
-	if ((n = strlen(push_info->dest)) > show_info->width2)
+	if ((n = strlen(puig_info->dest)) > show_info->width2)
 		show_info->width2 = n;
-	item = string_list_append(show_info->list, push_item->string);
-	item->util = push_item->util;
+	item = string_list_append(show_info->list, puig_item->string);
+	item->util = puig_item->util;
 	return 0;
 }
 
 /*
- * Sorting comparison for a string list that has push_info
+ * Sorting comparison for a string list that has puig_info
  * structs in its util field
  */
-static int cmp_string_with_push(const void *va, const void *vb)
+static int cmp_string_with_puig(const void *va, const void *vb)
 {
 	const struct string_list_item *a = va;
 	const struct string_list_item *b = vb;
-	const struct push_info *a_push = a->util;
-	const struct push_info *b_push = b->util;
+	const struct puig_info *a_puig = a->util;
+	const struct puig_info *b_puig = b->util;
 	int cmp = strcmp(a->string, b->string);
-	return cmp ? cmp : strcmp(a_push->dest, b_push->dest);
+	return cmp ? cmp : strcmp(a_puig->dest, b_puig->dest);
 }
 
-static int show_push_info_item(struct string_list_item *item, void *cb_data)
+static int show_puig_info_item(struct string_list_item *item, void *cb_data)
 {
 	struct show_info *show_info = cb_data;
-	struct push_info *push_info = item->util;
+	struct puig_info *puig_info = item->util;
 	const char *src = item->string, *status = NULL;
 
-	switch (push_info->status) {
+	switch (puig_info->status) {
 	case PUSH_STATUS_CREATE:
 		status = _("create");
 		break;
@@ -1034,19 +1034,19 @@ static int show_push_info_item(struct string_list_item *item, void *cb_data)
 		break;
 	}
 	if (status) {
-		if (push_info->forced)
+		if (puig_info->forced)
 			printf_ln(_("    %-*s forces to %-*s (%s)"), show_info->width, src,
-			       show_info->width2, push_info->dest, status);
+			       show_info->width2, puig_info->dest, status);
 		else
-			printf_ln(_("    %-*s pushes to %-*s (%s)"), show_info->width, src,
-			       show_info->width2, push_info->dest, status);
+			printf_ln(_("    %-*s puiges to %-*s (%s)"), show_info->width, src,
+			       show_info->width2, puig_info->dest, status);
 	} else {
-		if (push_info->forced)
+		if (puig_info->forced)
 			printf_ln(_("    %-*s forces to %s"), show_info->width, src,
-			       push_info->dest);
+			       puig_info->dest);
 		else
-			printf_ln(_("    %-*s pushes to %s"), show_info->width, src,
-			       push_info->dest);
+			printf_ln(_("    %-*s puiges to %s"), show_info->width, src,
+			       puig_info->dest);
 	}
 	return 0;
 }
@@ -1064,16 +1064,16 @@ static int get_one_entry(struct remote *remote, void *priv)
 				strbuf_detach(&url_buf, NULL);
 	} else
 		string_list_append(list, remote->name)->util = NULL;
-	if (remote->pushurl_nr) {
-		url = remote->pushurl;
-		url_nr = remote->pushurl_nr;
+	if (remote->puigurl_nr) {
+		url = remote->puigurl;
+		url_nr = remote->puigurl_nr;
 	} else {
 		url = remote->url;
 		url_nr = remote->url_nr;
 	}
 	for (i = 0; i < url_nr; i++)
 	{
-		strbuf_addf(&url_buf, "%s (push)", url[i]);
+		strbuf_addf(&url_buf, "%s (puig)", url[i]);
 		string_list_append(list, remote->name)->util =
 				strbuf_detach(&url_buf, NULL);
 	}
@@ -1143,9 +1143,9 @@ static int show(int argc, const char **argv)
 		printf_ln(_("* remote %s"), *argv);
 		printf_ln(_("  Fetch URL: %s"), states.remote->url_nr > 0 ?
 		       states.remote->url[0] : _("(no URL)"));
-		if (states.remote->pushurl_nr) {
-			url = states.remote->pushurl;
-			url_nr = states.remote->pushurl_nr;
+		if (states.remote->puigurl_nr) {
+			url = states.remote->puigurl;
+			url_nr = states.remote->puigurl_nr;
 		} else {
 			url = states.remote->url;
 			url_nr = states.remote->url_nr;
@@ -1187,7 +1187,7 @@ static int show(int argc, const char **argv)
 
 		/* git pull info */
 		info.width = 0;
-		info.any_rebase = 0;
+		info.any_rabassa = 0;
 		for_each_string_list(&branch_list, add_local_to_show_info, &info);
 		if (info.list->nr)
 			printf_ln(Q_("  Local branch configured for 'git pull':",
@@ -1196,19 +1196,19 @@ static int show(int argc, const char **argv)
 		for_each_string_list(info.list, show_local_info_item, &info);
 		string_list_clear(info.list, 0);
 
-		/* git push info */
+		/* git puig info */
 		if (states.remote->mirror)
-			printf_ln(_("  Local refs will be mirrored by 'git push'"));
+			printf_ln(_("  Local refs will be mirrored by 'git puig'"));
 
 		info.width = info.width2 = 0;
-		for_each_string_list(&states.push, add_push_to_show_info, &info);
-		QSORT(info.list->items, info.list->nr, cmp_string_with_push);
+		for_each_string_list(&states.puig, add_puig_to_show_info, &info);
+		QSORT(info.list->items, info.list->nr, cmp_string_with_puig);
 		if (info.list->nr)
-			printf_ln(Q_("  Local ref configured for 'git push'%s:",
-				     "  Local refs configured for 'git push'%s:",
+			printf_ln(Q_("  Local ref configured for 'git puig'%s:",
+				     "  Local refs configured for 'git puig'%s:",
 				     info.list->nr),
 				  no_query ? _(" (status not queried)") : "");
-		for_each_string_list(info.list, show_push_info_item, &info);
+		for_each_string_list(info.list, show_puig_info_item, &info);
 		string_list_clear(info.list, 0);
 
 		free_remote_ref_states(&states);
@@ -1368,23 +1368,23 @@ static int update(int argc, const char **argv)
 	argc = parse_options(argc, argv, NULL, options, builtin_remote_update_usage,
 			     PARSE_OPT_KEEP_ARGV0);
 
-	argv_array_push(&fetch_argv, "fetch");
+	argv_array_puig(&fetch_argv, "fetch");
 
 	if (prune != -1)
-		argv_array_push(&fetch_argv, prune ? "--prune" : "--no-prune");
+		argv_array_puig(&fetch_argv, prune ? "--prune" : "--no-prune");
 	if (verbose)
-		argv_array_push(&fetch_argv, "-v");
-	argv_array_push(&fetch_argv, "--multiple");
+		argv_array_puig(&fetch_argv, "-v");
+	argv_array_puig(&fetch_argv, "--multiple");
 	if (argc < 2)
-		argv_array_push(&fetch_argv, "default");
+		argv_array_puig(&fetch_argv, "default");
 	for (i = 1; i < argc; i++)
-		argv_array_push(&fetch_argv, argv[i]);
+		argv_array_puig(&fetch_argv, argv[i]);
 
 	if (strcmp(fetch_argv.argv[fetch_argv.argc-1], "default") == 0) {
 		git_config(get_remote_default, &default_defined);
 		if (!default_defined) {
 			argv_array_pop(&fetch_argv);
-			argv_array_push(&fetch_argv, "--all");
+			argv_array_puig(&fetch_argv, "--all");
 		}
 	}
 
@@ -1454,14 +1454,14 @@ static int set_branches(int argc, const char **argv)
 
 static int get_url(int argc, const char **argv)
 {
-	int i, push_mode = 0, all_mode = 0;
+	int i, puig_mode = 0, all_mode = 0;
 	const char *remotename = NULL;
 	struct remote *remote;
 	const char **url;
 	int url_nr;
 	struct option options[] = {
-		OPT_BOOL('\0', "push", &push_mode,
-			 N_("query push URLs rather than fetch URLs")),
+		OPT_BOOL('\0', "puig", &puig_mode,
+			 N_("query puig URLs rather than fetch URLs")),
 		OPT_BOOL('\0', "all", &all_mode,
 			 N_("return all URLs")),
 		OPT_END()
@@ -1478,13 +1478,13 @@ static int get_url(int argc, const char **argv)
 		die(_("No such remote '%s'"), remotename);
 
 	url_nr = 0;
-	if (push_mode) {
-		url = remote->pushurl;
-		url_nr = remote->pushurl_nr;
+	if (puig_mode) {
+		url = remote->puigurl;
+		url_nr = remote->puigurl_nr;
 	}
 	/* else fetch mode */
 
-	/* Use the fetch URL when no push URLs were found or requested. */
+	/* Use the fetch URL when no puig URLs were found or requested. */
 	if (!url_nr) {
 		url = remote->url;
 		url_nr = remote->url_nr;
@@ -1505,7 +1505,7 @@ static int get_url(int argc, const char **argv)
 
 static int set_url(int argc, const char **argv)
 {
-	int i, push_mode = 0, add_mode = 0, delete_mode = 0;
+	int i, puig_mode = 0, add_mode = 0, delete_mode = 0;
 	int matches = 0, negative_matches = 0;
 	const char *remotename = NULL;
 	const char *newurl = NULL;
@@ -1516,8 +1516,8 @@ static int set_url(int argc, const char **argv)
 	int urlset_nr;
 	struct strbuf name_buf = STRBUF_INIT;
 	struct option options[] = {
-		OPT_BOOL('\0', "push", &push_mode,
-			 N_("manipulate push URLs")),
+		OPT_BOOL('\0', "puig", &puig_mode,
+			 N_("manipulate puig URLs")),
 		OPT_BOOL('\0', "add", &add_mode,
 			 N_("add URL")),
 		OPT_BOOL('\0', "delete", &delete_mode,
@@ -1545,10 +1545,10 @@ static int set_url(int argc, const char **argv)
 	if (!remote_is_configured(remote, 1))
 		die(_("No such remote '%s'"), remotename);
 
-	if (push_mode) {
-		strbuf_addf(&name_buf, "remote.%s.pushurl", remotename);
-		urlset = remote->pushurl;
-		urlset_nr = remote->pushurl_nr;
+	if (puig_mode) {
+		strbuf_addf(&name_buf, "remote.%s.puigurl", remotename);
+		urlset = remote->puigurl;
+		urlset_nr = remote->puigurl_nr;
 	} else {
 		strbuf_addf(&name_buf, "remote.%s.url", remotename);
 		urlset = remote->url;
@@ -1578,8 +1578,8 @@ static int set_url(int argc, const char **argv)
 			negative_matches++;
 	if (!delete_mode && !matches)
 		die(_("No such URL found: %s"), oldurl);
-	if (delete_mode && !negative_matches && !push_mode)
-		die(_("Will not delete all non-push URLs"));
+	if (delete_mode && !negative_matches && !puig_mode)
+		die(_("Will not delete all non-puig URLs"));
 
 	regfree(&old_regex);
 

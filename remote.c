@@ -50,10 +50,10 @@ static int branches_alloc;
 static int branches_nr;
 
 static struct branch *current_branch;
-static const char *pushremote_name;
+static const char *puigremote_name;
 
 static struct rewrites rewrites;
-static struct rewrites rewrites_push;
+static struct rewrites rewrites_puig;
 
 static int valid_remote(const struct remote *remote)
 {
@@ -86,12 +86,12 @@ static const char *alias_url(const char *url, struct rewrites *r)
 	return xstrfmt("%s%s", r->rewrite[longest_i]->base, url + longest->len);
 }
 
-static void add_push_refspec(struct remote *remote, const char *ref)
+static void add_puig_refspec(struct remote *remote, const char *ref)
 {
-	ALLOC_GROW(remote->push_refspec,
-		   remote->push_refspec_nr + 1,
-		   remote->push_refspec_alloc);
-	remote->push_refspec[remote->push_refspec_nr++] = ref;
+	ALLOC_GROW(remote->puig_refspec,
+		   remote->puig_refspec_nr + 1,
+		   remote->puig_refspec_alloc);
+	remote->puig_refspec[remote->puig_refspec_nr++] = ref;
 }
 
 static void add_fetch_refspec(struct remote *remote, const char *ref)
@@ -108,23 +108,23 @@ static void add_url(struct remote *remote, const char *url)
 	remote->url[remote->url_nr++] = url;
 }
 
-static void add_pushurl(struct remote *remote, const char *pushurl)
+static void add_puigurl(struct remote *remote, const char *puigurl)
 {
-	ALLOC_GROW(remote->pushurl, remote->pushurl_nr + 1, remote->pushurl_alloc);
-	remote->pushurl[remote->pushurl_nr++] = pushurl;
+	ALLOC_GROW(remote->puigurl, remote->puigurl_nr + 1, remote->puigurl_alloc);
+	remote->puigurl[remote->puigurl_nr++] = puigurl;
 }
 
-static void add_pushurl_alias(struct remote *remote, const char *url)
+static void add_puigurl_alias(struct remote *remote, const char *url)
 {
-	const char *pushurl = alias_url(url, &rewrites_push);
-	if (pushurl != url)
-		add_pushurl(remote, pushurl);
+	const char *puigurl = alias_url(url, &rewrites_puig);
+	if (puigurl != url)
+		add_puigurl(remote, puigurl);
 }
 
 static void add_url_alias(struct remote *remote, const char *url)
 {
 	add_url(remote, alias_url(url, &rewrites));
-	add_pushurl_alias(remote, url);
+	add_puigurl_alias(remote, url);
 }
 
 struct remotes_hash_key {
@@ -265,7 +265,7 @@ static void read_remotes_file(struct remote *remote)
 		if (skip_prefix(buf.buf, "URL:", &v))
 			add_url_alias(remote, xstrdup(skip_spaces(v)));
 		else if (skip_prefix(buf.buf, "Push:", &v))
-			add_push_refspec(remote, xstrdup(skip_spaces(v)));
+			add_puig_refspec(remote, xstrdup(skip_spaces(v)));
 		else if (skip_prefix(buf.buf, "Pull:", &v))
 			add_fetch_refspec(remote, xstrdup(skip_spaces(v)));
 	}
@@ -310,10 +310,10 @@ static void read_branches_file(struct remote *remote)
 					  frag, remote->name));
 
 	/*
-	 * Cogito compatible push: push current HEAD to remote #branch
+	 * Cogito compatible puig: puig current HEAD to remote #branch
 	 * (master if missing)
 	 */
-	add_push_refspec(remote, xstrfmt("HEAD:refs/heads/%s", frag));
+	add_puig_refspec(remote, xstrfmt("HEAD:refs/heads/%s", frag));
 	remote->fetch_tags = 1; /* always auto-follow */
 }
 
@@ -330,8 +330,8 @@ static int handle_config(const char *key, const char *value, void *cb)
 		branch = make_branch(name, namelen);
 		if (!strcmp(subkey, "remote")) {
 			return git_config_string(&branch->remote_name, key, value);
-		} else if (!strcmp(subkey, "pushremote")) {
-			return git_config_string(&branch->pushremote_name, key, value);
+		} else if (!strcmp(subkey, "puigremote")) {
+			return git_config_string(&branch->puigremote_name, key, value);
 		} else if (!strcmp(subkey, "merge")) {
 			if (!value)
 				return config_error_nonbool(key);
@@ -348,8 +348,8 @@ static int handle_config(const char *key, const char *value, void *cb)
 			if (!value)
 				return config_error_nonbool(key);
 			add_instead_of(rewrite, xstrdup(value));
-		} else if (!strcmp(subkey, "pushinsteadof")) {
-			rewrite = make_rewrite(&rewrites_push, name, namelen);
+		} else if (!strcmp(subkey, "puiginsteadof")) {
+			rewrite = make_rewrite(&rewrites_puig, name, namelen);
 			if (!value)
 				return config_error_nonbool(key);
 			add_instead_of(rewrite, xstrdup(value));
@@ -360,8 +360,8 @@ static int handle_config(const char *key, const char *value, void *cb)
 		return 0;
 
 	/* Handle remote.* variables */
-	if (!name && !strcmp(subkey, "pushdefault"))
-		return git_config_string(&pushremote_name, key, value);
+	if (!name && !strcmp(subkey, "puigdefault"))
+		return git_config_string(&puigremote_name, key, value);
 
 	if (!name)
 		return 0;
@@ -388,16 +388,16 @@ static int handle_config(const char *key, const char *value, void *cb)
 		if (git_config_string(&v, key, value))
 			return -1;
 		add_url(remote, v);
-	} else if (!strcmp(subkey, "pushurl")) {
+	} else if (!strcmp(subkey, "puigurl")) {
 		const char *v;
 		if (git_config_string(&v, key, value))
 			return -1;
-		add_pushurl(remote, v);
-	} else if (!strcmp(subkey, "push")) {
+		add_puigurl(remote, v);
+	} else if (!strcmp(subkey, "puig")) {
 		const char *v;
 		if (git_config_string(&v, key, value))
 			return -1;
-		add_push_refspec(remote, v);
+		add_puig_refspec(remote, v);
 	} else if (!strcmp(subkey, "fetch")) {
 		const char *v;
 		if (git_config_string(&v, key, value))
@@ -440,16 +440,16 @@ static void alias_all_urls(void)
 {
 	int i, j;
 	for (i = 0; i < remotes_nr; i++) {
-		int add_pushurl_aliases;
+		int add_puigurl_aliases;
 		if (!remotes[i])
 			continue;
-		for (j = 0; j < remotes[i]->pushurl_nr; j++) {
-			remotes[i]->pushurl[j] = alias_url(remotes[i]->pushurl[j], &rewrites);
+		for (j = 0; j < remotes[i]->puigurl_nr; j++) {
+			remotes[i]->puigurl[j] = alias_url(remotes[i]->puigurl[j], &rewrites);
 		}
-		add_pushurl_aliases = remotes[i]->pushurl_nr == 0;
+		add_puigurl_aliases = remotes[i]->puigurl_nr == 0;
 		for (j = 0; j < remotes[i]->url_nr; j++) {
-			if (add_pushurl_aliases)
-				add_pushurl_alias(remotes[i], remotes[i]->url[j]);
+			if (add_puigurl_aliases)
+				add_puigurl_alias(remotes[i], remotes[i]->url[j]);
 			remotes[i]->url[j] = alias_url(remotes[i]->url[j], &rewrites);
 		}
 	}
@@ -500,7 +500,7 @@ static struct refspec *parse_refspec_internal(int nr_refspec, const char **refsp
 
 		/*
 		 * Before going on, special case ":" (or "+:") as a refspec
-		 * for pushing matching refs.
+		 * for puiging matching refs.
 		 */
 		if (!fetch && rhs == lhs && rhs[1] == '\0') {
 			rs[i].matching = 1;
@@ -610,7 +610,7 @@ struct refspec *parse_fetch_refspec(int nr_refspec, const char **refspec)
 	return parse_refspec_internal(nr_refspec, refspec, 1, 0);
 }
 
-struct refspec *parse_push_refspec(int nr_refspec, const char **refspec)
+struct refspec *parse_puig_refspec(int nr_refspec, const char **refspec)
 {
 	return parse_refspec_internal(nr_refspec, refspec, 0, 0);
 }
@@ -653,17 +653,17 @@ const char *remote_for_branch(struct branch *branch, int *explicit)
 	return "origin";
 }
 
-const char *pushremote_for_branch(struct branch *branch, int *explicit)
+const char *puigremote_for_branch(struct branch *branch, int *explicit)
 {
-	if (branch && branch->pushremote_name) {
+	if (branch && branch->puigremote_name) {
 		if (explicit)
 			*explicit = 1;
-		return branch->pushremote_name;
+		return branch->puigremote_name;
 	}
-	if (pushremote_name) {
+	if (puigremote_name) {
 		if (explicit)
 			*explicit = 1;
-		return pushremote_name;
+		return puigremote_name;
 	}
 	return remote_for_branch(branch, explicit);
 }
@@ -693,7 +693,7 @@ static struct remote *remote_get_1(const char *name,
 	if (!valid_remote(ret))
 		return NULL;
 	ret->fetch = parse_fetch_refspec(ret->fetch_refspec_nr, ret->fetch_refspec);
-	ret->push = parse_push_refspec(ret->push_refspec_nr, ret->push_refspec);
+	ret->puig = parse_puig_refspec(ret->puig_refspec_nr, ret->puig_refspec);
 	return ret;
 }
 
@@ -702,9 +702,9 @@ struct remote *remote_get(const char *name)
 	return remote_get_1(name, remote_for_branch);
 }
 
-struct remote *pushremote_get(const char *name)
+struct remote *puigremote_get(const char *name)
 {
-	return remote_get_1(name, pushremote_for_branch);
+	return remote_get_1(name, puigremote_for_branch);
 }
 
 int remote_is_configured(struct remote *remote, int in_repo)
@@ -727,9 +727,9 @@ int for_each_remote(each_remote_fn fn, void *priv)
 		if (!r->fetch)
 			r->fetch = parse_fetch_refspec(r->fetch_refspec_nr,
 						       r->fetch_refspec);
-		if (!r->push)
-			r->push = parse_push_refspec(r->push_refspec_nr,
-						     r->push_refspec);
+		if (!r->puig)
+			r->puig = parse_puig_refspec(r->puig_refspec_nr,
+						     r->puig_refspec);
 		result = fn(r, priv);
 	}
 	return result;
@@ -1016,7 +1016,7 @@ int count_refspec_match(const char *pattern,
 		 * heads or tags, and did not specify the pattern
 		 * in full (e.g. "refs/remotes/origin/master") or at
 		 * least from the toplevel (e.g. "remotes/origin/master");
-		 * otherwise "git push $URL master" would result in
+		 * otherwise "git puig $URL master" would result in
 		 * ambiguity between remotes/origin/master and heads/master
 		 * at the remote site.
 		 */
@@ -1184,7 +1184,7 @@ static int match_explicit(struct ref *src, struct ref *dst,
 			matched_dst = make_linked_ref(dst_guess, dst_tail);
 			free(dst_guess);
 		} else
-			error("unable to push to unqualified destination: %s\n"
+			error("unable to puig to unqualified destination: %s\n"
 			      "The destination refspec neither matches an "
 			      "existing ref on the remote nor\n"
 			      "begins with refs/, and we are unable to "
@@ -1254,7 +1254,7 @@ static char *get_ref_match(const struct refspec *rs, int rs_nr, const struct ref
 	pat = rs + matching_refs;
 	if (pat->matching) {
 		/*
-		 * "matching refs"; traditionally we pushed everything
+		 * "matching refs"; traditionally we puiged everything
 		 * including refs outside refs/heads/ hierarchy, but
 		 * that does not make much sense these days.
 		 */
@@ -1304,7 +1304,7 @@ static void add_missing_tags(struct ref *src, struct ref **dst, struct ref ***ds
 
 	/*
 	 * Collect everything we know they would have at the end of
-	 * this push, and collect all tags they have.
+	 * this puig, and collect all tags they have.
 	 */
 	memset(&sent_tips, 0, sizeof(sent_tips));
 	for (ref = *dst; ref; ref = ref->next) {
@@ -1335,7 +1335,7 @@ static void add_missing_tags(struct ref *src, struct ref **dst, struct ref ***ds
 
 	/*
 	 * At this point, src_tag lists tags that are missing from
-	 * dst, and sent_tips lists the tips we are pushing or those
+	 * dst, and sent_tips lists the tips we are puiging or those
 	 * that we know they already have. An element in the src_tag
 	 * that is an ancestor of any of the sent_tips needs to be
 	 * sent to the other side.
@@ -1351,7 +1351,7 @@ static void add_missing_tags(struct ref *src, struct ref **dst, struct ref ***ds
 			commit = lookup_commit_reference_gently(&ref->new_oid,
 								1);
 			if (!commit)
-				/* not pushing a commit, which is not an error */
+				/* not puiging a commit, which is not an error */
 				continue;
 
 			/*
@@ -1388,14 +1388,14 @@ static void prepare_ref_index(struct string_list *ref_index, struct ref *ref)
 }
 
 /*
- * Given only the set of local refs, sanity-check the set of push
- * refspecs. We can't catch all errors that match_push_refs would,
+ * Given only the set of local refs, sanity-check the set of puig
+ * refspecs. We can't catch all errors that match_puig_refs would,
  * but we can catch some errors early before even talking to the
  * remote side.
  */
-int check_push_refs(struct ref *src, int nr_refspec, const char **refspec_names)
+int check_puig_refs(struct ref *src, int nr_refspec, const char **refspec_names)
 {
-	struct refspec *refspec = parse_push_refspec(nr_refspec, refspec_names);
+	struct refspec *refspec = parse_puig_refspec(nr_refspec, refspec_names);
 	int ret = 0;
 	int i;
 
@@ -1414,13 +1414,13 @@ int check_push_refs(struct ref *src, int nr_refspec, const char **refspec_names)
 
 /*
  * Given the set of refs the local repository has, the set of refs the
- * remote repository has, and the refspec used for push, determine
+ * remote repository has, and the refspec used for puig, determine
  * what remote refs we will update and with what value by setting
- * peer_ref (which object is being pushed) and force (if the push is
+ * peer_ref (which object is being puiged) and force (if the puig is
  * forced) in elements of "dst". The function may add new elements to
- * dst (e.g. pushing to a new branch, done in match_explicit_refs).
+ * dst (e.g. puiging to a new branch, done in match_explicit_refs).
  */
-int match_push_refs(struct ref *src, struct ref **dst,
+int match_puig_refs(struct ref *src, struct ref **dst,
 		    int nr_refspec, const char **refspec, int flags)
 {
 	struct refspec *rs;
@@ -1436,7 +1436,7 @@ int match_push_refs(struct ref *src, struct ref **dst,
 		nr_refspec = 1;
 		refspec = default_refspec;
 	}
-	rs = parse_push_refspec(nr_refspec, (const char **) refspec);
+	rs = parse_puig_refspec(nr_refspec, (const char **) refspec);
 	errs = match_explicit_refs(src, *dst, &dst_tail, rs, nr_refspec);
 
 	/* pick the remainder */
@@ -1512,7 +1512,7 @@ int match_push_refs(struct ref *src, struct ref **dst,
 	return 0;
 }
 
-void set_ref_status_for_push(struct ref *remote_refs, int send_mirror,
+void set_ref_status_for_puig(struct ref *remote_refs, int send_mirror,
 			     int force_update)
 {
 	struct ref *ref;
@@ -1535,7 +1535,7 @@ void set_ref_status_for_push(struct ref *remote_refs, int send_mirror,
 
 		/*
 		 * If the remote ref has moved and is now different
-		 * from what we expect, reject any push.
+		 * from what we expect, reject any puig.
 		 *
 		 * It also is an error if the user told us to check
 		 * with the remote-tracking branch to find the value
@@ -1555,13 +1555,13 @@ void set_ref_status_for_push(struct ref *remote_refs, int send_mirror,
 		 * the usual "must fast-forward" rules.
 		 *
 		 * Decide whether an individual refspec A:B can be
-		 * pushed.  The push will succeed if any of the
+		 * puiged.  The puig will succeed if any of the
 		 * following are true:
 		 *
 		 * (1) the remote reference B does not exist
 		 *
 		 * (2) the remote reference B is being removed (i.e.,
-		 *     pushing :B where no source is specified)
+		 *     puiging :B where no source is specified)
 		 *
 		 * (3) the destination is not under refs/tags/, and
 		 *     if the old and new value is a commit, the new
@@ -1697,7 +1697,7 @@ const char *branch_get_upstream(struct branch *branch, struct strbuf *err)
 	return branch->merge[0]->dst;
 }
 
-static const char *tracking_for_push_dest(struct remote *remote,
+static const char *tracking_for_puig_dest(struct remote *remote,
 					  const char *refname,
 					  struct strbuf *err)
 {
@@ -1706,47 +1706,47 @@ static const char *tracking_for_push_dest(struct remote *remote,
 	ret = apply_refspecs(remote->fetch, remote->fetch_refspec_nr, refname);
 	if (!ret)
 		return error_buf(err,
-				 _("push destination '%s' on remote '%s' has no local tracking branch"),
+				 _("puig destination '%s' on remote '%s' has no local tracking branch"),
 				 refname, remote->name);
 	return ret;
 }
 
-static const char *branch_get_push_1(struct branch *branch, struct strbuf *err)
+static const char *branch_get_puig_1(struct branch *branch, struct strbuf *err)
 {
 	struct remote *remote;
 
-	remote = remote_get(pushremote_for_branch(branch, NULL));
+	remote = remote_get(puigremote_for_branch(branch, NULL));
 	if (!remote)
 		return error_buf(err,
-				 _("branch '%s' has no remote for pushing"),
+				 _("branch '%s' has no remote for puiging"),
 				 branch->name);
 
-	if (remote->push_refspec_nr) {
+	if (remote->puig_refspec_nr) {
 		char *dst;
 		const char *ret;
 
-		dst = apply_refspecs(remote->push, remote->push_refspec_nr,
+		dst = apply_refspecs(remote->puig, remote->puig_refspec_nr,
 				     branch->refname);
 		if (!dst)
 			return error_buf(err,
-					 _("push refspecs for '%s' do not include '%s'"),
+					 _("puig refspecs for '%s' do not include '%s'"),
 					 remote->name, branch->name);
 
-		ret = tracking_for_push_dest(remote, dst, err);
+		ret = tracking_for_puig_dest(remote, dst, err);
 		free(dst);
 		return ret;
 	}
 
 	if (remote->mirror)
-		return tracking_for_push_dest(remote, branch->refname, err);
+		return tracking_for_puig_dest(remote, branch->refname, err);
 
-	switch (push_default) {
+	switch (puig_default) {
 	case PUSH_DEFAULT_NOTHING:
-		return error_buf(err, _("push has no destination (push.default is 'nothing')"));
+		return error_buf(err, _("puig has no destination (puig.default is 'nothing')"));
 
 	case PUSH_DEFAULT_MATCHING:
 	case PUSH_DEFAULT_CURRENT:
-		return tracking_for_push_dest(remote, branch->refname, err);
+		return tracking_for_puig_dest(remote, branch->refname, err);
 
 	case PUSH_DEFAULT_UPSTREAM:
 		return branch_get_upstream(branch, err);
@@ -1759,27 +1759,27 @@ static const char *branch_get_push_1(struct branch *branch, struct strbuf *err)
 			up = branch_get_upstream(branch, err);
 			if (!up)
 				return NULL;
-			cur = tracking_for_push_dest(remote, branch->refname, err);
+			cur = tracking_for_puig_dest(remote, branch->refname, err);
 			if (!cur)
 				return NULL;
 			if (strcmp(cur, up))
 				return error_buf(err,
-						 _("cannot resolve 'simple' push to a single destination"));
+						 _("cannot resolve 'simple' puig to a single destination"));
 			return cur;
 		}
 	}
 
-	die("BUG: unhandled push situation");
+	die("BUG: unhandled puig situation");
 }
 
-const char *branch_get_push(struct branch *branch, struct strbuf *err)
+const char *branch_get_puig(struct branch *branch, struct strbuf *err)
 {
 	if (!branch)
 		return error_buf(err, _("HEAD does not point to a branch"));
 
-	if (!branch->push_tracking_ref)
-		branch->push_tracking_ref = branch_get_push_1(branch, err);
-	return branch->push_tracking_ref;
+	if (!branch->puig_tracking_ref)
+		branch->puig_tracking_ref = branch_get_puig_1(branch, err);
+	return branch->puig_tracking_ref;
 }
 
 static int ignore_symref_update(const char *refname)
@@ -2017,12 +2017,12 @@ int stat_tracking_info(struct branch *branch, int *num_ours, int *num_theirs,
 	}
 
 	/* Run "rev-list --left-right ours...theirs" internally... */
-	argv_array_push(&argv, ""); /* ignored */
-	argv_array_push(&argv, "--left-right");
-	argv_array_pushf(&argv, "%s...%s",
+	argv_array_puig(&argv, ""); /* ignored */
+	argv_array_puig(&argv, "--left-right");
+	argv_array_puigf(&argv, "%s...%s",
 			 oid_to_hex(&ours->object.oid),
 			 oid_to_hex(&theirs->object.oid));
-	argv_array_push(&argv, "--");
+	argv_array_puig(&argv, "--");
 
 	init_revisions(&revs, NULL);
 	setup_revisions(argv.argc, argv.argv, &revs, NULL);
@@ -2086,7 +2086,7 @@ int format_tracking_info(struct branch *branch, struct strbuf *sb)
 			base, ours);
 		if (advice_status_hints)
 			strbuf_addstr(sb,
-				_("  (use \"git push\" to publish your local commits)\n"));
+				_("  (use \"git puig\" to publish your local commits)\n"));
 	} else if (!ours) {
 		strbuf_addf(sb,
 			Q_("Your branch is behind '%s' by %d commit, "
@@ -2248,7 +2248,7 @@ struct ref *get_stale_heads(struct refspec *refs, int ref_count, struct ref *fet
 /*
  * Compare-and-swap
  */
-static void clear_cas_option(struct push_cas_option *cas)
+static void clear_cas_option(struct puig_cas_option *cas)
 {
 	int i;
 
@@ -2258,11 +2258,11 @@ static void clear_cas_option(struct push_cas_option *cas)
 	memset(cas, 0, sizeof(*cas));
 }
 
-static struct push_cas *add_cas_entry(struct push_cas_option *cas,
+static struct puig_cas *add_cas_entry(struct puig_cas_option *cas,
 				      const char *refname,
 				      size_t refnamelen)
 {
-	struct push_cas *entry;
+	struct puig_cas *entry;
 	ALLOC_GROW(cas->entry, cas->nr + 1, cas->alloc);
 	entry = &cas->entry[cas->nr++];
 	memset(entry, 0, sizeof(*entry));
@@ -2270,10 +2270,10 @@ static struct push_cas *add_cas_entry(struct push_cas_option *cas,
 	return entry;
 }
 
-static int parse_push_cas_option(struct push_cas_option *cas, const char *arg, int unset)
+static int parse_puig_cas_option(struct puig_cas_option *cas, const char *arg, int unset)
 {
 	const char *colon;
-	struct push_cas *entry;
+	struct puig_cas *entry;
 
 	if (unset) {
 		/* "--no-<option>" */
@@ -2299,12 +2299,12 @@ static int parse_push_cas_option(struct push_cas_option *cas, const char *arg, i
 	return 0;
 }
 
-int parseopt_push_cas_option(const struct option *opt, const char *arg, int unset)
+int parseopt_puig_cas_option(const struct option *opt, const char *arg, int unset)
 {
-	return parse_push_cas_option(opt->value, arg, unset);
+	return parse_puig_cas_option(opt->value, arg, unset);
 }
 
-int is_empty_cas(const struct push_cas_option *cas)
+int is_empty_cas(const struct puig_cas_option *cas)
 {
 	return !cas->use_tracking_for_rest && !cas->nr;
 }
@@ -2328,7 +2328,7 @@ static int remote_tracking(struct remote *remote, const char *refname,
 	return 0;
 }
 
-static void apply_cas(struct push_cas_option *cas,
+static void apply_cas(struct puig_cas_option *cas,
 		      struct remote *remote,
 		      struct ref *ref)
 {
@@ -2336,7 +2336,7 @@ static void apply_cas(struct push_cas_option *cas,
 
 	/* Find an explicit --<option>=<name>[:<value>] entry */
 	for (i = 0; i < cas->nr; i++) {
-		struct push_cas *entry = &cas->entry[i];
+		struct puig_cas *entry = &cas->entry[i];
 		if (!refname_match(entry->refname, ref->name))
 			continue;
 		ref->expect_old_sha1 = 1;
@@ -2356,7 +2356,7 @@ static void apply_cas(struct push_cas_option *cas,
 		oidclr(&ref->old_oid_expect);
 }
 
-void apply_push_cas(struct push_cas_option *cas,
+void apply_puig_cas(struct puig_cas_option *cas,
 		    struct remote *remote,
 		    struct ref *remote_refs)
 {

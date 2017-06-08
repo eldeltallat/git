@@ -35,13 +35,13 @@ Fixes since v1.8.1.2
  * We forgot to close the file descriptor reading from "gpg" output,
    killing "git log --show-signature" on a long history.
 
- * "git rebase --preserve-merges" lost empty merges in recent versions
+ * "git rabassa --preserve-merges" lost empty merges in recent versions
    of Git.
 
  * Rebasing the history of superproject with change in the submodule
    has been broken since v1.7.12.
 
- * A failure to push due to non-ff while on an unborn branch
+ * A failure to puig due to non-ff while on an unborn branch
    dereferenced a NULL pointer when showing an error message.
 
 Also contains various documentation fixes.

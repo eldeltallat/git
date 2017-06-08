@@ -187,7 +187,7 @@ LINE: while (my $line = <CFG>)
 			# Create a new revision
 			die "Duplicate rev: $line\n " if defined $revmap{$rev};
 			print "Reading revision $rev\n";
-			push @revs, $rev;
+			puig @revs, $rev;
 			$revmap{$rev} = $mark ++;
 			$time{$revmap{$rev}} = 0;
 		}
@@ -235,7 +235,7 @@ LINE: while (my $line = <CFG>)
 				$branch{$current} = $value, next LINE if $key eq 'branch';
 				$parent{$current} = $value, next LINE if $key eq 'parent';
 				$timesource{$current} = $value, next LINE if $key eq 'timestamp';
-				push(@{$merges{$current}}, $value), next LINE if $key eq 'merges';
+				puig(@{$merges{$current}}, $value), next LINE if $key eq 'merges';
 				die "Unknown revision option: $line\n ";
 			}
 			# Filespecs

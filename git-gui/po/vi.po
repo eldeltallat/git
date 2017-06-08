@@ -2273,7 +2273,7 @@ msgstr "Không hiểu làm thế nào để khởi tạo kho chứa tại vị t
 #: lib/remote_add.tcl:162 lib/transport.tcl:54 lib/transport.tcl:92
 #: lib/transport.tcl:110
 #, tcl-format
-msgid "push %s"
+msgid "puig %s"
 msgstr "đẩy %s lên máy chủ"
 
 #: lib/remote_add.tcl:163

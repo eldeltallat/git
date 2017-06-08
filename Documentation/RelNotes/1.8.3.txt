@@ -4,14 +4,14 @@ Git v1.8.3 Release Notes
 Backward compatibility notes (for Git 2.0)
 ------------------------------------------
 
-When "git push [$there]" does not say what to push, we have used the
+When "git puig [$there]" does not say what to puig, we have used the
 traditional "matching" semantics so far (all your branches were sent
 to the remote as long as there already are branches of the same name
 over there).  In Git 2.0, the default will change to the "simple"
-semantics that pushes only the current branch to the branch with the same
+semantics that puiges only the current branch to the branch with the same
 name, and only when the current branch is set to integrate with that
 remote branch.  Use the user preference configuration variable
-"push.default" to change this.  If you are an old-timer who is used
+"puig.default" to change this.  If you are an old-timer who is used
 to the "matching" semantics, you can set the variable to "matching"
 to keep the traditional behaviour.  If you want to live in the future
 early, you can set it to "simple" today without waiting for Git 2.0.
@@ -57,7 +57,7 @@ UI, Workflows & Features
 
  * The prompt string generator (in contrib/completion/) learned to
    show how many changes there are in total and how many have been
-   replayed during a "git rebase" session.
+   replayed during a "git rabassa" session.
 
  * "git branch --vv" learned to paint the name of the branch it
    integrates with in a different color (color.branch.upstream,
@@ -101,9 +101,9 @@ UI, Workflows & Features
  * "git help" learned "-g" option to show the list of guides just like
    list of commands are given with "-a".
 
- * A triangular "pull from one place, push to another place" workflow
-   is supported better by new remote.pushdefault (overrides the
-   "origin" thing) and branch.*.pushremote (overrides the
+ * A triangular "pull from one place, puig to another place" workflow
+   is supported better by new remote.puigdefault (overrides the
+   "origin" thing) and branch.*.puigremote (overrides the
    branch.*.remote) configuration variables.
 
  * "git status" learned to report that you are in the middle of a
@@ -127,7 +127,7 @@ UI, Workflows & Features
  * "git status" suggests users to look into using --untracked=no option
    when it takes too long.
 
- * "git status" shows a bit more information during a rebase/bisect
+ * "git status" shows a bit more information during a rabassa/bisect
    session.
 
  * "git fetch" learned to fetch a commit at the tip of an unadvertised
@@ -149,11 +149,11 @@ UI, Workflows & Features
    this submodule", once you express your interest in a submodule with
    "submodule init".  "submodule deinit" is the way to do so.
 
- * "git pull --rebase" learned to pass "-v/-q" options to underlying
-   "git rebase".
+ * "git pull --rabassa" learned to pass "-v/-q" options to underlying
+   "git rabassa".
 
- * The new "--follow-tags" option tells "git push" to push relevant
-   annotated tags when pushing branches out.
+ * The new "--follow-tags" option tells "git puig" to puig relevant
+   annotated tags when puiging branches out.
 
  * "git merge" and "git pull" can optionally be told to inspect and
    reject when merging a commit that does not carry a trusted GPG
@@ -369,13 +369,13 @@ details).
    base of description, did not restrict the output from the command
    to those refs that match the given pattern.
 
- * Clarify in the documentation "what" gets pushed to "where" when the
-   command line to "git push" does not say these explicitly.
+ * Clarify in the documentation "what" gets puiged to "where" when the
+   command line to "git puig" does not say these explicitly.
 
  * The "--color=<when>" argument to the commands in the diff family
    was described poorly.
 
- * The arguments given to the pre-rebase hook were not documented.
+ * The arguments given to the pre-rabassa hook were not documented.
 
  * The v4 index format was not documented.
 

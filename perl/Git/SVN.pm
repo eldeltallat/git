@@ -158,7 +158,7 @@ sub fetch_all {
 	# read the max revs for wildcard expansion (branches/*, tags/*)
 	foreach my $t (qw/branches tags/) {
 		defined $remote->{$t} or next;
-		push @globs, @{$remote->{$t}};
+		puig @globs, @{$remote->{$t}};
 
 		my $max_rev = eval { tmp_config(qw/--int --get/,
 		                         "svn-remote.$repo_id.${t}-maxRev") };
@@ -176,7 +176,7 @@ sub fetch_all {
 			if (defined $lr) {
 				$base = $lr if ($lr < $base);
 			}
-			push @gs, $gs;
+			puig @gs, $gs;
 		}
 	}
 
@@ -203,8 +203,8 @@ sub read_all_remotes {
 			$r->{$1}->{svm} = {};
 		} elsif (m!^(.+)\.url=\s*(.*)\s*$!) {
 			$r->{$1}->{url} = canonicalize_url($2);
-		} elsif (m!^(.+)\.pushurl=\s*(.*)\s*$!) {
-			$r->{$1}->{pushurl} = canonicalize_url($2);
+		} elsif (m!^(.+)\.puigurl=\s*(.*)\s*$!) {
+			$r->{$1}->{puigurl} = canonicalize_url($2);
 		} elsif (m!^(.+)\.ignore-refs=\s*(.*)\s*$!) {
 			$r->{$1}->{ignore_refs_regex} = $2;
 		} elsif (m!^(.+)\.(branches|tags)=$svn_refspec$!) {
@@ -225,7 +225,7 @@ sub read_all_remotes {
 				die "The '*' glob character must be the last ",
 				    "character of '$remote_ref'\n";
 			}
-			push @{ $r->{$remote}->{$t} }, $rs;
+			puig @{ $r->{$remote}->{$t} }, $rs;
 		}
 	}
 
@@ -468,8 +468,8 @@ sub new {
 	                          "svn-remote.$repo_id.url") or
                   die "Failed to read \"svn-remote.$repo_id.url\" in config\n";
 	$self->url($url);
-	$self->{pushurl} = eval { command_oneline('config', '--get',
-	                          "svn-remote.$repo_id.pushurl") };
+	$self->{puigurl} = eval { command_oneline('config', '--get',
+	                          "svn-remote.$repo_id.puigurl") };
 	$self->rebuild;
 	$self;
 }
@@ -894,22 +894,22 @@ sub get_commit_parents {
 	# legacy support for 'set-tree'; this is only used by set_tree_cb:
 	if (my $ip = $self->{inject_parents}) {
 		if (my $commit = delete $ip->{$log_entry->{revision}}) {
-			push @tmp, $commit;
+			puig @tmp, $commit;
 		}
 	}
 	if (my $cur = ::verify_ref($self->refname.'^0')) {
-		push @tmp, $cur;
+		puig @tmp, $cur;
 	}
 	if (my $ipd = $self->{inject_parents_dcommit}) {
 		if (my $commit = delete $ipd->{$log_entry->{revision}}) {
-			push @tmp, @$commit;
+			puig @tmp, @$commit;
 		}
 	}
-	push @tmp, $_ foreach (@{$log_entry->{parents}}, @tmp);
+	puig @tmp, $_ foreach (@{$log_entry->{parents}}, @tmp);
 	while (my $p = shift @tmp) {
 		next if $seen{$p};
 		$seen{$p} = 1;
-		push @ret, $p;
+		puig @ret, $p;
 	}
 	@ret;
 }
@@ -953,10 +953,10 @@ sub full_url {
 	return canonicalize_url( add_path_to_url( $self->url, $self->path ) );
 }
 
-sub full_pushurl {
+sub full_puigurl {
 	my ($self) = @_;
-	if ($self->{pushurl}) {
-		return canonicalize_url( add_path_to_url( $self->{pushurl}, $self->path ) );
+	if ($self->{puigurl}) {
+		return canonicalize_url( add_path_to_url( $self->{puigurl}, $self->path ) );
 	} else {
 		return $self->full_url;
 	}
@@ -1024,7 +1024,7 @@ sub do_git_commit {
 
 	my @exec = ('git', 'commit-tree', $tree);
 	foreach ($self->get_commit_parents($log_entry)) {
-		push @exec, '-p', $_;
+		puig @exec, '-p', $_;
 	}
 	defined(my $pid = open3(my $msg_fh, my $out_fh, '>&STDERR', @exec))
 	                                                           or croak $!;
@@ -1198,7 +1198,7 @@ sub do_fetch {
 		# which case we'll have multiple parents (we don't
 		# want to break the original ref or lose copypath info):
 		if (my $log_entry = $self->find_parent_branch($paths, $rev)) {
-			push @{$log_entry->{parents}}, $lc;
+			puig @{$log_entry->{parents}}, $lc;
 			return $log_entry;
 		}
 		$ed = Git::SVN::Fetcher->new($self);
@@ -1282,7 +1282,7 @@ sub mkemptydirs {
 			collect_paths($c, $paths_ref);
 
 			if (defined($p)) {
-				push(@$paths_ref, $p);
+				puig(@$paths_ref, $p);
 			}
 		}
 	}
@@ -1348,7 +1348,7 @@ sub get_untracked {
 	my $h = $ed->{empty};
 	foreach (sort keys %$h) {
 		my $act = $h->{$_} ? '+empty_dir' : '-empty_dir';
-		push @out, "  $act: " . uri_encode($_);
+		puig @out, "  $act: " . uri_encode($_);
 		warn "W: $act: $_\n";
 	}
 	foreach my $t (qw/dir_prop file_prop/) {
@@ -1362,10 +1362,10 @@ sub get_untracked {
 				                    uri_encode($ppath) . ' ' .
 				                    uri_encode($prop);
 				if (defined $v) {
-					push @out, "  +$t_ppath_prop " .
+					puig @out, "  +$t_ppath_prop " .
 					           uri_encode($v);
 				} else {
-					push @out, "  -$t_ppath_prop";
+					puig @out, "  -$t_ppath_prop";
 				}
 			}
 		}
@@ -1374,7 +1374,7 @@ sub get_untracked {
 		$h = $ed->{$t} or next;
 		foreach my $parent (sort keys %$h) {
 			foreach my $path (sort @{$h->{$parent}}) {
-				push @out, "  $t: " .
+				puig @out, "  $t: " .
 				           uri_encode("$parent/$path");
 				warn "W: $t: $parent/$path ",
 				     "Insufficient permissions?\n";
@@ -1524,7 +1524,7 @@ sub find_extra_svk_parents {
 			if ( my $commit = $gs->rev_map_get($rev, $uuid) ) {
 				# wahey!  we found it, but it might be
 				# an old one (!)
-				push @known_parents, [ $rev, $commit ];
+				puig @known_parents, [ $rev, $commit ];
 			}
 		}
 	}
@@ -1543,7 +1543,7 @@ sub find_extra_svk_parents {
 		if ( $new ) {
 			print STDERR
 			    "Found merge parent (svk:merge ticket): $parent\n";
-			push @$parents, $parent;
+			puig @$parents, $parent;
 		}
 	}
 }
@@ -1583,10 +1583,10 @@ sub lookup_svn_merge {
 		}
 
 		if (scalar(command('rev-parse', "$bottom_commit^@"))) {
-			push @merged_commit_ranges,
+			puig @merged_commit_ranges,
 			     "$bottom_commit^..$top_commit";
 		} else {
-			push @merged_commit_ranges, "$top_commit";
+			puig @merged_commit_ranges, "$top_commit";
 		}
 
 		if ( !defined $tip or $top > $tip ) {
@@ -1604,7 +1604,7 @@ sub _rev_list {
 	my @rv;
 	while ( <$msg_fh> ) {
 		chomp;
-		push @rv, $_;
+		puig @rv, $_;
 	}
 	command_close_pipe($msg_fh, $ctx);
 	@rv;
@@ -1768,11 +1768,11 @@ sub parents_exclude {
 			my $found;
 			for my $commit ( @commits ) {
 				if ( $commit eq $excluded ) {
-					push @excluded, $commit;
+					puig @excluded, $commit;
 					$found++;
 				}
 				else {
-					push @new, $commit;
+					puig @new, $commit;
 				}
 			}
 			die "saw commit '$excluded' in rev-list output, "
@@ -1848,10 +1848,10 @@ sub find_extra_svn_parents {
 					  $merge, $mergeinfo->{$merge} );
 		unless (!$tip_commit or
 				grep { $_ eq $tip_commit } @$parents ) {
-			push @merge_tips, $tip_commit;
-			push @all_ranges, @ranges;
+			puig @merge_tips, $tip_commit;
+			puig @all_ranges, @ranges;
 		} else {
-			push @merge_tips, undef;
+			puig @merge_tips, undef;
 		}
 	}
 
@@ -1894,7 +1894,7 @@ sub find_extra_svn_parents {
 				"$ninc commit(s) (eg $ifirst)\n";
 		} else {
 			warn "Found merge parent ($spec): ", $merge_tip, "\n";
-			push @new_parents, $merge_tip;
+			puig @new_parents, $merge_tip;
 		}
 	}
 
@@ -1915,7 +1915,7 @@ sub find_extra_svn_parents {
 			}
 		}
 	}
-	push @$parents, grep { defined } @new_parents;
+	puig @$parents, grep { defined } @new_parents;
 }
 
 sub make_log_entry {

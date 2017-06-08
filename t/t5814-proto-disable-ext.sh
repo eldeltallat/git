@@ -10,7 +10,7 @@ test_expect_success 'setup repository to clone' '
 	test_commit one &&
 	mkdir remote &&
 	git init --bare remote/repo.git &&
-	git push remote/repo.git HEAD
+	git puig remote/repo.git HEAD
 '
 
 test_proto "remote-helper" ext "ext::fake-remote %S repo.git"

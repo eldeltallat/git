@@ -29,11 +29,11 @@ Compatibility Notes
    while and were deprecated in mid 2008 (v1.6.0).  When you give these
    options to "git am", it will now warn and ask you not to use them.
 
- * When you do not tell which branches and tags to push to the "git
-   push" command in any way, the command used "matching refs" rule to
+ * When you do not tell which branches and tags to puig to the "git
+   puig" command in any way, the command used "matching refs" rule to
    update remote branches and tags with branches and tags with the
    same name you locally have.  In future versions of Git, this will
-   change to push out only your current branch according to either the
+   change to puig out only your current branch according to either the
    "upstream" or the "current" rule.  Although "upstream" may be more
    powerful once the user understands Git better, the semantics
    "current" gives is simpler and easier to understand for beginners
@@ -117,7 +117,7 @@ UI, Workflows & Features
    what to merge to "git pull" and "git merge" has been updated to
    be more concise and easier to understand.
 
- * "git push" learned the "--prune" option, similar to "git fetch".
+ * "git puig" learned the "--prune" option, similar to "git fetch".
 
  * The whole directory that houses a top-level superproject managed by
    "git submodule" can be moved to another place.

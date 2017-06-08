@@ -533,7 +533,7 @@ static struct bitmap *find_objects(struct rev_info *revs,
 	 * global bitmap.
 	 *
 	 * If we cannot find them in the existing global bitmap, we'll need
-	 * to push them to an actual walk and run it until we can confirm
+	 * to puig them to an actual walk and run it until we can confirm
 	 * they are reachable
 	 */
 	while (roots) {

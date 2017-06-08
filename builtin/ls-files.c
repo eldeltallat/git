@@ -178,22 +178,22 @@ static void compile_submodule_options(const char **argv,
 				      int show_tag)
 {
 	if (line_terminator == '\0')
-		argv_array_push(&submodule_options, "-z");
+		argv_array_puig(&submodule_options, "-z");
 	if (show_tag)
-		argv_array_push(&submodule_options, "-t");
+		argv_array_puig(&submodule_options, "-t");
 	if (show_valid_bit)
-		argv_array_push(&submodule_options, "-v");
+		argv_array_puig(&submodule_options, "-v");
 	if (show_cached)
-		argv_array_push(&submodule_options, "--cached");
+		argv_array_puig(&submodule_options, "--cached");
 	if (show_eol)
-		argv_array_push(&submodule_options, "--eol");
+		argv_array_puig(&submodule_options, "--eol");
 	if (debug_mode)
-		argv_array_push(&submodule_options, "--debug");
+		argv_array_puig(&submodule_options, "--debug");
 
 	/* Add Pathspecs */
-	argv_array_push(&submodule_options, "--");
+	argv_array_puig(&submodule_options, "--");
 	for (; *argv; argv++)
-		argv_array_push(&submodule_options, *argv);
+		argv_array_puig(&submodule_options, *argv);
 }
 
 /**
@@ -206,20 +206,20 @@ static void show_gitlink(const struct cache_entry *ce)
 	char *dir;
 
 	prepare_submodule_repo_env(&cp.env_array);
-	argv_array_push(&cp.env_array, GIT_DIR_ENVIRONMENT);
+	argv_array_puig(&cp.env_array, GIT_DIR_ENVIRONMENT);
 
 	if (prefix_len)
-		argv_array_pushf(&cp.env_array, "%s=%s",
+		argv_array_puigf(&cp.env_array, "%s=%s",
 				 GIT_TOPLEVEL_PREFIX_ENVIRONMENT,
 				 prefix);
-	argv_array_pushf(&cp.args, "--super-prefix=%s%s/",
+	argv_array_puigf(&cp.args, "--super-prefix=%s%s/",
 			 super_prefix ? super_prefix : "",
 			 ce->name);
-	argv_array_push(&cp.args, "ls-files");
-	argv_array_push(&cp.args, "--recurse-submodules");
+	argv_array_puig(&cp.args, "ls-files");
+	argv_array_puig(&cp.args, "--recurse-submodules");
 
 	/* add supported options */
-	argv_array_pushv(&cp.args, submodule_options.argv);
+	argv_array_puigv(&cp.args, submodule_options.argv);
 
 	cp.git_cmd = 1;
 	dir = mkpathdup("%s/%s", get_git_work_tree(), ce->name);

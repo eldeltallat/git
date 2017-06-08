@@ -108,7 +108,7 @@ $sha1_short = qr/[a-f\d]{4,40}/;
 my ($_stdin, $_help, $_edit,
 	$_message, $_file, $_branch_dest,
 	$_template, $_shared,
-	$_version, $_fetch_all, $_no_rebase, $_fetch_parent,
+	$_version, $_fetch_all, $_no_rabassa, $_fetch_parent,
 	$_before, $_after,
 	$_merge, $_strategy, $_preserve_merges, $_dry_run, $_parents, $_local,
 	$_prefix, $_no_checkout, $_url, $_verbose,
@@ -192,7 +192,7 @@ my %cmd = (
 			  'commit-url=s' => \$_commit_url,
 			  'set-svn-props=s' => \$_set_svn_props,
 			  'revision|r=i' => \$_revision,
-			  'no-rebase' => \$_no_rebase,
+			  'no-rabassa' => \$_no_rabassa,
 			  'mergeinfo=s' => \$_merge_info,
 			  'interactive|i' => \$_interactive,
 			%cmt_opts, %fc_opts } ],
@@ -263,7 +263,7 @@ my %cmd = (
 	                "Translate between SVN revision numbers and tree-ish",
 			{ 'B|before' => \$_before,
 			  'A|after' => \$_after } ],
-	'rebase' => [ \&cmd_rebase, "Fetch and rebase your working directory",
+	'rabassa' => [ \&cmd_rabassa, "Fetch and rabassa your working directory",
 			{ 'merge|m|M' => \$_merge,
 			  'verbose|v' => \$_verbose,
 			  'strategy|s=s' => \$_strategy,
@@ -462,12 +462,12 @@ sub ask {
 sub do_git_init_db {
 	unless (-d $ENV{GIT_DIR}) {
 		my @init_db = ('init');
-		push @init_db, "--template=$_template" if defined $_template;
+		puig @init_db, "--template=$_template" if defined $_template;
 		if (defined $_shared) {
 			if ($_shared =~ /[a-z]/) {
-				push @init_db, "--shared=$_shared";
+				puig @init_db, "--shared=$_shared";
 			} else {
-				push @init_db, "--shared";
+				puig @init_db, "--shared";
 			}
 		}
 		command_noisy(@init_db);
@@ -589,9 +589,9 @@ sub cmd_set_tree {
 	foreach my $c (@commits) {
 		my @tmp = command('rev-parse',$c);
 		if (scalar @tmp == 1) {
-			push @revs, $tmp[0];
+			puig @revs, $tmp[0];
 		} elsif (scalar @tmp > 1) {
-			push @revs, reverse(command('rev-list',@tmp));
+			puig @revs, reverse(command('rev-list',@tmp));
 		} else {
 			fatal "Failed to rev-parse $c";
 		}
@@ -626,7 +626,7 @@ sub combine_ranges {
 	my @arr = split(/,/, $in);
 	for my $element (@arr) {
 		my ($start, $end) = split_merge_info_range($element);
-		push @fnums, $start;
+		puig @fnums, $start;
 	}
 
 	my @sorted = @arr [ sort {
@@ -651,9 +651,9 @@ sub combine_ranges {
 			next;
 		}
 		if ($first == $last) {
-			push @return, "$first";
+			puig @return, "$first";
 		} else {
-			push @return, "$first-$last";
+			puig @return, "$first-$last";
 		}
 		$first = $start;
 		$last = $end;
@@ -661,9 +661,9 @@ sub combine_ranges {
 
 	if ($first != -1) {
 		if ($first == $last) {
-			push @return, "$first";
+			puig @return, "$first";
 		} else {
-			push @return, "$first-$last";
+			puig @return, "$first-$last";
 		}
 	}
 
@@ -717,7 +717,7 @@ sub populate_merge_info {
 		my $all_parents_ok = 1;
 		my $aggregate_mergeinfo = '';
 		my $rooturl = $gs->repos_root;
-		my ($target_branch) = $gs->full_pushurl =~ /^\Q$rooturl\E(.*)/;
+		my ($target_branch) = $gs->full_puigurl =~ /^\Q$rooturl\E(.*)/;
 
 		if (defined($rewritten_parent)) {
 			# Replace first parent with newly-rewritten version
@@ -758,7 +758,7 @@ sub populate_merge_info {
 					   $parent, qw/--not/);
 			foreach my $par (@parents) {
 				unless ($par eq $parent) {
-					push @cmd, $par;
+					puig @cmd, $par;
 				}
 			}
 			my @revsin = ();
@@ -781,7 +781,7 @@ sub populate_merge_info {
 						 ."svn:mergeinfo population to function "
 						 ."properly";
 				}
-				push @revsin, $csvnrev;
+				puig @revsin, $csvnrev;
 			}
 			command_close_pipe($revlist, $ctx);
 
@@ -804,7 +804,7 @@ sub populate_merge_info {
 	return undef;
 }
 
-sub dcommit_rebase {
+sub dcommit_rabassa {
 	my ($is_last, $current, $fetched_ref, $svn_error) = @_;
 	my @diff;
 
@@ -812,14 +812,14 @@ sub dcommit_rebase {
 		print STDERR "\nERROR from SVN:\n",
 				$svn_error->expanded_message, "\n";
 	}
-	unless ($_no_rebase) {
-		# we always want to rebase against the current HEAD,
+	unless ($_no_rabassa) {
+		# we always want to rabassa against the current HEAD,
 		# not any head that was passed to us
 		@diff = command('diff-tree', $current,
 	                   $fetched_ref, '--');
 		my @finish;
 		if (@diff) {
-			@finish = rebase_cmd();
+			@finish = rabassa_cmd();
 			print STDERR "W: $current and ", $fetched_ref,
 			             " differ, using @finish:\n",
 			             join("\n", @diff), "\n";
@@ -834,7 +834,7 @@ sub dcommit_rebase {
 	}
 	if ($svn_error) {
 		die "ERROR: Not all changes have been committed into SVN"
-			.($_no_rebase ? ".\n" : ", however the committed\n"
+			.($_no_rabassa ? ".\n" : ", however the committed\n"
 			."ones (if any) seem to be successfully integrated "
 			."into the working tree.\n")
 			."Please see the above messages for details.\n";
@@ -876,7 +876,7 @@ sub cmd_dcommit {
 		$url = eval { command_oneline('config', '--get',
 			      "svn-remote.$gs->{repo_id}.commiturl") };
 		if (!$url) {
-			$url = $gs->full_pushurl
+			$url = $gs->full_puigurl
 		}
 	}
 
@@ -885,11 +885,11 @@ sub cmd_dcommit {
 		print "Committing to $url ...\n";
 	}
 	my ($linear_refs, $parents) = linearize_history($gs, \@refs);
-	if ($_no_rebase && scalar(@$linear_refs) > 1) {
+	if ($_no_rabassa && scalar(@$linear_refs) > 1) {
 		warn "Attempting to commit more than one change while ",
-		     "--no-rebase is enabled.\n",
+		     "--no-rabassa is enabled.\n",
 		     "If these changes depend on each other, re-running ",
-		     "without --no-rebase may be required."
+		     "without --no-rabassa may be required."
 	}
 
 	if (defined $_interactive){
@@ -914,17 +914,17 @@ sub cmd_dcommit {
 
 	my $expect_url = $url;
 
-	my $push_merge_info = eval {
-		command_oneline(qw/config --get svn.pushmergeinfo/)
+	my $puig_merge_info = eval {
+		command_oneline(qw/config --get svn.puigmergeinfo/)
 		};
-	if (not defined($push_merge_info)
-			or $push_merge_info eq "false"
-			or $push_merge_info eq "no"
-			or $push_merge_info eq "never") {
-		$push_merge_info = 0;
+	if (not defined($puig_merge_info)
+			or $puig_merge_info eq "false"
+			or $puig_merge_info eq "no"
+			or $puig_merge_info eq "never") {
+		$puig_merge_info = 0;
 	}
 
-	unless (defined($_merge_info) || ! $push_merge_info) {
+	unless (defined($_merge_info) || ! $puig_merge_info) {
 		# Preflight check of changes to ensure no issues with mergeinfo
 		# This includes check for uncommitted-to-SVN parents
 		# (other than the first parent, which we will handle),
@@ -946,7 +946,7 @@ sub cmd_dcommit {
 						fatal "$parent is merged into revision $d, "
 							 ."but does not have git-svn metadata. "
 							 ."Either dcommit the branch or use a "
-							 ."local cherry-pick, FF merge, or rebase "
+							 ."local cherry-pick, FF merge, or rabassa "
 							 ."instead of an explicit merge commit.";
 					}
 
@@ -988,7 +988,7 @@ sub cmd_dcommit {
 		} else {
 			my $cmt_rev;
 
-			unless (defined($_merge_info) || ! $push_merge_info) {
+			unless (defined($_merge_info) || ! $puig_merge_info) {
 				$_merge_info = populate_merge_info($d, $gs,
 				                             $uuid,
 				                             $linear_refs,
@@ -1013,7 +1013,7 @@ sub cmd_dcommit {
 			my $err_handler = $SVN::Error::handler;
 			$SVN::Error::handler = sub {
 				my $err = shift;
-				dcommit_rebase(1, $current_head, $gs->refname,
+				dcommit_rabassa(1, $current_head, $gs->refname,
 					$err);
 			};
 
@@ -1026,9 +1026,9 @@ sub cmd_dcommit {
 			$_fetch_all ? $gs->fetch_all : $gs->fetch;
 			$SVN::Error::handler = $err_handler;
 			$last_rev = $cmt_rev;
-			next if $_no_rebase;
+			next if $_no_rabassa;
 
-			my @diff = dcommit_rebase(@$linear_refs == 0, $d,
+			my @diff = dcommit_rabassa(@$linear_refs == 0, $d,
 						$gs->refname, undef);
 
 			$rewritten_parent = command_oneline(qw/rev-parse/,
@@ -1051,7 +1051,7 @@ sub cmd_dcommit {
 					  join("\n", @$linear_refs_), "\n",
 					  'If you are attempting to commit ',
 					  "merges, try running:\n\t",
-					  'git rebase --interactive',
+					  'git rabassa --interactive',
 					  '--preserve-merges ',
 					  $gs->refname,
 					  "\nBefore dcommitting";
@@ -1063,12 +1063,12 @@ sub cmd_dcommit {
 						  " $url_\n";
 					} else {
 						fatal
-						  "URL mismatch after rebase:",
+						  "URL mismatch after rabassa:",
 						  " $url_ != $expect_url";
 					}
 				}
 				if ($uuid_ ne $uuid) {
-					fatal "uuid mismatch after rebase: ",
+					fatal "uuid mismatch after rabassa: ",
 					      "$uuid_ != $uuid";
 				}
 				# remap parents
@@ -1077,7 +1077,7 @@ sub cmd_dcommit {
 					my $new = $linear_refs_->[$i] or next;
 					$p{$new} =
 						$parents->{$linear_refs->[$i]};
-					push @l, $new;
+					puig @l, $new;
 				}
 				$parents = \%p;
 				$linear_refs = \@l;
@@ -1113,7 +1113,7 @@ sub cmd_branch {
 	$head ||= 'HEAD';
 
 	my (undef, $rev, undef, $gs) = working_head_info($head);
-	my $src = $gs->full_pushurl;
+	my $src = $gs->full_puigurl;
 
 	my $remote = Git::SVN::read_all_remotes()->{$gs->{repo_id}};
 	my $allglobs = $remote->{ $_tag ? 'tags' : 'branches' };
@@ -1163,7 +1163,7 @@ sub cmd_branch {
 		$url = eval { command_oneline('config', '--get',
 			"svn-remote.$gs->{repo_id}.commiturl") };
 		if (!$url) {
-			$url = $remote->{pushurl} || $remote->{url};
+			$url = $remote->{puigurl} || $remote->{url};
 		}
 	}
 	my $dst = join '/', $url, $lft, $branch_name, ($rgt || ());
@@ -1250,7 +1250,7 @@ sub auto_create_empty_directories {
 	return !($var && $var eq 'false');
 }
 
-sub cmd_rebase {
+sub cmd_rabassa {
 	command_noisy(qw/update-index --refresh/);
 	my ($url, $rev, $uuid, $gs) = working_head_info('HEAD');
 	unless ($gs) {
@@ -1263,16 +1263,16 @@ sub cmd_rebase {
 		return;
 	}
 	if (command(qw/diff-index HEAD --/)) {
-		print STDERR "Cannot rebase with uncommitted changes:\n";
+		print STDERR "Cannot rabassa with uncommitted changes:\n";
 		command_noisy('status');
 		exit 1;
 	}
 	unless ($_local) {
-		# rebase will checkout for us, so no need to do it explicitly
+		# rabassa will checkout for us, so no need to do it explicitly
 		$_no_checkout = 'true';
 		$_fetch_all ? $gs->fetch_all : $gs->fetch;
 	}
-	command_noisy(rebase_cmd(), $gs->refname);
+	command_noisy(rabassa_cmd(), $gs->refname);
 	if (auto_create_empty_directories($gs)) {
 		$gs->mkemptydirs;
 	}
@@ -1401,7 +1401,7 @@ sub cmd_propset {
 	my $cur_props = Git::SVN::Editor::check_attr( "svn-properties", $path );
 	my @new_props;
 	if (!$cur_props || $cur_props eq "unset" || $cur_props eq "" || $cur_props eq "set") {
-		push @new_props, "$propname=$propval";
+		puig @new_props, "$propname=$propval";
 	} else {
 		# TODO: handle combining properties better
 		my @props = split(/;/, $cur_props);
@@ -1414,11 +1414,11 @@ sub cmd_propset {
 					$v = $propval;
 					$replaced_prop = 1;
 				}
-				push @new_props, "$n=$v";
+				puig @new_props, "$n=$v";
 			}
 		}
 		if (!$replaced_prop) {
-			push @new_props, "$propname=$propval";
+			puig @new_props, "$propname=$propval";
 		}
 	}
 	my $attrfile = "$dn/.gitattributes";
@@ -1553,8 +1553,8 @@ sub cmd_info {
 		my @tdirs = File::Spec->splitdir($tdirs);
 		pop @dirs if $dirs[-1] eq '';
 		pop @tdirs if $tdirs[-1] eq '';
-		push @dirs, $file;
-		push @tdirs, $tfile;
+		puig @dirs, $file;
+		puig @tdirs, $tfile;
 		while (@tdirs && @dirs && $tdirs[0] eq $dirs[0]) {
 			shift @dirs;
 			shift @tdirs;
@@ -1705,12 +1705,12 @@ sub cmd_gc {
 
 ########################### utility functions #########################
 
-sub rebase_cmd {
-	my @cmd = qw/rebase/;
-	push @cmd, '-v' if $_verbose;
-	push @cmd, qw/--merge/ if $_merge;
-	push @cmd, "--strategy=$_strategy" if $_strategy;
-	push @cmd, "--preserve-merges" if $_preserve_merges;
+sub rabassa_cmd {
+	my @cmd = qw/rabassa/;
+	puig @cmd, '-v' if $_verbose;
+	puig @cmd, qw/--merge/ if $_merge;
+	puig @cmd, "--strategy=$_strategy" if $_strategy;
+	puig @cmd, "--preserve-merges" if $_preserve_merges;
 	@cmd;
 }
 
@@ -1949,7 +1949,7 @@ sub read_git_config {
 		# if we have mixedCase and a long option-only, then
 		# it's a config-only variable that we don't need for
 		# the command-line.
-		push @config_only, $o if ($o =~ /[A-Z]/ && $o =~ /^[a-z]+$/i);
+		puig @config_only, $o if ($o =~ /[A-Z]/ && $o =~ /^[a-z]+$/i);
 		my $v = $opts->{$o};
 		my ($key) = ($o =~ /^([a-zA-Z\-]+)/);
 		$key =~ s/-//g;

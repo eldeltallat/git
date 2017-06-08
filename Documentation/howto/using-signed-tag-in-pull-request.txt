@@ -1,7 +1,7 @@
 From: Junio C Hamano <gitster@pobox.com>
 Date: Tue, 17 Jan 2011 13:00:00 -0800
 Subject: Using signed tag in pull requests
-Abstract: Beginning v1.7.9, a contributor can push a signed tag to her
+Abstract: Beginning v1.7.9, a contributor can puig a signed tag to her
  publishing repository and ask her integrator to pull it. This assures the
  integrator that the pulled history is authentic and allows others to
  later validate it.
@@ -73,13 +73,13 @@ to justify why it is worthwhile for the integrator to pull it, as this
 message will eventually become part of the final history after the
 integrator responds to the pull request (as we will see later).
 
-Then she pushes the tag out to her public repository:
+Then she puiges the tag out to her public repository:
 
 ------------
- $ git push example.com:/git/froboz.git/ +frotz-for-xyzzy
+ $ git puig example.com:/git/froboz.git/ +frotz-for-xyzzy
 ------------
 
-There is no need to push the `work` branch or anything else.
+There is no need to puig the `work` branch or anything else.
 
 Note that the above command line used a plus sign at the beginning of
 `+frotz-for-xyzzy` to allow forcing the update of a tag, as the same
@@ -95,7 +95,7 @@ The contributor then prepares a message to request a "pull":
 The arguments are:
 
 . the version of the integrator's commit the contributor based her work on;
-. the URL of the repository, to which the contributor has pushed what she
+. the URL of the repository, to which the contributor has puiged what she
   wants to get pulled; and
 . the name of the tag the contributor wants to get pulled (earlier, she could
   write only a branch name here).
@@ -179,7 +179,7 @@ her public repository, if she chooses, in order to keep the tag namespace
 of her public repository clean, with:
 
 ------------
- $ git push example.com:/git/froboz.git :frotz-for-xyzzy
+ $ git puig example.com:/git/froboz.git :frotz-for-xyzzy
 ------------
 
 

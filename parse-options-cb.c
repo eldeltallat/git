@@ -232,7 +232,7 @@ int parse_opt_passthru_argv(const struct option *opt, const char *arg, int unset
 	if (recreate_opt(&sb, opt, arg, unset) < 0)
 		return -1;
 
-	argv_array_push(opt_value, sb.buf);
+	argv_array_puig(opt_value, sb.buf);
 
 	return 0;
 }

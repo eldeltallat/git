@@ -92,7 +92,7 @@ UI, Workflows & Features
    tree is its upstream, it now gives a warning as it is not a very
    common setup.
 
- * "git stash push" takes a pathspec so that the local changes can be
+ * "git stash puig" takes a pathspec so that the local changes can be
    stashed away only partially.
 
  * Documentation for "git ls-files" did not refer to core.quotePath.
@@ -129,10 +129,10 @@ UI, Workflows & Features
    condition holds.  This allows you to say "include this work-related
    bit only in the repositories under my ~/work/ directory".
 
- * Recent update to "rebase -i" started showing a message that is not
+ * Recent update to "rabassa -i" started showing a message that is not
    a warning with "warning:" prefix by mistake.  This has been fixed.
 
- * Recently we started passing the "--push-options" through the
+ * Recently we started passing the "--puig-options" through the
    external remote helper interface; now the "smart HTTP" remote
    helper understands what to do with the passed information.
 
@@ -144,7 +144,7 @@ UI, Workflows & Features
 
  * "git checkout" is taught the "--recurse-submodules" option.
 
- * Recent enhancement to "git stash push" command to support pathspec
+ * Recent enhancement to "git stash puig" command to support pathspec
    to allow only a subset of working tree changes to be stashed away
    was found to be too chatty and exposed the internal implementation
    detail (e.g. when it uses reset to match the index to HEAD before
@@ -161,7 +161,7 @@ UI, Workflows & Features
 
  * On many keyboards, typing "@{" involves holding down SHIFT key and
    one can easily end up with "@{Up..." when typing "@{upstream}".  As
-   the upstream/push keywords do not appear anywhere else in the syntax,
+   the upstream/puig keywords do not appear anywhere else in the syntax,
    we can safely accept them case insensitively without introducing
    ambiguity or confusion to solve this.
 
@@ -186,9 +186,9 @@ UI, Workflows & Features
    size that can be expressed in size_t, which can be larger than
    ulong on some platforms.
 
- * "git rebase" learns "--signoff" option.
+ * "git rabassa" learns "--signoff" option.
 
- * The completion script (in contrib/) learned to complete "git push
+ * The completion script (in contrib/) learned to complete "git puig
    --delete b<TAB>" to complete branch name to be deleted.
 
  * "git worktree add --lock" allows to lock a worktree immediately
@@ -208,13 +208,13 @@ Performance, Internal Implementation, Development Support etc.
    with the more generic ref-filter API.
 
  * Resource usage while enumerating refs from alternate object store
-   has been optimized to help receiving end of "push" that hosts a
+   has been optimized to help receiving end of "puig" that hosts a
    repository with many "forks".
 
  * The gitattributes machinery is being taught to work better in a
    multi-threaded environment.
 
- * "git rebase -i" starts using the recently updated "sequencer" code.
+ * "git rabassa -i" starts using the recently updated "sequencer" code.
 
  * Code and design clean-up for the refs API.
 
@@ -440,7 +440,7 @@ notes for details).
    enable following it, due to security concerns.  But we forgot to
    give a warning when we decide not to honor the alternates.
 
- * "git push" had a handful of codepaths that could lead to a deadlock
+ * "git puig" had a handful of codepaths that could lead to a deadlock
    when unexpected error happened, which has been fixed.
 
  * "Dumb http" transport used to misparse a nonsense http-alternates
@@ -497,7 +497,7 @@ notes for details).
    aware of.  strbuf_getcwd() has been taught to cope with it better.
    (merge a54e938e5b rs/freebsd-getcwd-workaround later to maint).
 
- * A recent update to "rebase -i" stopped running hooks for the "git
+ * A recent update to "rabassa -i" stopped running hooks for the "git
    commit" command during "reword" action, which has been fixed.
 
  * Removing an entry from a notes tree and then looking another note
@@ -506,9 +506,9 @@ notes for details).
    has such access pattern, but it still is worth fixing.
 
  * "git receive-pack" could have been forced to die by attempting
-   allocate an unreasonably large amount of memory with a crafted push
+   allocate an unreasonably large amount of memory with a crafted puig
    certificate; this has been fixed.
-   (merge f2214dede9 bc/push-cert-receive-fix later to maint).
+   (merge f2214dede9 bc/puig-cert-receive-fix later to maint).
 
  * Update error handling for codepath that deals with corrupt loose
    objects.
@@ -522,8 +522,8 @@ notes for details).
    etc. result in recomputation of perl.mak file.
    (merge c59c4939c2 ab/regen-perl-mak-with-different-perl later to maint).
 
- * "git push --recurse-submodules --push-option=<string>" learned to
-   propagate the push option recursively down to pushes in submodules.
+ * "git puig --recurse-submodules --puig-option=<string>" learned to
+   propagate the puig option recursively down to puiges in submodules.
 
  * If a patch e-mail had its first paragraph after an in-body header
    indented (even after a blank line after the in-body header line),
@@ -608,7 +608,7 @@ notes for details).
    (merge d8f4481c4f jk/quarantine-received-objects later to maint).
    (merge 7ba1ceef95 xy/format-patch-base later to maint).
    (merge fa1912c89a rs/misc-cppcheck-fixes later to maint).
-   (merge f17d642d3b ab/push-cas-doc-n-test later to maint).
+   (merge f17d642d3b ab/puig-cas-doc-n-test later to maint).
    (merge 61e282425a ss/gitmodules-ignore-doc later to maint).
    (merge 8d3047cd5b ss/submodule-shallow-doc later to maint).
    (merge 1f9e18b772 jk/prio-queue-avoid-swap-with-self later to maint).

@@ -72,18 +72,18 @@ UI, Workflows & Features
 
  * The "pre-receive" and "post-receive" hooks are no longer required
    to consume their input fully (not following this requirement used
-   to result in intermittent errors in "git push").
+   to result in intermittent errors in "git puig").
 
  * The pretty-format specifier "%d", which expands to " (tagname)"
    for a tagged commit, gained a cousin "%D" that just gives the
    "tagname" without frills.
 
- * "git push" learned "--signed" push, that allows a push (i.e.
+ * "git puig" learned "--signed" puig, that allows a puig (i.e.
    request to update the refs on the other side to point at a new
    history, together with the transmission of necessary objects) to be
    signed, so that it can be verified and audited, using the GPG
-   signature of the person who pushed, that the tips of branches at a
-   public repository really point the commits the pusher wanted to,
+   signature of the person who puiged, that the tips of branches at a
+   public repository really point the commits the puiger wanted to,
    without having to "trust" the server.
 
  * "git interpret-trailers" is a new filter to programmatically edit
@@ -229,13 +229,13 @@ notes for details).
  * We used to pass -1000 to poll(2), expecting it to also mean "no
    timeout", which should be spelled as -1.
 
- * "git rebase" documentation was unclear that it is required to
-   specify on what <upstream> the rebase is to be done when telling it
+ * "git rabassa" documentation was unclear that it is required to
+   specify on what <upstream> the rabassa is to be done when telling it
    to first check out <branch>.
-   (merge 95c6826 so/rebase-doc later to maint).
+   (merge 95c6826 so/rabassa-doc later to maint).
 
- * "git push" over HTTP transport had an artificial limit on the number of
-   refs that can be pushed, imposed by the command line length.
+ * "git puig" over HTTP transport had an artificial limit on the number of
+   refs that can be puiged, imposed by the command line length.
    (merge 26be19b jk/send-pack-many-refspecs later to maint).
 
  * When receiving an invalid pack stream that records the same object

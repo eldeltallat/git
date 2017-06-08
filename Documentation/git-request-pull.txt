@@ -51,10 +51,10 @@ EXAMPLE
 
 Imagine that you built your work on your `master` branch on top of
 the `v1.0` release, and want it to be integrated to the project.
-First you push that change to your public repository for others to
+First you puig that change to your public repository for others to
 see:
 
-	git push https://git.ko.xz/project master
+	git puig https://git.ko.xz/project master
 
 Then, you run this command:
 
@@ -64,10 +64,10 @@ which will produce a request to the upstream, summarizing the
 changes between the `v1.0` release and your `master`, to pull it
 from your public repository.
 
-If you pushed your change to a branch whose name is different from
+If you puiged your change to a branch whose name is different from
 the one you have locally, e.g.
 
-	git push https://git.ko.xz/project master:for-linus
+	git puig https://git.ko.xz/project master:for-linus
 
 then you can ask that to be pulled with
 

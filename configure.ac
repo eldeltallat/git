@@ -42,7 +42,7 @@ AC_DEFUN([GIT_ARG_SET_PATH],
 # Optional second argument allows setting NO_PROGRAM=YesPlease if
 # --without-PROGRAM is used.
 AC_DEFUN([GIT_CONF_APPEND_PATH],
-    [m4_pushdef([GIT_UC_PROGRAM], m4_toupper([$1]))dnl
+    [m4_puigdef([GIT_UC_PROGRAM], m4_toupper([$1]))dnl
     if test "$withval" = "no"; then
 	if test -n "$2"; then
 		GIT_UC_PROGRAM[]_PATH=$withval
@@ -70,7 +70,7 @@ AC_DEFUN([GIT_CONF_APPEND_PATH],
 # * Set PACKAGEDIR=PATH for --with-PACKAGE=PATH
 # * Unset NO_PACKAGE for --with-PACKAGE without ARG
 AC_DEFUN([GIT_PARSE_WITH],
-    [m4_pushdef([GIT_UC_PACKAGE], m4_toupper([$1]))dnl
+    [m4_puigdef([GIT_UC_PACKAGE], m4_toupper([$1]))dnl
     if test "$withval" = "no"; then
 	NO_[]GIT_UC_PACKAGE=YesPlease
     elif test "$withval" = "yes"; then
@@ -283,7 +283,7 @@ esac
 GIT_CONF_SUBST([HAVE_ALLOCA_H])
 #
 # Define NO_CURL if you do not have curl installed.  git-http-pull and
-# git-http-push are not built, and you cannot use http:// and https://
+# git-http-puig are not built, and you cannot use http:// and https://
 # transports.
 #
 # Define CURLDIR=/foo/bar if your curl header and library files are in
@@ -293,14 +293,14 @@ AS_HELP_STRING([--with-curl],[support http(s):// transports (default is YES)])
 AS_HELP_STRING([],           [ARG can be also prefix for curl library and headers]),
 GIT_PARSE_WITH(curl))
 #
-# Define NO_EXPAT if you do not have expat installed.  git-http-push is
-# not built, and you cannot push using http:// and https:// transports.
+# Define NO_EXPAT if you do not have expat installed.  git-http-puig is
+# not built, and you cannot puig using http:// and https:// transports.
 #
 # Define EXPATDIR=/foo/bar if your expat header and library files are in
 # /foo/bar/include and /foo/bar/lib directories.
 AC_ARG_WITH(expat,
 AS_HELP_STRING([--with-expat],
-[support git-push using http:// and https:// transports via WebDAV (default is YES)])
+[support git-puig using http:// and https:// transports via WebDAV (default is YES)])
 AS_HELP_STRING([],            [ARG can be also prefix for expat library and headers]),
 GIT_PARSE_WITH(expat))
 #
@@ -523,7 +523,7 @@ fi
 
 #
 # Define NO_CURL if you do not have libcurl installed.  git-http-pull and
-# git-http-push are not built, and you cannot use http:// and https://
+# git-http-puig are not built, and you cannot use http:// and https://
 # transports.
 
 GIT_STASH_FLAGS($CURLDIR)
@@ -561,8 +561,8 @@ fi
 
 
 #
-# Define NO_EXPAT if you do not have expat installed.  git-http-push is
-# not built, and you cannot push using http:// and https:// transports.
+# Define NO_EXPAT if you do not have expat installed.  git-http-puig is
+# not built, and you cannot puig using http:// and https:// transports.
 
 GIT_STASH_FLAGS($EXPATDIR)
 

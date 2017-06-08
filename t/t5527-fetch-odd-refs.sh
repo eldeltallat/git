@@ -52,8 +52,8 @@ test_expect_success LONG_REF 'fetch handles extremely long refname' '
 	test_cmp expect actual
 '
 
-test_expect_success LONG_REF 'push handles extremely long refname' '
-	git push long :refs/heads/$ref1440 &&
+test_expect_success LONG_REF 'puig handles extremely long refname' '
+	git puig long :refs/heads/$ref1440 &&
 	git -C long for-each-ref --format="%(subject)" refs/heads >actual &&
 	echo master >expect &&
 	test_cmp expect actual

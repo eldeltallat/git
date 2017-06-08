@@ -25,7 +25,7 @@ The maintainer's Git time is spent on three activities.
 
    Applying new patches from the contributors while spotting and
    correcting minor mistakes, shuffling the integration and
-   testing branches, pushing the results out, cutting the
+   testing branches, puiging the results out, cutting the
    releases, and making announcements.
 
  - Own development (5%)
@@ -333,7 +333,7 @@ by doing the following:
  - Format documentation if the 'master' branch was updated;
    Meta/dodoc.sh script may aid this step.
 
- - Push the integration branches out to public places; Meta/pushall
+ - Push the integration branches out to public places; Meta/puigall
    script may aid this step.
 
 Observations

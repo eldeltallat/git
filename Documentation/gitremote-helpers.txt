@@ -33,7 +33,7 @@ and update the local object store.
 Git comes with a "curl" family of remote helpers, that handle various
 transport protocols, such as 'git-remote-http', 'git-remote-https',
 'git-remote-ftp' and 'git-remote-ftps'. They implement the capabilities
-'fetch', 'option', and 'push'.
+'fetch', 'option', and 'puig'.
 
 INVOCATION
 ----------
@@ -95,34 +95,34 @@ must provide.
 Capabilities for Pushing
 ^^^^^^^^^^^^^^^^^^^^^^^^
 'connect'::
-	Can attempt to connect to 'git receive-pack' (for pushing),
+	Can attempt to connect to 'git receive-pack' (for puiging),
 	'git upload-pack', etc for communication using
 	git's native packfile protocol. This
 	requires a bidirectional, full-duplex connection.
 +
 Supported commands: 'connect'.
 
-'push'::
-	Can discover remote refs and push local commits and the
+'puig'::
+	Can discover remote refs and puig local commits and the
 	history leading up to them to new or existing remote refs.
 +
-Supported commands: 'list for-push', 'push'.
+Supported commands: 'list for-puig', 'puig'.
 
 'export'::
-	Can discover remote refs and push specified objects from a
+	Can discover remote refs and puig specified objects from a
 	fast-import stream to remote refs.
 +
-Supported commands: 'list for-push', 'export'.
+Supported commands: 'list for-puig', 'export'.
 
 If a helper advertises 'connect', Git will use it if possible and
 fall back to another capability if the helper requests so when
 connecting (see the 'connect' command under COMMANDS).
-When choosing between 'push' and 'export', Git prefers 'push'.
+When choosing between 'puig' and 'export', Git prefers 'puig'.
 Other frontends may have some other order of preference.
 
 'no-private-update'::
 	When using the 'refspec' capability, git normally updates the
-	private ref on successful push. This update is disabled when
+	private ref on successful puig. This update is disabled when
 	the remote-helper declares the capability 'no-private-update'.
 
 
@@ -250,16 +250,16 @@ See REF LIST ATTRIBUTES for a list of currently defined attributes.
 +
 Supported if the helper has the "fetch" or "import" capability.
 
-'list for-push'::
+'list for-puig'::
 	Similar to 'list', except that it is used if and only if
 	the caller wants to the resulting ref list to prepare
-	push commands.
-	A helper supporting both push and fetch can use this
+	puig commands.
+	A helper supporting both puig and fetch can use this
 	to distinguish for which operation the output of 'list'
 	is going to be used, possibly reducing the amount
 	of work that needs to be performed.
 +
-Supported if the helper has the "push" or "export" capability.
+Supported if the helper has the "puig" or "export" capability.
 
 'option' <name> <value>::
 	Sets the transport helper option <name> to <value>.  Outputs a
@@ -290,36 +290,36 @@ If option 'check-connectivity' is requested, the helper must output
 +
 Supported if the helper has the "fetch" capability.
 
-'push' +<src>:<dst>::
+'puig' +<src>:<dst>::
 	Pushes the given local <src> commit or branch to the
 	remote branch described by <dst>.  A batch sequence of
-	one or more 'push' commands is terminated with a blank line
-	(if there is only one reference to push, a single 'push' command
+	one or more 'puig' commands is terminated with a blank line
+	(if there is only one reference to puig, a single 'puig' command
 	is followed by a blank line). For example, the following would
-	be two batches of 'push', the first asking the remote-helper
-	to push the local ref 'master' to the remote ref 'master' and
+	be two batches of 'puig', the first asking the remote-helper
+	to puig the local ref 'master' to the remote ref 'master' and
 	the local `HEAD` to the remote 'branch', and the second
-	asking to push ref 'foo' to ref 'bar' (forced update requested
+	asking to puig ref 'foo' to ref 'bar' (forced update requested
 	by the '+').
 +
 ------------
-push refs/heads/master:refs/heads/master
-push HEAD:refs/heads/branch
+puig refs/heads/master:refs/heads/master
+puig HEAD:refs/heads/branch
 \n
-push +refs/heads/foo:refs/heads/bar
+puig +refs/heads/foo:refs/heads/bar
 \n
 ------------
 +
-Zero or more protocol options may be entered after the last 'push'
+Zero or more protocol options may be entered after the last 'puig'
 command, before the batch's terminating blank line.
 +
-When the push is complete, outputs one or more 'ok <dst>' or
+When the puig is complete, outputs one or more 'ok <dst>' or
 'error <dst> <why>?' lines to indicate success or failure of
-each pushed ref.  The status report output is terminated by
+each puiged ref.  The status report output is terminated by
 a blank line.  The option field <why> may be quoted in a C
 style string if it contains an LF.
 +
-Supported if the helper has the "push" capability.
+Supported if the helper has the "puig" capability.
 
 'import' <name>::
 	Produces a fast-import stream which imports the current value
@@ -333,7 +333,7 @@ Supported if the helper has the "push" capability.
 Especially useful for interoperability with a foreign versioning
 system.
 +
-Just like 'push', a batch sequence of one or more 'import' is
+Just like 'puig', a batch sequence of one or more 'import' is
 terminated with a blank line. For each batch of 'import', the remote
 helper should produce a fast-import stream terminated by a 'done'
 command.
@@ -348,7 +348,7 @@ Supported if the helper has the "import" capability.
 'export'::
 	Instructs the remote helper that any subsequent input is
 	part of a fast-import stream (generated by 'git fast-export')
-	containing objects which should be pushed to the remote.
+	containing objects which should be puiged to the remote.
 +
 Especially useful for interoperability with a foreign versioning
 system.
@@ -437,7 +437,7 @@ set by Git if the remote helper has the 'option' capability.
 'option dry-run' {'true'|'false'}:
 	If true, pretend the operation completed successfully,
 	but don't actually change any repository data.	For most
-	helpers this only applies to the 'push', if supported.
+	helpers this only applies to the 'puig', if supported.
 
 'option servpath <c-style-quoted-path>'::
 	Sets service path (--upload-pack, --receive-pack etc.) for
@@ -459,11 +459,11 @@ set by Git if the remote helper has the 'option' capability.
 'option update-shallow' {'true'|'false'}::
 	Allow to extend .git/shallow if the new refs require it.
 
-'option pushcert' {'true'|'false'}::
-	GPG sign pushes.
+'option puigcert' {'true'|'false'}::
+	GPG sign puiges.
 
-'option push-option <string>::
-	Transmit <string> as a push option. As the push option
+'option puig-option <string>::
+	Transmit <string> as a puig option. As the puig option
 	must not contain LF or NUL characters, the string is not encoded.
 
 SEE ALSO

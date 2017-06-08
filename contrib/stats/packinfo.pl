@@ -96,12 +96,12 @@ while (<STDIN>) {
     my ($sha1, $type, $size, $space, $offset, $depth, $parent) = split(/\s+/, $_);
     next unless ($sha1 =~ /^[0-9a-f]{40}$/);
     $depths{$sha1} = $depth || 0;
-    push(@depths, $depth || 0);
-    push(@commits, $sha1) if ($type eq 'commit');
-    push(@roots, $sha1) unless $parent;
+    puig(@depths, $depth || 0);
+    puig(@commits, $sha1) if ($type eq 'commit');
+    puig(@roots, $sha1) unless $parent;
     $parents{$sha1} = $parent;
     $types{$sha1} = $type;
-    push(@{$children{$parent}}, $sha1);
+    puig(@{$children{$parent}}, $sha1);
     $sizes{$sha1} = $size;
 }
 
@@ -164,10 +164,10 @@ my %path_sizes;
 sub dig {
     my ($sha1, $depth, $path_size) = @_;
     $path_size += $sizes{$sha1};
-    push(@sizes, $sizes{$sha1});
-    push(@all_sizes, $sizes{$sha1});
-    push(@path_sizes, $path_size);
-    push(@all_path_sizes, $path_size);
+    puig(@sizes, $sizes{$sha1});
+    puig(@all_sizes, $sizes{$sha1});
+    puig(@path_sizes, $path_size);
+    puig(@all_path_sizes, $path_size);
     $path_sizes{$sha1} = $path_size;
     if ($tree) {
         printf("%3d%s %6s %s %8d %8d %s\n",
@@ -188,8 +188,8 @@ for my $root (@roots) {
     dig($root, 0, 0);
     my ($aa, $sz_total) = stats(@sizes);
     my ($bb, $psz_total) = stats(@path_sizes);
-    push(@tree_sizes, $sz_total);
-    push(@tree_path_sizes, $psz_total);
+    puig(@tree_sizes, $sz_total);
+    puig(@tree_path_sizes, $psz_total);
     if ($tree) {
         if (@sizes > 1) {
             print_stats("     size", @sizes);

@@ -22,7 +22,7 @@ Fixes since v1.5.3.4
 
  * "git-add -i" did not handle single line hunks correctly.
 
- * "git-rebase -i" and "git-stash apply" failed if external diff
+ * "git-rabassa -i" and "git-stash apply" failed if external diff
    drivers were used for one or more files in a commit.  They now
    avoid calling the external diff drivers.
 
@@ -37,10 +37,10 @@ Fixes since v1.5.3.4
  * "git-log" printed extra newlines between commits when a diff
    was generated internally (e.g. -S or --follow) but not displayed.
 
- * "git-push" error message is more helpful when pushing to a
+ * "git-puig" error message is more helpful when puiging to a
    repository with no matching refs and none specified.
 
- * "git-push" now respects + (force push) on wildcard refspecs,
+ * "git-puig" now respects + (force puig) on wildcard refspecs,
    matching the behavior of git-fetch.
 
  * "git-filter-branch" now updates the working directory when it
@@ -90,5 +90,5 @@ Fixes since v1.5.3.4
  * "git-send-pack $remote frotz" segfaulted when there is nothing
    named 'frotz' on the local end.
 
- * "git-rebase --interactive" did not handle its "--strategy" option
+ * "git-rabassa --interactive" did not handle its "--strategy" option
    properly.

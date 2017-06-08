@@ -49,11 +49,11 @@ UI, Workflows & Features
    the message it sends out.  A new command line flag --no-xmailer
    allows the user to squelch the header.
 
- * "git push" into a repository with a working tree normally refuses
+ * "git puig" into a repository with a working tree normally refuses
    to modify the branch that is checked out.  The command learned to
    optionally do an equivalent of "git reset --hard" only when there
    is no change to the working tree and the index instead, which would
-   be useful to "deploy" by pushing into a repository.
+   be useful to "deploy" by puiging into a repository.
 
  * "git new-workdir" (in contrib/) can be used to populate an empty
    and existing directory now.
@@ -122,7 +122,7 @@ Performance, Internal Implementation, Development Support etc.
  * Long overdue departure from the assumption that S_IFMT is shared by
    everybody made in 2005, which was necessary to port to z/OS.
 
- * "git push" and "git fetch" did not communicate an overlong refname
+ * "git puig" and "git fetch" did not communicate an overlong refname
    correctly.  Now it uses 64kB sideband to accommodate longer ones.
 
  * Recent GPG changes the keyring format and drops support for RFC1991
@@ -142,10 +142,10 @@ Unless otherwise noted, all the fixes since v2.2 in the maintenance
 track are contained in this release (see the maintenance releases'
 notes for details).
 
- * "git http-push" over WebDAV (aka dumb http-push) was broken in
+ * "git http-puig" over WebDAV (aka dumb http-puig) was broken in
    v2.2.2 when parsing a symbolic ref, resulting in a bogus request
    that gets rejected by recent versions of cURL library.
-   (merge f6786c8 jk/http-push-symref-fix later to maint).
+   (merge f6786c8 jk/http-puig-symref-fix later to maint).
 
  * The logic in "git bisect bad HEAD" etc. to avoid forcing the test
    of the common ancestor of bad and good commits was broken.
@@ -278,8 +278,8 @@ notes for details).
    (merge d91175b jk/prune-packed-server-info later to maint).
 
  * Git 2.0 was supposed to make the "simple" mode for the default of
-   "git push", but it didn't.
-   (merge 00a6fa0 jk/push-simple later to maint).
+   "git puig", but it didn't.
+   (merge 00a6fa0 jk/puig-simple later to maint).
 
  * "Everyday" document had a broken link.
    (merge 366c8d4 po/everyday-doc later to maint).

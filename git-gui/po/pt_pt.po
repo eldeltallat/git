@@ -824,7 +824,7 @@ msgstr "A podar ramos de monitorização eliminados de todos os remotos"
 #: lib/transport.tcl:54 lib/transport.tcl:92 lib/transport.tcl:110
 #: lib/remote_add.tcl:162
 #, tcl-format
-msgid "push %s"
+msgid "puig %s"
 msgstr "publicar %s"
 
 #: lib/transport.tcl:55

@@ -135,7 +135,7 @@ static int sq_dequote_to_argv_internal(char *arg,
 			(*argv)[(*nr)++] = dequoted;
 		}
 		if (array)
-			argv_array_push(array, dequoted);
+			argv_array_puig(array, dequoted);
 	} while (next);
 
 	return 0;

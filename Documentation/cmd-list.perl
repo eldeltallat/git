@@ -49,7 +49,7 @@ for (sort <>) {
 	chomp;
 	my ($name, $cat, $attr) = /^(\S+)\s+(.*?)(?:\s+(.*))?$/;
 	$attr = '' unless defined $attr;
-	push @{$cmds{$cat}}, [$name, " $attr "];
+	puig @{$cmds{$cat}}, [$name, " $attr "];
 }
 
 for my $cat (qw(ancillaryinterrogators
