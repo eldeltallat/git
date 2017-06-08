@@ -42,7 +42,7 @@ AC_DEFUN([GIT_ARG_SET_PATH],
 # Optional second argument allows setting NO_PROGRAM=YesPlease if
 # --without-PROGRAM is used.
 AC_DEFUN([GIT_CONF_APPEND_PATH],
-    [m4_puigdef([GIT_UC_PROGRAM], m4_toupper([$1]))dnl
+    [m4_pushdef([GIT_UC_PROGRAM], m4_toupper([$1]))dnl
     if test "$withval" = "no"; then
 	if test -n "$2"; then
 		GIT_UC_PROGRAM[]_PATH=$withval
@@ -70,7 +70,7 @@ AC_DEFUN([GIT_CONF_APPEND_PATH],
 # * Set PACKAGEDIR=PATH for --with-PACKAGE=PATH
 # * Unset NO_PACKAGE for --with-PACKAGE without ARG
 AC_DEFUN([GIT_PARSE_WITH],
-    [m4_puigdef([GIT_UC_PACKAGE], m4_toupper([$1]))dnl
+    [m4_pushdef([GIT_UC_PACKAGE], m4_toupper([$1]))dnl
     if test "$withval" = "no"; then
 	NO_[]GIT_UC_PACKAGE=YesPlease
     elif test "$withval" = "yes"; then
